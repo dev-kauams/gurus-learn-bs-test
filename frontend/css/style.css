@@ -1,0 +1,48 @@
+/* ============================================================
+   ESTILOS GLOBAIS
+   Configurações base que afetam toda a aplicação.
+   O Bootstrap já cuida da maioria — aqui ficam os ajustes finos.
+   ============================================================ */
+
+
+/* 1ª Digitação (Aqui) */
+
+
+
+/* ============================================================
+   TELA DE LOGIN
+   ============================================================ */
+
+
+
+
+/* ============================================================
+   TABELA DO PAINEL ADMINISTRATIVO
+   ============================================================ */
+
+
+
+/* ============================================================
+   IMAGENS DE VEÍCULOS
+   ============================================================ */
+
+
+
+/* ============================================================
+   VITRINE PÚBLICA — HERO BANNER
+   Banner com imagem de fundo coberta por um gradiente escuro.
+   Isso garante que o texto branco seja legível sobre qualquer imagem.
+   ============================================================ */
+.hero-banner {
+    background:
+        /* Gradiente semi-transparente por cima da imagem */
+        linear-gradient(rgba(10, 37, 64, 0.85), rgba(10, 37, 64, 0.85)),
+        /* Imagem de fundo carregada do Unsplash */
+        url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1920')
+        center / cover;
+}
+
+/* ============================================================
+   VITRINE PÚBLICA — CARDS DE VEÍCULOS
+   ============================================================ */
+

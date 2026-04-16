@@ -1,0 +1,79 @@
+# ============================================================
+# DEPENDÊNCIAS
+# ============================================================
+node_modules/
+
+# ============================================================
+# VARIÁVEIS DE AMBIENTE
+# Nunca suba credenciais de banco ou chaves secretas!
+# ============================================================
+.env
+.env.*
+!.env.example
+
+# ============================================================
+# UPLOADS DE IMAGENS
+# Arquivos enviados pelos usuários não são versionados.
+# A pasta é criada automaticamente pelo servidor.
+# ============================================================
+uploads/
+!uploads/.gitkeep
+
+# ============================================================
+# LOGS
+# ============================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================================
+# SISTEMA OPERACIONAL
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ============================================================
+# EDITORES E IDEs
+# ============================================================
+
+# VS Code (manter apenas extensões recomendadas, se quiser)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains (WebStorm, IntelliJ...)
+.idea/
+*.iml
+
+# Vim / Neovim
+*.swp
+*.swo
+
+# ============================================================
+# BUILD / CACHE
+# ============================================================
+dist/
+build/
+.cache/
+.parcel-cache/
+.npm/
+
+# ============================================================
+# COBERTURA DE TESTES
+# ============================================================
+coverage/
+.nyc_output/
