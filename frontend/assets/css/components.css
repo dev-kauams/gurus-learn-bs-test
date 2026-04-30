@@ -273,6 +273,7 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
+        transition: all 0.3s ease;
 
         & img{
             border-radius: 50%;
@@ -285,12 +286,14 @@
     }
 
     .more-info-classroom{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         max-height: 0;
         overflow: hidden;
         opacity: 0;
-        transition:
-            max-height 0.4s ease,
-            opacity 0.3s ease;
+        transition: all 0.2s;
     }
 
     .more-info-input{
@@ -323,7 +326,22 @@
     &:has(input:checked){
         height: 12rem;
 
+        .info-classroom{
+            transform: translate(45%, -55%);
+            scale: 75%;
+            opacity: 0.5;
+
+            & img{
+                opacity: 0;
+            }
+        }
+
         .more-info-classroom{
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             max-height: 300px;
             opacity: 1;
         }

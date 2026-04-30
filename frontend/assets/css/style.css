@@ -27,19 +27,66 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+.body-index {
   width: 100vw;
   height: 100dvh;
   background-color: var(--bg-base-w);
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+
+  grid-template-rows: 5rem auto 1fr;
+
+  grid-template-areas:
+  "header header"
+  "sidebar aside"
+  "sidebar main";
+
+    height: 100dvh;
 
   & header {
+    padding: 0 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    grid-area: header;
 
-    & nav{
-      
+    .search-bar{
+      height: 70%;
+      width: 50%;
+      background: linear-gradient(to left, #2F184B, #532B88);
+      border-radius: var(--br-base);
+      color: var(--text-base-w);
+      display: flex;
+      align-items: center;
+
+      & p{
+        margin-left: 10px;
+      }
+    }
+
+    .user-info{
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      background-color: #2F184B;
+      padding: 0.8rem;
+      border-radius: var(--br-base);
+      color: var(--text-base-w);
+
     }
   }
-
+  
+  & nav{
+    height: 100%;
+    width: 10%;
+    position: relative;
+    left: 0;
+    grid-area: sidebar;
+  }
   & main {
+
+    grid-area: main;
+
     & section {
 
     }
