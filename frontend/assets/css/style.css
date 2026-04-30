@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-base-w: #F4EFFA;
+  --bg-base-d: #2F184B;
+  --bg-component-w: #d7c4ef;
+  --bg-component-d: #3B1F6B;
+
+  --bg-block: #532B88;
+
+  --text-base-w: #F4EFFA;
+  --text-base-d: #2F184B;
+
+    --br-base: 1.8rem;
+}
+
+::selection {
+  background-color: var(--bg-component-w);
+  color: var(--text-base-d);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100vw;
+  height: 100dvh;
+  background-color: var(--bg-base-w);
+
+  & header {
+
+    & nav{
+      
+    }
+  }
+
+  & main {
+    & section {
+
+    }
+  }
+
+  & footer {
+
+  }
+}
