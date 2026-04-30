@@ -18,6 +18,11 @@
     --br-base: 1.8rem;
 }
 
+::selection {
+  background-color: var(--bg-component-w);
+  color: var(--text-base-d);
+}
+
 html {
   scroll-behavior: smooth;
 }

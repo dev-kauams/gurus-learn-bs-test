@@ -1,3 +1,190 @@
+/* Login Card */
+.card-login{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    overflow: hidden;
+    width: 50rem;
+    background-color: var(--bg-component-w);
+    border-radius: var(--br-base);
+
+    & button{
+        position: relative;
+        overflow: hidden;
+        width: 80%;
+        height: 3rem;
+        margin-top: 5rem;
+        border-radius: var(--br-base);
+        border: 2px solid var(--bg-component-d);
+        color: var(--text-base-d);
+        font-size: 1.25rem;
+        transition: color 1ms ease;
+        z-index: 1;
+
+        &::after{
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0px;
+            height: 0px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-color: var(--bg-component-d);
+            z-index: -2;
+        }
+
+        &::before{
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0px;
+            height: 0px;
+            transform: translate(-50%, -50%);
+            transition: all .5s;
+            border-radius: 50%;
+            background-color: var(--bg-component-d);
+            z-index: -1;
+        }
+
+        &:hover{
+            color: var(--text-base-w);
+            transition: color 0.5s ease-out;
+            &::before{
+                width: 450px;
+                height: 450px;
+                
+            }
+        }
+    }
+
+    & form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 80%;
+        height: 100%;
+        background-color: var(--bg-component-w);
+        padding: 1rem;
+
+        & h2{
+            color: var(--text-base-d);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        & .field {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.5rem;
+
+            & input {
+                width: 100%;
+                padding: 12px 10px;
+                border: 2px solid var(--bg-component-d);
+                border-radius: 5px;
+                outline: none;
+                background-color: var(--bg-component-w);
+                transition: border-radius 0.3s ease;
+
+                &:focus {
+                    box-shadow: 0 0 0 2px var(--bg-component-w);
+                    border-radius: var(--br-base);
+                }
+
+                &:focus + label,
+                &:not(:placeholder-shown) + label {
+                    top: 0;
+                    font-size: 0.7rem;
+                }
+            }
+
+            & label {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                color: var(--text-base-d);
+                pointer-events: none;
+                transition: 
+                    top 0.2s ease,
+                    transform 0.2s ease,
+                    font-size 0.2s ease,
+                    color 0.2s ease;
+                background: var(--bg-component-w);
+                border-radius: 10px;
+                padding: 0 5px;
+            }
+        }
+    }
+
+    .form-register{
+        opacity: 0;
+        position: absolute;
+        pointer-events: none;
+        transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+
+        & #register_link {
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+    }
+
+    .form-login{
+        opacity: 1;
+        position: relative;
+        transform: translateX(0);
+        transition: opacity 0.4s ease-in-out;
+
+        & #login_link {
+            display: none;
+        }
+    }
+
+    & img{
+        width: 50%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 90%;
+        transform: translateX(0);
+        transition: transform 0.4s ease-in-out;
+    }
+
+    &.show-register{
+        & img{
+            transform: translateX(-100%);
+        }
+
+        & .form-register {
+            opacity: 1;
+            position: relative;
+            transform: translateX(100%);
+            pointer-events: auto;
+        }
+
+        & .form-login {
+            opacity: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        & #register_link {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        & #login_link {
+            display: block;
+        }
+    }
+}
+
+
+
 /* CARD */
 
 .card{
@@ -9,12 +196,22 @@
 }
 
 .card:has(img){
+    margin-top: 10px;
     height: 25rem;
     width: 20rem;
+    overflow: hidden;
+    &:hover{
+        & img{
+            scale: 100%;
+            border-radius: 0;
+        }
+    }
     & img{
         width: 100%;
         height: 50%;
+        scale: 95%;
         border-radius: var(--br-base);
+        transition: scale 0.3s ease-in-out, border-radius 0.5s ease-in-out;
 
         ::before{
             content: "";
@@ -25,3 +222,47 @@
         }
     }
 }
+
+.card:has(input){
+    &::before{
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0px;
+        height: 0px;
+        border-radius: 50%;
+        background-color: var(--bg-component-d);
+    }
+    & label{
+        position: relative;
+        color: var(--text-base-w);
+        width: 80%;
+        height: 2.5rem;
+        border-radius: 5px;
+        border: none;
+        padding: 0.5rem;
+        transition: border-radius 0.3s ease-in-out;
+        z-index: 1;
+
+        &::placeholder{
+            color: var(--text-base-w);
+            opacity: 0.7;
+        }
+
+        &:focus{
+            outline: none;
+            box-shadow: 0 0 0 2px var(--bg-component-w);
+            border-radius: var(--br-base);
+        }
+
+        &:has(input:focus){
+            &::before{
+                width: 200%;
+                height: 200%;
+            }
+        }
+    }
+}
+
+
