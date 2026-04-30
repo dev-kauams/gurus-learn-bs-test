@@ -120,6 +120,11 @@
                 background-color: var(--bg-component-w);
                 transition: border-radius 0.3s ease;
 
+                &[type="date"]::-webkit-datetime-edit{
+                    display: flex;
+                    justify-content: center;
+                }
+
                 &[type="date"]::-webkit-calendar-picker-indicator {
                     opacity: 0;
                 }
@@ -155,7 +160,7 @@
                 border-radius: 10px;
                 padding: 0 5px;
             }
-
+            
             &:has(input[type="date"]),
             &:has(input[type="tel"]){
                 width: 50%;
@@ -215,8 +220,6 @@
     }
 }
 
-
-
 /* CARD */
 
 .card{
@@ -255,46 +258,79 @@
     }
 }
 
-.card:has(input){
-    &::before{
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0px;
-        height: 0px;
-        border-radius: 50%;
-        background-color: var(--bg-component-d);
+.card:has(input[type="checkbox"]){
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 10rem;
+    padding: 0.5rem;
+    transition: height 0.4s ease;
+
+    .info-classroom{
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        & img{
+            border-radius: 50%;
+            width: 15%;
+        }
+
+        & h2{
+            font-size: clamp(0.7rem, 1.2rem, 2rem);
+        }
     }
-    & label{
-        position: relative;
-        color: var(--text-base-w);
-        width: 80%;
-        height: 2.5rem;
-        border-radius: 5px;
-        border: none;
-        padding: 0.5rem;
-        transition: border-radius 0.3s ease-in-out;
-        z-index: 1;
 
-        &::placeholder{
-            color: var(--text-base-w);
-            opacity: 0.7;
+    .more-info-classroom{
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+            max-height 0.4s ease,
+            opacity 0.3s ease;
+    }
+
+    .more-info-input{
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 2rem;
+
+        input{
+            display: none;
         }
 
-        &:focus{
-            outline: none;
-            box-shadow: 0 0 0 2px var(--bg-component-w);
-            border-radius: var(--br-base);
-        }
+        label{
+            cursor: pointer;
 
-        &:has(input:focus){
-            &::before{
-                width: 200%;
-                height: 200%;
+            img{
+                width: 2rem;
+                height: 2rem;
+
+                transform: rotate(90deg);
+                transition: transform 0.3s ease;
             }
         }
     }
-}
 
+    &:has(input:checked){
+        height: 12rem;
+
+        .more-info-classroom{
+            max-height: 300px;
+            opacity: 1;
+        }
+
+        label img{
+            transform: rotate(270deg);
+        }
+    }
+}
 
