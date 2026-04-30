@@ -1,0 +1,19 @@
+@media (max-width: 481px) {
+    /* Card Login */
+
+    .body-login{
+        padding: 1rem;
+
+        .card-login{
+            .form-login,
+            .form-register{
+                width: 100%;
+            }
+    
+            & img{
+                display: none;
+            }
+        }
+    }
+
+}

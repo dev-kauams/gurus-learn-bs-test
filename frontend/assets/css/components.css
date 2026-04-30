@@ -1,5 +1,6 @@
 /* Login Card */
 .card-login{
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -10,8 +11,27 @@
     background-color: var(--bg-component-w);
     border-radius: var(--br-base);
 
+    &.show-register{
+
+        .form-login{
+            transform: translateX(-100%);
+        }
+
+        .form-register{
+            transform: translateX(-100%);
+        }
+
+        & img{
+            transform: translateX(-100%);
+            border-radius: var(--br-base) 0 0 var(--br-base);
+            object-fit: cover;
+            object-position: 30%;
+        }
+    }
+
     & button{
-        position: relative;
+        position: absolute;
+        bottom: 5%;
         overflow: hidden;
         width: 80%;
         height: 3rem;
@@ -62,6 +82,8 @@
     }
 
     & form{
+        position: relative;
+        top: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -72,9 +94,16 @@
         padding: 1rem;
 
         & h2{
+            position: absolute;
+            top: 10%;
             color: var(--text-base-d);
             font-size: 2rem;
-            margin-bottom: 2rem;
+        }
+
+        & .field-gruop{
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
 
         & .field {
@@ -91,6 +120,10 @@
                 background-color: var(--bg-component-w);
                 transition: border-radius 0.3s ease;
 
+                &[type="date"]::-webkit-calendar-picker-indicator {
+                    opacity: 0;
+                }
+
                 &:focus {
                     box-shadow: 0 0 0 2px var(--bg-component-w);
                     border-radius: var(--br-base);
@@ -100,11 +133,14 @@
                 &:not(:placeholder-shown) + label {
                     top: 0;
                     font-size: 0.7rem;
+                    line-height: 0.6rem;
                 }
             }
 
             & label {
                 position: absolute;
+                text-align: center;
+                line-height: 1rem;
                 left: 50%;
                 top: 50%;
                 transform: translate(-50%, -50%);
@@ -119,67 +155,63 @@
                 border-radius: 10px;
                 padding: 0 5px;
             }
+
+            &:has(input[type="date"]),
+            &:has(input[type="tel"]){
+                width: 50%;
+            }
         }
+    }
+
+    
+
+    .form-login,
+    .form-register {
+        position: absolute;
+
+        width: 50%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transition: 0.5s ease;
+    }
+
+    .form-login {
+        left: 0;
     }
 
     .form-register{
-        opacity: 0;
-        position: absolute;
-        pointer-events: none;
-        transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-
-        & #register_link {
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
+        left: 100%;
     }
 
-    .form-login{
-        opacity: 1;
-        position: relative;
-        transform: translateX(0);
-        transition: opacity 0.4s ease-in-out;
 
-        & #login_link {
-            display: none;
+    #register_link{
+        position: fixed;
+        bottom: 0;
+        margin-top: 1rem;
+        color: var(--text-base-d);
+        cursor: pointer;
+        transition: color 0.3s ease;
+
+        &:hover{
+            color: var(--bg-block);
+            transition: color 0.3s ease;
         }
     }
 
     & img{
+        position: absolute;
+        left: 50%;
         width: 50%;
         height: 100%;
         object-fit: cover;
-        object-position: 90%;
+        object-position: 70%;
         transform: translateX(0);
-        transition: transform 0.4s ease-in-out;
-    }
-
-    &.show-register{
-        & img{
-            transform: translateX(-100%);
-        }
-
-        & .form-register {
-            opacity: 1;
-            position: relative;
-            transform: translateX(100%);
-            pointer-events: auto;
-        }
-
-        & .form-login {
-            opacity: 0;
-            position: absolute;
-            pointer-events: none;
-        }
-
-        & #register_link {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        & #login_link {
-            display: block;
-        }
+        border-radius: 0 var(--br-base) var(--br-base) 0;
+        transition: 0.5s ease;
     }
 }
 

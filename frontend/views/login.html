@@ -6,39 +6,54 @@
     <title>Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/components.css" />
+    <link rel="stylesheet" href="../assets/css/components.css"/>
+    <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
-<body class="flex justify-center items-center">
+<body class="flex justify-center items-center body-login">
     <div class="card-login">
         <form action="/login" method="POST" class="form-login">
             <h2>Login</h2>
             <div class="field">
                 <input type="text" id="username" name="username" placeholder=" " required>
-                <label for="username">Username</label>
+                <label for="username">Email</label>
             </div>
             <div class="field">
                 <input type="password" id="password" name="password" placeholder=" " required>
-                <label for="password">Password</label>
+                <label for="password">Senha</label>
             </div>
             <button type="submit" id="login_button">Login</button>
-            <p id="register_link">Don't have an account? Registra ent prr</p>
         </form>
 
-        <form action="/register" method="POST" class="form-register">
+        <form action="/login" method="POST" class="form-register">
             <h2>Register</h2>
             <div class="field">
                 <input type="text" id="username" name="username" placeholder=" " required>
-                <label for="username">Username</label>
+                <label for="username">Nome Completo</label>
             </div>
-            <div class="field">
-                <input type="password" id="password" name="password" placeholder=" " required>
-                <label for="password">Password</label>
+            <div class="field-gruop">
+                <div class="field">
+                    <input type="date" name="dataNasc" id="dataNasc" placeholder="" required>
+                </div>
+                <div class="field">
+                    <input type="tel" name="phone" id="phone" placeholder="" required maxlength="11" pattern="[0-9]*">
+                    <label for="phone">Telefone</label>
+                </div>
+            </div>
+            <div class="field-gruop">
+                <div class="field">
+                    <input type="password" id="password" name="password" placeholder=" " minlength="8" required>
+                    <label for="password">Senha</label>
+                </div>
+                <div class="field">
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder=" " minlength="8" required>
+                    <label for="password">Confirmar Senha</label>
+            </div>
             </div>
             <button type="submit" id="register_button">Register</button>
-            <p id="login_link">Already have an account? Loga nesse krl</p>
         </form>
+        <p id="register_link">Não possui conta? Registra ent prr</p>
 
-        <img src="../assets/img/login.svg" alt="Login Image">
+        <img src="../assets/img/login-image.gif" alt="Login Image" class="">
     </div>
     <script src="../assets/js/script.js"></script>
 </body>
