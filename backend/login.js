@@ -5,18 +5,18 @@ const registerForm = document.querySelector(".form-register");
 loginForm.addEventListener('submit', function(e){
     e.preventDefault();
 
-    let user = loginForm.querySelector('#username').value;
+    let email = loginForm.querySelector('#email').value;
     let password = loginForm.querySelector('#password').value;
 
-    const logged = authenticUser(user, password);
+    const logged = authenticUser(email, password);
 
     if(logged){
-        console.log(`Login efetuado pelo usuário: ${logged.fullname}. O nível da conta é: ${logged.nivel}`)
+        console.log(`Login efetuado pelo usuário: ${logged.fullname}, com email: ${logged.email}. O nível da conta é: ${logged.nivel}`)
     } else {
         console.log(`O usuário não foi encontrado. Confira a senha ou usuário enviado.`)
     }
 
-    loginForm.querySelector('#username').value = "";
+    loginForm.querySelector('#email').value = "";
     loginForm.querySelector('#password').value = "";
 });
 
@@ -85,8 +85,8 @@ const users = [
 ];
 
 
-function authenticUser(user, password){
-return users.find(u => u.fullname === user && u.password === password);
+function authenticUser(email, password){
+return users.find(u => u.email === email && u.password === password);
 }
 
 function emailExists(email){
