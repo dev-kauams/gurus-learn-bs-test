@@ -9,6 +9,55 @@
     <link rel="stylesheet" href="../assets/css/components.css" />
 </head>
 <body>
-    
+  <a href="index.html">Ir para a página de usuário.</a>
+  <button type="button" id="btnOpen">Adicionar nova classe</button>
+  <dialog id="addModal">
+    <form id="addForm" method="post">
+
+  <label for="namClass">Nome da classe:</label>
+  <input type="text" id="namClass" name="namClass" required>
+
+  <label for="lecture">Matéria</label>
+  <input type="text" id="lecture" name="lecture" required>
+
+<label for="instructor">Professor responsável:</label>
+  <input type="text" id="instructor" name="instructor" required>
+
+  <button type="submit">Criar nova classe</button>
+</form>
+<button type="button" id="btnClose">X</button>
+  </dialog>
+
+   <table id="classes" border="1">
+  <thead>
+    <tr>
+      <th>Número da classe:</th>
+      <th>Nome da classe:</th>
+      <th>Matéria:</th>
+      <th>Professor:</th>
+    </tr>
+  </thead>
+  <tbody id="classesBody">
+  </tbody>
+</table>
+
+ <dialog id="editModal">
+    <form id="editForm" method="post">
+
+  <label for="editNam">Nome da classe:</label>
+  <input type="text" id="editNam" name="editNam" required>
+
+  <label for="editLecture">Matéria</label>
+  <input type="text" id="editLecture" name="editLecture" required>
+
+<label for="editInstructor">Professor responsável:</label>
+  <input type="text" id="editInstructor" name="editInstructor" required>
+
+  <button type="submit">Editar classe</button>
+</form>
+<button type="button" id="btnCloseEdit">X</button>
+  </dialog>
+
+    <script src="../../backend/dashboard.js"></script>
 </body>
 </html>
