@@ -2,25 +2,23 @@
 .card-login{
     position: relative;
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 70vh;
+
+    width: clamp(320px, 90vw, 60rem);
+    height: clamp(40dvh, 70dvh, 700px);
     overflow: hidden;
-    width: 50rem;
+
     background-color: var(--bg-component-w);
     border-radius: var(--br-base);
 
     &.show-register{
-
-        .form-login{
-            transform: translateX(-100%);
-        }
-
+        
+        .form-login,
         .form-register{
             transform: translateX(-100%);
         }
-
+        
         & img{
             transform: translateX(-100%);
             border-radius: var(--br-base) 0 0 var(--br-base);
@@ -29,138 +27,171 @@
         }
     }
 
-    & button{
-        position: absolute;
-        bottom: 5%;
-        overflow: hidden;
-        width: 80%;
-        height: 3rem;
-        margin-top: 5rem;
-        border-radius: var(--br-base);
-        border: 2px solid var(--bg-component-d);
-        color: var(--text-base-d);
-        font-size: 1.25rem;
-        transition: color 1ms ease;
-        z-index: 1;
-
-        &::after{
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0px;
-            height: 0px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background-color: var(--bg-component-d);
-            z-index: -2;
-        }
-
-        &::before{
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0px;
-            height: 0px;
-            transform: translate(-50%, -50%);
-            transition: all .5s;
-            border-radius: 50%;
-            background-color: var(--bg-component-d);
-            z-index: -1;
-        }
-
-        &:hover{
-            color: var(--text-base-w);
-            transition: color 0.5s ease-out;
-            &::before{
-                width: 450px;
-                height: 450px;
-                
-            }
-        }
-    }
 
     & form{
         position: relative;
-        top: 0;
+
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 80%;
-        height: 100%;
+
+        width: clamp(280px, 85%, 32rem);
+
+        padding: clamp(1rem, 3vw, 2rem);
+
         background-color: var(--bg-component-w);
-        padding: 1rem;
 
         & h2{
-            position: absolute;
-            top: 10%;
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+
             color: var(--text-base-d);
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        & button{
+            position: absolute;
+            bottom: clamp(1rem, 15px, 2rem);
+    
+            width: clamp(220px, 80%, 28rem);
+            height: clamp(2.7rem, 4vw, 3rem);
+    
+            border-radius: var(--br-base);
+            border: 2px solid var(--bg-component-d);
+    
+            color: var(--text-base-d);
+            font-size: clamp(0.9rem, 1vw, 1.25rem);
+    
+            overflow: hidden;
+            z-index: 1;
+    
+            transition: color 0.5s ease;
+    
+            &::after,
+            &::before{
+                content: "";
+                position: absolute;
+    
+                top: 50%;
+                left: 50%;
+    
+                width: 0;
+                height: 0;
+    
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+    
+                background-color: var(--bg-component-d);
+            }
+    
+            &::after{
+                z-index: -2;
+            }
+    
+            &::before{
+                transition: all .5s ease;
+                z-index: -1;
+            }
+    
+            &:hover{
+                color: var(--text-base-w);
+    
+                &::before{
+                    width: 32rem;
+                    height: 32rem;
+                }
+            }
         }
 
         & .field-gruop{
             display: flex;
-            gap: 10px;
+            gap: clamp(0.5rem, 2vw, 1rem);
+
             width: 100%;
         }
 
-        & .field {
+        & .field{
             position: relative;
-            width: 100%;
-            margin-bottom: 1.5rem;
 
-            & input {
+            width: 100%;
+
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+
+            & input{
                 width: 100%;
-                padding: 12px 10px;
+
+                padding:
+                    clamp(0.7rem, 1.2vw, 0.9rem)
+                    clamp(0.7rem, 1vw, 1rem);
+
                 border: 2px solid var(--bg-component-d);
-                border-radius: 5px;
+                border-radius: 0.5rem;
+
                 outline: none;
+
                 background-color: var(--bg-component-w);
-                transition: border-radius 0.3s ease;
+
+                font-size: clamp(0.9rem, 1vw, 1rem);
+
+                transition:
+                    border-radius 0.3s ease,
+                    box-shadow 0.3s ease;
 
                 &[type="date"]::-webkit-datetime-edit{
                     display: flex;
                     justify-content: center;
                 }
 
-                &[type="date"]::-webkit-calendar-picker-indicator {
+                &[type="date"]::-webkit-calendar-picker-indicator{
                     opacity: 0;
                 }
 
-                &:focus {
+                &:focus{
                     box-shadow: 0 0 0 2px var(--bg-component-w);
                     border-radius: var(--br-base);
                 }
 
                 &:focus + label,
-                &:not(:placeholder-shown) + label {
+                &:not(:placeholder-shown) + label{
                     top: 0;
-                    font-size: 0.7rem;
-                    line-height: 0.6rem;
+
+                    font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+
+                    line-height: 1;
                 }
             }
 
-            & label {
+            & label{
                 position: absolute;
-                text-align: center;
-                line-height: 1rem;
+
                 left: 50%;
                 top: 50%;
+
                 transform: translate(-50%, -50%);
+
+                padding:
+                    0
+                    clamp(0.2rem, 0.5vw, 0.4rem);
+
+                line-height: 1rem;
+
                 color: var(--text-base-d);
+
+                background: var(--bg-component-w);
+
+                border-radius: 999px;
+
                 pointer-events: none;
-                transition: 
+
+                font-size: clamp(0.85rem, 1vw, 1rem);
+
+                transition:
                     top 0.2s ease,
                     transform 0.2s ease,
                     font-size 0.2s ease,
                     color 0.2s ease;
-                background: var(--bg-component-w);
-                border-radius: 10px;
-                padding: 0 5px;
             }
-            
+
             &:has(input[type="date"]),
             &:has(input[type="tel"]){
                 width: 50%;
@@ -168,23 +199,21 @@
         }
     }
 
-    
-
     .form-login,
-    .form-register {
+    .form-register{
         position: absolute;
 
         width: 50%;
         height: 100%;
 
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
 
-        transition: 0.5s ease;
+        transition: transform 0.5s ease;
     }
 
-    .form-login {
+    .form-login{
         left: 0;
     }
 
@@ -193,30 +222,22 @@
     }
 
 
-    #register_link{
-        position: fixed;
-        bottom: 0;
-        margin-top: 1rem;
-        color: var(--text-base-d);
-        cursor: pointer;
-        transition: color 0.3s ease;
-
-        &:hover{
-            color: var(--bg-block);
-            transition: color 0.3s ease;
-        }
-    }
-
     & img{
         position: absolute;
+
         left: 50%;
+
         width: 50%;
         height: 100%;
+
         object-fit: cover;
         object-position: 70%;
-        transform: translateX(0);
+
         border-radius: 0 var(--br-base) var(--br-base) 0;
-        transition: 0.5s ease;
+
+        transition: all 0.5s ease;
+
+        transform: translateX(0);
     }
 }
 

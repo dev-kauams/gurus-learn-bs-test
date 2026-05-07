@@ -2,12 +2,36 @@
     /* Card Login */
 
     .body-login{
-        padding: 1rem;
-
+        display: flex;
+        flex-direction: column;
         .card-login{
+            display: flex;
+            flex-direction: column;
+            height: 50dvh;
+            transition: filter 1s ease;
+            
+
+            &.show-register{
+            filter: invert(1);
+            
+                .form-login,
+                .form-register{
+                    transform: translateY(-100%);
+                }
+            }
+
             .form-login,
             .form-register{
                 width: 100%;
+            }
+
+            .form-login{
+                bottom: 0;
+            }
+
+            .form-register{
+                bottom: -100%;
+                left: 0;
             }
     
             & img{
