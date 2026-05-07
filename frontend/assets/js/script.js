@@ -4,4 +4,11 @@ const cardLogin = document.querySelector('.card-login');
 
 registerLink.addEventListener('click', () => {
     cardLogin.classList.toggle('show-register');
+    
+    // Trocar o texto
+    if (registerLink.textContent === 'Não possui conta? Registre-se agora!') {
+        registerLink.textContent = 'Possui conta? Logue agora!';
+    } else {
+        registerLink.textContent = 'Não possui conta? Registre-se agora!';
+    }
 });
