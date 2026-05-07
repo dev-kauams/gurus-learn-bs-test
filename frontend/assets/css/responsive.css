@@ -40,4 +40,26 @@
         }
     }
 
+    .body-index{
+        grid-template-columns: 1fr; 
+        grid-template-rows: 5rem 1fr auto; 
+        grid-template-areas:
+            "header"
+            "main"
+            "footer";
+
+        & nav{
+            display: none;
+        }
+
+        & main{
+            .card-gruop {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr;
+                place-items: center;
+                gap: 1.5rem;
+            }
+        }
+    }
 }

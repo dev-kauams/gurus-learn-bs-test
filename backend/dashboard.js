@@ -99,7 +99,8 @@ function updateTable(){
 
         // Abre o modal.
         editModal.showModal();
-    })
+        editModal.style.display = "flex";
+    })  
     });
 }
 
@@ -135,6 +136,7 @@ formAdd.addEventListener('submit', (e) => {
     formAdd.querySelector("#lecture").value = "";
     formAdd.querySelector("#instructor").value = "";
     addModal.close();
+    addModal.style.display = "none";
 })
 
 // Edita uma classe existente ao ser submitada.
@@ -183,16 +185,19 @@ function generateId(arr){
 // Escuta a ação de clique e abre o modal.
 openBtn.addEventListener('click', () =>{
     addModal.showModal();
+    addModal.style.display = "flex";
 })
 
 // Escuta a ação de clique e fecha o modal.
 closeBtn.addEventListener('click', () =>{
     addModal.close();
+    addModal.style.display = "none";
 })
 
 // Escuta a ação de clique e fecha o modal.
 closeBtnEdit.addEventListener('click', () => {
     editModal.close();
+    editModal.style.display = "none";
 
     // Também limpa o id alvo, visto que o usuário pode cancelar a ação de editar.
     currentEditId = null;

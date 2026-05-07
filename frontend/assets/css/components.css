@@ -1,375 +1,409 @@
 /* Login Card */
-.card-login{
+.card-login {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: clamp(320px, 90vw, 60rem);
+  height: clamp(40dvh, 70dvh, 700px);
+  overflow: hidden;
+
+  background-color: var(--bg-component-w);
+  border-radius: var(--br-base);
+
+  &.show-register {
+    .form-login,
+    .form-register {
+      transform: translateX(-100%);
+    }
+
+    & img {
+      transform: translateX(-100%);
+      border-radius: var(--br-base) 0 0 var(--br-base);
+      object-fit: cover;
+      object-position: 30%;
+    }
+  }
+
+  & form {
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: clamp(280px, 85%, 32rem);
+
+    padding: clamp(1rem, 3vw, 2rem);
+
+    background-color: var(--bg-component-w);
+
+    & h2 {
+      margin-bottom: clamp(1rem, 2vw, 1.5rem);
+
+      color: var(--text-base-d);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    & button {
+      position: absolute;
+      bottom: clamp(1rem, 15px, 2rem);
+
+      width: clamp(220px, 80%, 28rem);
+      height: clamp(2.7rem, 4vw, 3rem);
+
+      border-radius: var(--br-base);
+      border: 2px solid var(--bg-component-d);
+
+      color: var(--text-base-d);
+      font-size: clamp(0.9rem, 1vw, 1.25rem);
+
+      overflow: hidden;
+      z-index: 1;
+
+      transition: color 0.5s ease;
+
+      &::after,
+      &::before {
+        content: "";
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        width: 0;
+        height: 0;
+
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+
+        background-color: var(--bg-component-d);
+      }
+
+      &::after {
+        z-index: -2;
+      }
+
+      &::before {
+        transition: all 0.5s ease;
+        z-index: -1;
+      }
+
+      &:hover {
+        color: var(--text-base-w);
+
+        &::before {
+          width: 32rem;
+          height: 32rem;
+        }
+      }
+    }
+
+    & .field-gruop {
+      display: flex;
+      gap: clamp(0.5rem, 2vw, 1rem);
+
+      width: 100%;
+    }
+
+    & .field {
+      position: relative;
+
+      width: 100%;
+
+      margin-bottom: clamp(1rem, 2vw, 1.5rem);
+
+      & input {
+        width: 100%;
+
+        padding: clamp(0.7rem, 1.2vw, 0.9rem) clamp(0.7rem, 1vw, 1rem);
+
+        border: 2px solid var(--bg-component-d);
+        border-radius: 0.5rem;
+
+        outline: none;
+
+        background-color: var(--bg-component-w);
+
+        font-size: clamp(0.9rem, 1vw, 1rem);
+
+        transition:
+          border-radius 0.3s ease,
+          box-shadow 0.3s ease;
+
+        &[type="date"]::-webkit-datetime-edit {
+          display: flex;
+          justify-content: center;
+        }
+
+        &[type="date"]::-webkit-calendar-picker-indicator {
+          opacity: 0;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 2px var(--bg-component-w);
+          border-radius: var(--br-base);
+        }
+
+        &:focus + label,
+        &:not(:placeholder-shown) + label {
+          top: 0;
+
+          font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+
+          line-height: 1;
+        }
+      }
+
+      & label {
+        position: absolute;
+
+        left: 50%;
+        top: 50%;
+
+        transform: translate(-50%, -50%);
+
+        padding: 0 clamp(0.2rem, 0.5vw, 0.4rem);
+
+        line-height: 1rem;
+
+        color: var(--text-base-d);
+
+        background: var(--bg-component-w);
+
+        border-radius: 999px;
+
+        pointer-events: none;
+
+        font-size: clamp(0.85rem, 1vw, 1rem);
+
+        transition:
+          top 0.2s ease,
+          transform 0.2s ease,
+          font-size 0.2s ease,
+          color 0.2s ease;
+      }
+
+      &:has(input[type="date"]),
+      &:has(input[type="tel"]) {
+        width: 50%;
+      }
+    }
+  }
+
+  .form-login,
+  .form-register {
+    position: absolute;
+
+    width: 50%;
+    height: 100%;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: clamp(320px, 90vw, 60rem);
-    height: clamp(40dvh, 70dvh, 700px);
-    overflow: hidden;
+    transition: transform 0.5s ease;
+  }
 
-    background-color: var(--bg-component-w);
-    border-radius: var(--br-base);
+  .form-login {
+    left: 0;
+  }
 
-    &.show-register{
-        
-        .form-login,
-        .form-register{
-            transform: translateX(-100%);
-        }
-        
-        & img{
-            transform: translateX(-100%);
-            border-radius: var(--br-base) 0 0 var(--br-base);
-            object-fit: cover;
-            object-position: 30%;
-        }
-    }
+  .form-register {
+    left: 100%;
+  }
 
+  & img {
+    position: absolute;
 
-    & form{
-        position: relative;
+    left: 50%;
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    width: 50%;
+    height: 100%;
 
-        width: clamp(280px, 85%, 32rem);
+    object-fit: cover;
+    object-position: 70%;
 
-        padding: clamp(1rem, 3vw, 2rem);
+    border-radius: 0 var(--br-base) var(--br-base) 0;
 
-        background-color: var(--bg-component-w);
+    transition: all 0.5s ease;
 
-        & h2{
-            margin-bottom: clamp(1rem, 2vw, 1.5rem);
-
-            color: var(--text-base-d);
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
-        }
-
-        & button{
-            position: absolute;
-            bottom: clamp(1rem, 15px, 2rem);
-    
-            width: clamp(220px, 80%, 28rem);
-            height: clamp(2.7rem, 4vw, 3rem);
-    
-            border-radius: var(--br-base);
-            border: 2px solid var(--bg-component-d);
-    
-            color: var(--text-base-d);
-            font-size: clamp(0.9rem, 1vw, 1.25rem);
-    
-            overflow: hidden;
-            z-index: 1;
-    
-            transition: color 0.5s ease;
-    
-            &::after,
-            &::before{
-                content: "";
-                position: absolute;
-    
-                top: 50%;
-                left: 50%;
-    
-                width: 0;
-                height: 0;
-    
-                transform: translate(-50%, -50%);
-                border-radius: 50%;
-    
-                background-color: var(--bg-component-d);
-            }
-    
-            &::after{
-                z-index: -2;
-            }
-    
-            &::before{
-                transition: all .5s ease;
-                z-index: -1;
-            }
-    
-            &:hover{
-                color: var(--text-base-w);
-    
-                &::before{
-                    width: 32rem;
-                    height: 32rem;
-                }
-            }
-        }
-
-        & .field-gruop{
-            display: flex;
-            gap: clamp(0.5rem, 2vw, 1rem);
-
-            width: 100%;
-        }
-
-        & .field{
-            position: relative;
-
-            width: 100%;
-
-            margin-bottom: clamp(1rem, 2vw, 1.5rem);
-
-            & input{
-                width: 100%;
-
-                padding:
-                    clamp(0.7rem, 1.2vw, 0.9rem)
-                    clamp(0.7rem, 1vw, 1rem);
-
-                border: 2px solid var(--bg-component-d);
-                border-radius: 0.5rem;
-
-                outline: none;
-
-                background-color: var(--bg-component-w);
-
-                font-size: clamp(0.9rem, 1vw, 1rem);
-
-                transition:
-                    border-radius 0.3s ease,
-                    box-shadow 0.3s ease;
-
-                &[type="date"]::-webkit-datetime-edit{
-                    display: flex;
-                    justify-content: center;
-                }
-
-                &[type="date"]::-webkit-calendar-picker-indicator{
-                    opacity: 0;
-                }
-
-                &:focus{
-                    box-shadow: 0 0 0 2px var(--bg-component-w);
-                    border-radius: var(--br-base);
-                }
-
-                &:focus + label,
-                &:not(:placeholder-shown) + label{
-                    top: 0;
-
-                    font-size: clamp(0.65rem, 0.8vw, 0.75rem);
-
-                    line-height: 1;
-                }
-            }
-
-            & label{
-                position: absolute;
-
-                left: 50%;
-                top: 50%;
-
-                transform: translate(-50%, -50%);
-
-                padding:
-                    0
-                    clamp(0.2rem, 0.5vw, 0.4rem);
-
-                line-height: 1rem;
-
-                color: var(--text-base-d);
-
-                background: var(--bg-component-w);
-
-                border-radius: 999px;
-
-                pointer-events: none;
-
-                font-size: clamp(0.85rem, 1vw, 1rem);
-
-                transition:
-                    top 0.2s ease,
-                    transform 0.2s ease,
-                    font-size 0.2s ease,
-                    color 0.2s ease;
-            }
-
-            &:has(input[type="date"]),
-            &:has(input[type="tel"]){
-                width: 50%;
-            }
-        }
-    }
-
-    .form-login,
-    .form-register{
-        position: absolute;
-
-        width: 50%;
-        height: 100%;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: transform 0.5s ease;
-    }
-
-    .form-login{
-        left: 0;
-    }
-
-    .form-register{
-        left: 100%;
-    }
-
-
-    & img{
-        position: absolute;
-
-        left: 50%;
-
-        width: 50%;
-        height: 100%;
-
-        object-fit: cover;
-        object-position: 70%;
-
-        border-radius: 0 var(--br-base) var(--br-base) 0;
-
-        transition: all 0.5s ease;
-
-        transform: translateX(0);
-    }
+    transform: translateX(0);
+  }
 }
 
 /* CARD */
 
-.card{
-    height: 8rem;
-    width: 15rem;
-    background-color: var(--bg-component-w);
+.card {
+  height: 8rem;
+  width: 15rem;
+  background-color: var(--bg-component-w);
+  border-radius: var(--br-base);
+  gap: 0.5rem;
+}
+
+.card:has(img) {
+  margin-top: 10px;
+  height: 25rem;
+  width: 20rem;
+  overflow: hidden;
+  &:hover {
+    & img {
+      scale: 100%;
+      border-radius: 0;
+    }
+  }
+  & img {
+    width: 100%;
+    height: 50%;
+    scale: 95%;
     border-radius: var(--br-base);
-    gap: 0.5rem;
+    transition:
+      scale 0.3s ease-in-out,
+      border-radius 0.5s ease-in-out;
+
+    ::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      background-color: var(--bg-component-d);
+    }
+  }
 }
 
-.card:has(img){
-    margin-top: 10px;
-    height: 25rem;
-    width: 20rem;
-    overflow: hidden;
-    &:hover{
-        & img{
-            scale: 100%;
-            border-radius: 0;
-        }
-    }
-    & img{
-        width: 100%;
-        height: 50%;
-        scale: 95%;
-        border-radius: var(--br-base);
-        transition: scale 0.3s ease-in-out, border-radius 0.5s ease-in-out;
+.card:has(input[type="checkbox"]) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: clamp(250px, 10rem, 14rem);
+  width: clamp(250px, 30rem, 25vw);
+  transition: height 0.4s ease;
 
-        ::before{
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 50%;
-            background-color: var(--bg-component-d);
-        }
-    }
-}
-
-.card:has(input[type="checkbox"]){
-    position: relative;
+  .info-classroom {
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+
+    & img {
+      border-radius: 50%;
+      width: 15%;
+    }
+
+    & h2 {
+      font-size: clamp(1rem, 1.5rem, 2rem);
+    }
+  }
+
+  .more-info-classroom {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 0;
     overflow: hidden;
-    height: 10rem;
-    padding: 0.5rem;
-    transition: height 0.4s ease;
+    opacity: 0;
+    transition: all 0.2s;
+  }
 
-    .info-classroom{
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        transition: all 0.3s ease;
+  .more-info-input {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
 
-        & img{
-            border-radius: 50%;
-            width: 15%;
-        }
-
-        & h2{
-            font-size: clamp(0.7rem, 1.2rem, 2rem);
-        }
+    input {
+      display: none;
     }
 
-    .more-info-classroom{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: all 0.2s;
-    }
+    label {
+      cursor: pointer;
 
-    .more-info-input{
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      img {
+        width: 2rem;
         height: 2rem;
 
-        input{
-            display: none;
-        }
+        transform: rotate(90deg);
+        transition: transform 0.3s ease;
+      }
+    }
+  }
 
-        label{
-            cursor: pointer;
+  &:has(input:checked) {
+    height: clamp(400px, 20rem, 40vh);
 
-            img{
-                width: 2rem;
-                height: 2rem;
-
-                transform: rotate(90deg);
-                transition: transform 0.3s ease;
-            }
-        }
+     .info-classroom {
+      opacity: 0;
     }
 
-    &:has(input:checked){
-        height: 12rem;
+    .more-info-classroom {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      max-height: 400px;
+      opacity: 1;
 
-        .info-classroom{
-            transform: translate(45%, -55%);
-            scale: 75%;
-            opacity: 0.5;
+      
+      & p{
+        font-size: clamp(0.8rem, 1.5vw, 1.5rem);
+      }
 
-            & img{
-                opacity: 0;
-            }
+      & img{
+        margin-top: 10px;
+        border-radius: 50%;
+        width: 100%;
+        border: 5px solid var(--bg-component-d);
+      }
+
+      & button{
+        width: 100%;
+        background: transparent;
+        border: 2px solid var(--bg-component-d);
+        color: var(--bg-component-d);
+
+        &:hover {
+          background-color: var(--bg-component-d);
+          color: var(--bg-component-w);
         }
-
-        .more-info-classroom{
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            max-height: 300px;
-            opacity: 1;
-        }
-
-        label img{
-            transform: rotate(270deg);
-        }
+      }
     }
+
+    label img {
+      transform: rotate(270deg);
+    }
+  }
 }
 
+.icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 10px;
+  background-color: var(--bg-component-w);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-radius: 50%;
+  }
+
+  & svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: var(--bg-component-d);
+  }
+}
