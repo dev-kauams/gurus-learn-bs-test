@@ -128,7 +128,6 @@ html {
     }
 
     #class {
-      display: none;
 
       & h1 {
         font-size: clamp(1.5rem, 2vw, 3rem);
@@ -337,7 +336,6 @@ html {
     #chat {
   width: 100%;
   height: 100%;
-  display: none;
   flex-direction: column;
   border-radius: var(--br-base);
   overflow: hidden;
@@ -417,7 +415,7 @@ html {
           font-size: 0.9rem;
           line-height: 1.4;
           color: var(--text-base-w);
-          background-color: #3b1f6b; /* Cor do balão recebido */
+          background-color: #3b1f6b;
           
           &.audio {
             display: flex;
@@ -434,7 +432,6 @@ html {
         }
       }
 
-      /* Estilo para Mensagens Enviadas (Direita) */
       &.outgoing {
         align-self: flex-end;
         flex-direction: row;
@@ -449,7 +446,6 @@ html {
         }
       }
 
-      /* Estilo para Mensagens Recebidas (Esquerda) */
       &.incoming {
         align-self: flex-start;
       }
@@ -602,4 +598,10 @@ html {
       }
     }
   }
+}
+
+
+
+.disable-section {
+  display: none !important;
 }
