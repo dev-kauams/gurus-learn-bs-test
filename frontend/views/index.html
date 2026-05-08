@@ -195,12 +195,22 @@
       </section>
 
       <section id="calendar">
-        <h1>Calendário</h1>
-        <aside></aside>
+        <aside>
+          <h2>Tarefas do Mês</h2>
+          <ul>
+            <li>Programação Orientada à Objetos - Exercício 1 | 10/05</li>
+            <li>Landing Page com React.js e TypeScript | 13/05</li>
+            <li>Lógica II - Exercício 1 ao 10 | 13/05</li>
+            <li>Programação Orientada à Objetos - Exercício 2 | 17/05</li>
+          </ul>
+        </aside>
         <div class="calendar-header">
-    <button class="prev-month">&lt;</button>
-    <h2>Maio 2026</h2>
-    <button class="next-month">&gt;</button>
+          <h1>Calendário</h1>
+          <div class="month-selector">
+            <button class="prev-month"><</button>
+      <h2>Maio 2026</h2>
+      <button class="next-month">></button>
+          </div>
   </div>
   
   <table>
@@ -264,6 +274,56 @@
     </tbody>
   </table>
       </section>
+
+      <section id="chat">
+  <header class="chat-header">
+    <div class="header-left">
+      <button class="back-btn">&lt;</button>
+      <div class="group-icon">Gurupos</div>
+      <button class="filter-btn">Geral</button>
+    </div>
+    <div class="header-right">
+      <span class="dots">...</span>
+    </div>
+  </header>
+
+  <div class="chat-content">
+    <div class="message incoming">
+      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      <div class="bubble-group">
+        <span class="username">Antônio Manso Pacífico de Oliveira Sossegado</span>
+        <div class="bubble">Ai vei muito Bangers isso aí, não ligo O-D</div>
+      </div>
+    </div>
+
+    <div class="message outgoing">
+      <div class="bubble-group">
+        <div class="bubble">Pessoal precisamos terminar as atividades antes da data de entrega se não, estamos ferrados.</div>
+      </div>
+      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+    </div>
+
+    <div class="message incoming">
+      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      <div class="bubble-group">
+        <span class="username">Lança Perfume Rodometálico de Andrade</span>
+        <div class="bubble">Só sei que eu sou o Mior</div>
+      </div>
+    </div>
+
+    <div class="message incoming">
+      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      <div class="bubble-group">
+        <span class="username">Excelza Teresinha do Menino Jesus da Costa e Silva</span>
+        <div class="bubble audio">
+          <button class="play-btn">(btn de pause add dps)</button>
+          <div class="wave">|||||||||||||||||||||||||</div>
+          <span class="time">07:24</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
       <!-- Parte de teste de classes de container. Os cards ficaram aqui. Pode mudar o quanto quiser
       só tenha certeza de utilizar o esquema de ID's certos que está no index.js no backend. -->
 
