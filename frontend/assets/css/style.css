@@ -27,6 +27,17 @@ html {
   scroll-behavior: smooth;
 }
 
+
+body{
+  background: radial-gradient(
+  circle at center,
+  #ffffff 0%,
+  #f8f4fc 45%,
+  #f4effa 75%,
+  #f0e4fe 100%
+  );
+}
+
 /* --- LOGIN BODY --- */
 .body-login {
   width: 100%;
@@ -106,7 +117,7 @@ html {
     justify-content: space-between;
     padding: 1rem 0;
     align-items: center;
-    background-color: var(--bg-base-w);
+    background-color: transparent;
     height: 100%;
 
     .icon-gruop {
@@ -125,6 +136,10 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     & section {
       width: 100%;
@@ -474,6 +489,7 @@ html {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    background-color: transparent;
     color: var(--text-base-d);
   }
 }

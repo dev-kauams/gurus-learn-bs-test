@@ -150,7 +150,7 @@
         &:focus + label,
         &:not(:placeholder-shown) + label {
           top: 0;
-
+          text-align: center;
           font-size: clamp(0.65rem, 0.8vw, 0.75rem);
 
           line-height: 1;
