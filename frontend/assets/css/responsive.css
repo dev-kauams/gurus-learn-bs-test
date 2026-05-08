@@ -40,7 +40,7 @@
         }
     }
 
-    .body-index{
+    .body-index {
         grid-template-columns: 1fr; 
         grid-template-rows: 5rem 1fr auto; 
         grid-template-areas:
@@ -48,17 +48,30 @@
             "main"
             "footer";
 
-        & nav{
+        & nav {
             display: none;
         }
 
-        & main{
-            .card-gruop {
+        & main {
+            grid-area: main;
+            
+            #class .card-gruop {
                 width: 100%;
                 display: grid;
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Agora sim vai forçar 1 coluna */
                 place-items: center;
                 gap: 1.5rem;
+            }
+
+            #calendar{
+                display: flex;
+                aside{
+                    width: 100%;
+                }
+
+                & table, .calendar-header {
+                    display: none;
+                }
             }
         }
     }

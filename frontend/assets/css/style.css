@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Stack+Sans+Text:wght@200..700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Stack Sans Text";
 }
 
 :root {
@@ -66,6 +69,10 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    .logo{
+      width: 5%;
+    }
 
     .search-bar {
       height: 70%;
@@ -134,10 +141,10 @@ html {
         color: var(--text-base-d);
       }
 
-      & button {
+      .enter-room-button {
         margin: 1rem 0;
         padding: 0.7rem 1rem;
-        width: 30%;
+        width: 30dvh;
         background-color: var(--bg-block);
         color: var(--text-base-w);
         border-radius: 10px;
@@ -436,6 +443,10 @@ html {
         align-self: flex-end;
         flex-direction: row;
 
+        & img{
+          align-self: center;
+        }
+
         .bubble {
           background-color: #2d1b4e;
           border: 1px solid #4a2b82;
@@ -448,6 +459,10 @@ html {
 
       &.incoming {
         align-self: flex-start;
+
+        & img{
+          align-self: center;
+        }
       }
     }
   }
@@ -457,7 +472,7 @@ html {
   & footer {
     grid-area: footer;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     color: var(--text-base-d);
   }

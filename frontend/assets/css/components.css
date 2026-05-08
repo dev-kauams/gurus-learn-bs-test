@@ -241,6 +241,7 @@
   width: 15rem;
   background-color: var(--bg-component-w);
   border-radius: var(--br-base);
+  color: var(--text-base-d);
   gap: 0.5rem;
 }
 
@@ -279,7 +280,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: clamp(250px, 10rem, 14rem);
+  height: clamp(300px, 12rem, 16rem);
   width: clamp(250px, 30rem, 25vw);
   transition: height 0.4s ease;
 
@@ -340,7 +341,7 @@
   }
 
   &:has(input:checked) {
-    height: clamp(400px, 20rem, 40vh);
+    height: clamp(450px, 20rem, 40vh);
 
      .info-classroom {
       opacity: 0;
@@ -357,6 +358,8 @@
       
       & p{
         font-size: clamp(0.8rem, 1.5vw, 1.5rem);
+        text-align: center;
+        margin-top: 10px;
       }
 
       & img{
@@ -366,11 +369,15 @@
         border: 5px solid var(--bg-component-d);
       }
 
-      & button{
+      .card-class-button{
         width: 100%;
+        padding: 0.8rem 0;
+        margin: 1rem 0;  
         background: transparent;
         border: 2px solid var(--bg-component-d);
+        border-radius: var(--br-base);
         color: var(--bg-component-d);
+        transition: all 0.2s ease;
 
         &:hover {
           background-color: var(--bg-component-d);
