@@ -167,6 +167,8 @@ formEdit.addEventListener('submit', (e) => {
     // Limpa a variável global de id alvo para não causar erro no fluxo de edição.
     currentEditId = null;
     editModal.close();
+    editModal.style.display = "none";
+
 })
 
 // Função responsável por salvar as novas informações do array de classes, no item classes.
