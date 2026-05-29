@@ -61,33 +61,6 @@ insert into nivel(nome_nivel) values
 ('Professor'),
 ('Gestão');
 
-insert into materia(nome_materia) values
-('Matemática'),
-('Artes'),
-('Aura');
-
-insert into usuario(nome, email, cpf, telefone, data_nascimento, senha, id_nivel) values
-('Matheus Souza', 'matheus.sbs03@gmail.com', '49219234858', '11972762077', '2009-03-22', 'Queijo10@', 1),
-('Ignácio Cunha', 'ignacio.cunha@gmail.com', '12345678901', '11912345678', '1981-04-30', 'Banana10@', 2),
-('André Denane', 'andre.denane@gmail.com', '01234567890', '11987203542', '1990-04-30', 'Açafrão10@', 2),
-('Dênis Araujo', 'denis.machado@gmail.com', '12345678903', '11912345978', '2026-04-30', 'Sesi@2026', 2),
-('Marcos Alves', 'marcos.alves@gmail.com', '98765432110', '11987654321', '1950-09-18', 'AmoSenai@10', 3);
-
-insert into turma(nome_turma, id_professor) values
-('2IH-DS', 2),
-('2IG-DS', 3),
-('2IF-DS', 4);
-
-insert into atividade(titulo, prazo, id_turma, id_materia) values
-('Entrega da Sprint 1', '2026-05-23 20:30:00', 1, 1),
-('Desenvolvimento Mobile', '2026-10-09 20:30:00', 2, 2),
-('Prototipação no Figma', '2026-12-14 19:30:00', 3, 3);
-
-insert into aula(titulo, data_aula, conteudo, id_turma) values
-('Aula expositória sobre Node.js', '2026-05-22', 'Nesta aula, baixem os arquivos propostos e leiam o PDF anexado.', 1),
-('Aula expositória sobre React.js', '2026-05-22', 'Nesta aula, o processo de criação e estilização está disponibilizado na aula anterior. Reveja e construa sua própria interface.', 2),
-('Boas práticas e Normalização', '2026-05-22', 'A normalização e boas práticas pode parecer desnecessário, mas eficiência em fazer um código universal é poderoso.', 3);
-
 -- Visão básica de turma, professor responsável.
 SELECT 
     u.nome AS Nome_Professor, 
