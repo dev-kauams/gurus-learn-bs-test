@@ -1,64 +1,779 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/components.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guru's Learn — Gestão</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3976/3976625.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    :root {
+      --ink:    #2F184B;
+      --yellow: #f5d300;
+      --green:  #4caf50;
+      --red:    #e53935;
+    }
+
+    body.body-dashboard {
+      align-items: stretch; justify-content: flex-start;
+      flex-direction: column; padding: 0;
+    }
+
+    /* NAVBAR */
+    .dash-nav {
+      background: var(--bg-base-d); color: var(--text-base-w);
+      padding: .8rem 2rem; display: flex;
+      justify-content: space-between; align-items: center;
+      border-bottom: 4px solid var(--bg-block);
+    }
+    .dash-nav .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
+    .dash-nav .brand span { color: #d4aaff; }
+    .dash-nav .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .dash-nav .badge-gestao {
+      background: var(--bg-block); color: #fff;
+      font-size: .72rem; padding: 3px 10px; border-radius: 20px; font-weight: 700;
+    }
+    .dash-nav .nome-user { font-size: .85rem; opacity: .8; }
+    .btn-logout {
+      background: transparent; border: 2px solid #ffffff50; color: #fff;
+      padding: 5px 14px; border-radius: 20px; cursor: pointer; font-size: .82rem;
+      transition: background .2s;
+    }
+    .btn-logout:hover { background: #ffffff20; }
+
+    /* HERO */
+    .dash-hero {
+      background: linear-gradient(135deg, var(--bg-base-d), var(--bg-block));
+      padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .dash-hero h1 {
+      font-size: 1.8rem; color: #f5d300; letter-spacing: 1px;
+    }
+    .dash-hero p { color: #d4aaff; font-size: .9rem; }
+
+    /* MAIN */
+    .dash-main { padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+
+    /* STAT CARDS */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card {
+      background: var(--bg-component-w); border-radius: var(--br-base);
+      padding: 1.2rem 1.4rem; position: relative; overflow: hidden;
+      border: 2px solid #0001;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px #0002; }
+    .stat-card .accent { position: absolute; top:0; left:0; width:100%; height:5px; }
+    .stat-card .icon   { font-size: 2rem; margin-bottom: .3rem; }
+    .stat-card .label  { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+    .stat-card .valor  { font-size: 2.5rem; font-weight: 900; color: var(--bg-base-d); line-height: 1.1; }
+
+    /* SECTION TITLE */
+    .sec-title {
+      font-size: 1.2rem; font-weight: 900; color: var(--bg-base-d);
+      border-bottom: 3px solid var(--bg-block); padding-bottom: 4px;
+      margin-bottom: 1rem; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* TABELAS */
+    .table-wrap { background: var(--bg-component-w); border-radius: var(--br-base); overflow: hidden; margin-bottom: 2rem; }
+    .dash-table { width: 100%; border-collapse: collapse; }
+    .dash-table thead th {
+      background: var(--bg-base-d); color: #f5d300;
+      padding: .8rem 1rem; font-size: .85rem; text-align: left; letter-spacing: 1px;
+    }
+    .dash-table tbody tr { border-bottom: 1px solid #eee; transition: background .15s; }
+    .dash-table tbody tr:hover { background: rgba(83,43,136,.08); }
+    .dash-table td { padding: .7rem 1rem; font-size: .88rem; vertical-align: middle; color: var(--text-base-d); }
+
+    /* Badges nível */
+    .badge-n { font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+    .badge-n.aluno     { background: #e3f2fd; color: #1565c0; }
+    .badge-n.professor { background: #e8f5e9; color: #2e7d32; }
+    .badge-n.gestao    { background: #fce4ec; color: #880e4f; }
+
+    /* BOTÕES */
+    .btn-gl {
+      font-size: .75rem; font-weight: 700; padding: 5px 12px;
+      border-radius: 8px; border: 2px solid var(--bg-base-d);
+      cursor: pointer; transition: all .15s;
+    }
+    .btn-gl:hover { transform: translateY(-1px); }
+    .btn-gl.primary  { background: var(--bg-block); color: #fff; border-color: var(--bg-block); }
+    .btn-gl.danger   { background: #ffcdd2; color: #b71c1c; }
+    .btn-gl.yellow   { background: #f5d300; color: var(--bg-base-d); }
+    .btn-add-row {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .85rem; font-weight: 700; text-transform: uppercase;
+      padding: .5rem 1.2rem; border-radius: var(--br-base);
+      background: var(--bg-block); color: #fff; border: none; cursor: pointer;
+      transition: background .2s; margin-bottom: 1rem;
+    }
+    .btn-add-row:hover { background: var(--bg-base-d); }
+
+    /* BUSCA */
+    .busca-input {
+      padding: .5rem 1rem; border-radius: var(--br-base);
+      border: 2px solid var(--bg-component-d);
+      background: var(--bg-component-w); color: var(--text-base-d);
+      font-size: .85rem; outline: none;
+    }
+
+    /* TOAST */
+    .toast-gl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: var(--bg-block); color: #F4EFFA;
+      padding: 12px 22px; border-radius: 12px; font-size: .9rem;
+      box-shadow: 0 8px 24px #0003; display: none;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: #0005; z-index: 200;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--bg-component-w); border-radius: var(--br-base);
+      padding: 2rem; width: 90%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .modal-box h3 { color: var(--bg-block); font-size: 1.3rem; font-weight: 900; }
+    .modal-box label { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+    .modal-box input, .modal-box select, .modal-box textarea {
+      width: 100%; padding: .6rem 1rem; border-radius: .8rem;
+      border: 2px solid var(--bg-component-d);
+      background: var(--bg-base-w); color: var(--text-base-d); font-size: .9rem; outline: none;
+    }
+    .modal-box .btn-row { display: flex; gap: .8rem; margin-top: .5rem; }
+    .modal-box .btn-row button { flex: 1; padding: .65rem; border-radius: var(--br-base); border: 2px solid var(--bg-component-d); cursor: pointer; font-size: .9rem; font-weight: 700; transition: all .2s; }
+    .modal-box .btn-row .btn-primary { background: var(--bg-block); color: #fff; border-color: var(--bg-block); }
+    .modal-box .btn-row .btn-cancel  { background: transparent; }
+    .modal-box .btn-row .btn-primary:hover { background: var(--bg-base-d); }
+
+    /* TABS */
+    .dash-tabs { display: flex; gap: .5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .dash-tab {
+      padding: .5rem 1.2rem; border-radius: var(--br-base);
+      border: 2px solid var(--bg-component-d); cursor: pointer;
+      font-size: .85rem; font-weight: 700; background: transparent; color: var(--text-base-d);
+      transition: all .2s;
+    }
+    .dash-tab.active { background: var(--bg-block); color: #fff; border-color: var(--bg-block); }
+  </style>
 </head>
 <body class="body-dashboard">
-  <a href="index.html">Ir para a página de usuário.</a>
-  <button type="button" id="btnOpen">Adicionar nova classe</button>
-  <dialog id="addModal">
-    <form id="addForm" method="post">
 
-  <label for="namClass">Nome da classe:</label>
-  <input type="text" id="namClass" name="namClass" required>
+<div class="toast-gl" id="toast"></div>
 
-  <label for="lecture">Matéria</label>
-  <input type="text" id="lecture" name="lecture" required>
+<!-- NAVBAR -->
+<nav class="dash-nav">
+  <div class="brand">GURU'S <span>LEARN</span></div>
+  <div class="nav-right">
+    <span class="badge-gestao">GESTÃO</span>
+    <span class="nome-user" id="nomeAdmin">—</span>
+    <button class="btn-logout" id="btnLogout">Sair</button>
+  </div>
+</nav>
 
-<label for="instructor">Professor responsável:</label>
-  <input type="text" id="instructor" name="instructor" required>
+<!-- HERO -->
+<div class="dash-hero">
+  <div>
+    <h1>PAINEL DE GESTÃO</h1>
+    <p>Guru's Learn — gerenciamento completo do portal educacional</p>
+  </div>
+</div>
 
-  <button type="submit">Criar nova classe</button>
-</form>
-<button type="button" id="btnClose">X</button>
-  </dialog>
+<!-- MAIN -->
+<div class="dash-main">
 
-   <table id="classes" border="1">
-  <thead>
-    <tr>
-      <th>Número da classe:</th>
-      <th>Nome da classe:</th>
-      <th>Matéria:</th>
-      <th>Professor:</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="classesBody">
-  </tbody>
-</table>
+  <!-- STAT CARDS -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="accent" style="background:#532B88;"></div>
+      <div class="icon">👨‍🎓</div>
+      <div class="label">Alunos</div>
+      <div class="valor" id="statAlunos">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="accent" style="background:#4caf50;"></div>
+      <div class="icon">👨‍🏫</div>
+      <div class="label">Professores</div>
+      <div class="valor" id="statProfs">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="accent" style="background:#2196f3;"></div>
+      <div class="icon">📚</div>
+      <div class="label">Turmas</div>
+      <div class="valor" id="statTurmas">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="accent" style="background:#ff9800;"></div>
+      <div class="icon">🎓</div>
+      <div class="label">Aulas</div>
+      <div class="valor" id="statAulas">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="accent" style="background:#e53935;"></div>
+      <div class="icon">📝</div>
+      <div class="label">Atividades</div>
+      <div class="valor" id="statAtiv">—</div>
+    </div>
+  </div>
 
- <dialog id="editModal">
-    <form id="editForm" method="post">
+  <!-- TABS -->
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-tab="usuarios">Usuários</button>
+    <button class="dash-tab" data-tab="turmas">Turmas</button>
+    <button class="dash-tab" data-tab="aulas">Aulas</button>
+    <button class="dash-tab" data-tab="atividades">Atividades</button>
+  </div>
 
-  <label for="editNam">Nome da classe:</label>
-  <input type="text" id="editNam" name="editNam" required>
+  <!-- ── TAB USUÁRIOS ── -->
+  <div id="tab-usuarios" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <div class="sec-title mb-0" style="border:none;padding:0;">👥 Usuários Cadastrados</div>
+      <input type="text" class="busca-input" id="buscaUsuario" placeholder="🔍 Buscar usuário...">
+    </div>
+    <div class="table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Nome</th><th>Email</th><th>Nível</th><th>CPF</th><th>Cadastro</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyUsuarios"><tr><td colspan="6" style="text-align:center;padding:1.5rem;">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-  <label for="editLecture">Matéria</label>
-  <input type="text" id="editLecture" name="editLecture" required>
+  <!-- ── TAB TURMAS ── -->
+  <div id="tab-turmas" class="tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <div class="sec-title mb-0" style="border:none;padding:0;">📚 Turmas</div>
+      <button class="btn-add-row" id="btnNovaTurma">+ Nova Turma</button>
+    </div>
+    <div class="table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Nome</th><th>Descrição</th><th>Professor</th><th>Criado em</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyTurmas"><tr><td colspan="5" style="text-align:center;padding:1.5rem;">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-<label for="editInstructor">Professor responsável:</label>
-  <input type="text" id="editInstructor" name="editInstructor" required>
+  <!-- ── TAB AULAS ── -->
+  <div id="tab-aulas" class="tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <div class="sec-title mb-0" style="border:none;padding:0;">🎓 Aulas</div>
+      <button class="btn-add-row" id="btnNovaAula">+ Nova Aula</button>
+    </div>
+    <div class="table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Título</th><th>Data/Hora</th><th>Turma</th><th>Conteúdo</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyAulas"><tr><td colspan="5" style="text-align:center;padding:1.5rem;">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-  <button type="submit">Editar classe</button>
-</form>
-<button type="button" id="btnCloseEdit">X</button>
-  </dialog>
+  <!-- ── TAB ATIVIDADES ── -->
+  <div id="tab-atividades" class="tab-content" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+      <div class="sec-title mb-0" style="border:none;padding:0;">📝 Atividades</div>
+      <button class="btn-add-row" id="btnNovaAtividade">+ Nova Atividade</button>
+    </div>
+    <div class="table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead><tr><th>Título</th><th>Matéria</th><th>Turma</th><th>Prazo</th><th>Ações</th></tr></thead>
+          <tbody id="tbodyAtividades"><tr><td colspan="5" style="text-align:center;padding:1.5rem;">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    <script src="../../backend/dashboard.js"></script>
+</div><!-- /dash-main -->
+
+<!-- ══ MODAL TURMA ══ -->
+<div class="modal-overlay" id="modalTurma">
+  <div class="modal-box">
+    <h3 id="modalTurmaTitle">Nova Turma</h3>
+    <input type="hidden" id="tId">
+    <div><label>Nome da Turma *</label><input type="text" id="tNome" placeholder="Ex: 2IH-DS"></div>
+    <div><label>Descrição</label><textarea id="tDesc" rows="2" placeholder="Breve descrição..."></textarea></div>
+    <div><label>Professor Responsável</label><select id="tProf"><option value="">Selecione...</option></select></div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="fecharModal('modalTurma')">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarTurma">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL AULA ══ -->
+<div class="modal-overlay" id="modalAula">
+  <div class="modal-box">
+    <h3 id="modalAulaTitle">Nova Aula</h3>
+    <input type="hidden" id="aId">
+    <div><label>Título *</label><input type="text" id="aTitulo" placeholder="Título da aula"></div>
+    <div><label>Data e Hora *</label><input type="datetime-local" id="aData"></div>
+    <div><label>Turma *</label><select id="aTurma"><option value="">Selecione...</option></select></div>
+    <div><label>Conteúdo *</label><textarea id="aConteudo" rows="3" placeholder="Descrição do conteúdo..."></textarea></div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="fecharModal('modalAula')">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarAula">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ATIVIDADE ══ -->
+<div class="modal-overlay" id="modalAtividade">
+  <div class="modal-box">
+    <h3 id="modalAtivTitle">Nova Atividade</h3>
+    <input type="hidden" id="atId">
+    <div><label>Título *</label><input type="text" id="atTitulo" placeholder="Título da atividade"></div>
+    <div><label>Descrição</label><textarea id="atDesc" rows="2" placeholder="Descrição opcional..."></textarea></div>
+    <div><label>Matéria *</label><select id="atMateria"><option value="">Selecione...</option></select></div>
+    <div><label>Turma *</label><select id="atTurma"><option value="">Selecione...</option></select></div>
+    <div><label>Prazo *</label><input type="datetime-local" id="atPrazo"></div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="fecharModal('modalAtividade')">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarAtiv">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL EDITAR USUÁRIO ══ -->
+<div class="modal-overlay" id="modalUsuario">
+  <div class="modal-box">
+    <h3>Editar Usuário</h3>
+    <input type="hidden" id="uId">
+    <div><label>Nome *</label><input type="text" id="uNome"></div>
+    <div><label>Email *</label><input type="email" id="uEmail"></div>
+    <div><label>Telefone</label><input type="tel" id="uTel"></div>
+    <div><label>Nível</label>
+      <select id="uNivel">
+        <option value="1">Aluno</option>
+        <option value="2">Professor</option>
+        <option value="3">Gestão</option>
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="fecharModal('modalUsuario')">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarUsuario">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// dashboard.html — JavaScript de Gestão
+// ============================================================
+
+// ── Verificar sessão ──────────────────────────────────────────
+(async () => {
+  try {
+    const resp = await fetch('/api/sessao', { credentials: 'include' });
+    if (!resp.ok) { window.location.href = '/login'; return; }
+    const data = await resp.json();
+    if (!data.user || data.user.id_nivel !== 3) { window.location.href = '/portal'; return; }
+    document.getElementById('nomeAdmin').textContent = data.user.nome;
+  } catch { window.location.href = '/login'; }
+})();
+
+// ── Toast ─────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent   = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3200);
+}
+
+// ── Logout ────────────────────────────────────────────────────
+document.getElementById('btnLogout').addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+  window.location.href = '/login';
+});
+
+// ── Tabs ──────────────────────────────────────────────────────
+document.querySelectorAll('.dash-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).style.display = 'block';
+  });
+});
+
+// ── Modal helpers ─────────────────────────────────────────────
+function abrirModal(id)  { document.getElementById(id).classList.add('open'); }
+function fecharModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── ESTATÍSTICAS ──────────────────────────────────────────────
+async function carregarEstatisticas() {
+  try {
+    const resp  = await fetch('/api/estatisticas', { credentials: 'include' });
+    const stats = await resp.json();
+    document.getElementById('statAlunos').textContent = stats.alunos;
+    document.getElementById('statProfs').textContent  = stats.professores;
+    document.getElementById('statTurmas').textContent = stats.totalTurmas;
+    document.getElementById('statAulas').textContent  = stats.totalAulas;
+    document.getElementById('statAtiv').textContent   = stats.totalAtividades;
+  } catch { /* silencioso */ }
+}
+
+// ── USUÁRIOS ──────────────────────────────────────────────────
+let todosUsuarios = [];
+
+async function carregarUsuarios() {
+  try {
+    const resp = await fetch('/api/usuarios', { credentials: 'include' });
+    todosUsuarios = await resp.json();
+    renderizarUsuarios(todosUsuarios);
+  } catch { toast('Erro ao carregar usuários.'); }
+}
+
+function renderizarUsuarios(lista) {
+  const nivelBadge = { 1: 'aluno', 2: 'professor', 3: 'gestao' };
+  const nivelNome  = { 1: 'Aluno', 2: 'Professor', 3: 'Gestão' };
+  document.getElementById('tbodyUsuarios').innerHTML = lista.length
+    ? lista.map(u => {
+        const d = u.criado_em ? new Date(u.criado_em).toLocaleDateString('pt-BR') : '—';
+        return `<tr>
+          <td><strong>${u.nome}</strong></td>
+          <td>${u.email}</td>
+          <td><span class="badge-n ${nivelBadge[u.id_nivel]}">${nivelNome[u.id_nivel] || '?'}</span></td>
+          <td>${u.cpf || '—'}</td>
+          <td>${d}</td>
+          <td>
+            <button class="btn-gl yellow" onclick="editarUsuario(${u.id_usuario})">Editar</button>
+            <button class="btn-gl danger" onclick="deletarUsuario(${u.id_usuario},'${u.nome.replace(/'/g,"\\'")}')">Remover</button>
+          </td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:1.5rem;">Nenhum usuário.</td></tr>';
+}
+
+document.getElementById('buscaUsuario').addEventListener('input', function () {
+  const q = this.value.toLowerCase();
+  renderizarUsuarios(todosUsuarios.filter(u =>
+    u.nome.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+  ));
+});
+
+async function editarUsuario(id) {
+  try {
+    const resp = await fetch(`/api/usuarios/${id}`, { credentials: 'include' });
+    const u    = await resp.json();
+    document.getElementById('uId').value    = u.id_usuario;
+    document.getElementById('uNome').value  = u.nome;
+    document.getElementById('uEmail').value = u.email;
+    document.getElementById('uTel').value   = u.telefone || '';
+    document.getElementById('uNivel').value = u.id_nivel;
+    abrirModal('modalUsuario');
+  } catch { toast('Erro ao carregar usuário.'); }
+}
+
+document.getElementById('btnSalvarUsuario').addEventListener('click', async () => {
+  const id = document.getElementById('uId').value;
+  const body = {
+    nome:     document.getElementById('uNome').value.trim(),
+    email:    document.getElementById('uEmail').value.trim(),
+    telefone: document.getElementById('uTel').value.trim(),
+    id_nivel: parseInt(document.getElementById('uNivel').value)
+  };
+  try {
+    const resp = await fetch(`/api/usuarios/${id}`, {
+      method: 'PUT', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    fecharModal('modalUsuario');
+    carregarUsuarios(); carregarEstatisticas();
+  } catch { toast('Erro ao salvar.'); }
+});
+
+async function deletarUsuario(id, nome) {
+  if (!confirm(`Remover "${nome}" permanentemente?`)) return;
+  try {
+    const resp = await fetch(`/api/usuarios/${id}`, { method: 'DELETE', credentials: 'include' });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    carregarUsuarios(); carregarEstatisticas();
+  } catch { toast('Erro ao remover.'); }
+}
+
+// ── TURMAS ────────────────────────────────────────────────────
+let todasTurmas = [];
+
+async function carregarTurmas() {
+  try {
+    const [rT, rP] = await Promise.all([
+      fetch('/api/turmas', { credentials: 'include' }),
+      fetch('/api/professores', { credentials: 'include' })
+    ]);
+    todasTurmas = await rT.json();
+    const profs = await rP.json();
+
+    // Popula selects
+    const opts = '<option value="">Selecione...</option>' + profs.map(p => `<option value="${p.id_usuario}">${p.nome}</option>`).join('');
+    document.getElementById('tProf').innerHTML = opts;
+
+    renderizarTurmas(todasTurmas);
+  } catch { toast('Erro ao carregar turmas.'); }
+}
+
+function renderizarTurmas(lista) {
+  document.getElementById('tbodyTurmas').innerHTML = lista.length
+    ? lista.map(t => {
+        const d = t.criado_em ? new Date(t.criado_em).toLocaleDateString('pt-BR') : '—';
+        return `<tr>
+          <td><strong>${t.nome_turma}</strong></td>
+          <td>${t.descricao || '—'}</td>
+          <td>${t.nome_professor || '—'}</td>
+          <td>${d}</td>
+          <td>
+            <button class="btn-gl yellow" onclick="editarTurma(${t.id_turma})">Editar</button>
+            <button class="btn-gl danger"  onclick="deletarTurma(${t.id_turma},'${t.nome_turma.replace(/'/g,"\\'")}')">Remover</button>
+          </td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="5" style="text-align:center;padding:1.5rem;">Nenhuma turma.</td></tr>';
+}
+
+document.getElementById('btnNovaTurma').addEventListener('click', () => {
+  document.getElementById('modalTurmaTitle').textContent = 'Nova Turma';
+  document.getElementById('tId').value = '';
+  document.getElementById('tNome').value = '';
+  document.getElementById('tDesc').value = '';
+  document.getElementById('tProf').selectedIndex = 0;
+  abrirModal('modalTurma');
+});
+
+async function editarTurma(id) {
+  try {
+    const resp = await fetch(`/api/turmas/${id}`, { credentials: 'include' });
+    const t    = await resp.json();
+    document.getElementById('modalTurmaTitle').textContent = 'Editar Turma';
+    document.getElementById('tId').value    = t.id_turma;
+    document.getElementById('tNome').value  = t.nome_turma;
+    document.getElementById('tDesc').value  = t.descricao || '';
+    document.getElementById('tProf').value  = t.id_professor || '';
+    abrirModal('modalTurma');
+  } catch { toast('Erro ao carregar turma.'); }
+}
+
+document.getElementById('btnSalvarTurma').addEventListener('click', async () => {
+  const id = document.getElementById('tId').value;
+  const body = {
+    nome_turma:   document.getElementById('tNome').value.trim(),
+    descricao:    document.getElementById('tDesc').value.trim(),
+    id_professor: document.getElementById('tProf').value || null
+  };
+  if (!body.nome_turma) { toast('Informe o nome da turma.'); return; }
+
+  const url    = id ? `/api/turmas/${id}` : '/api/turmas';
+  const method = id ? 'PUT' : 'POST';
+  try {
+    const resp = await fetch(url, { method, credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    fecharModal('modalTurma');
+    carregarTurmas(); carregarEstatisticas(); popularSelectsTurma();
+  } catch { toast('Erro ao salvar turma.'); }
+});
+
+async function deletarTurma(id, nome) {
+  if (!confirm(`Remover turma "${nome}"?`)) return;
+  try {
+    const resp = await fetch(`/api/turmas/${id}`, { method: 'DELETE', credentials: 'include' });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    carregarTurmas(); carregarEstatisticas();
+  } catch { toast('Erro.'); }
+}
+
+// ── AULAS ─────────────────────────────────────────────────────
+async function carregarAulas() {
+  try {
+    const resp  = await fetch('/api/aulas', { credentials: 'include' });
+    const aulas = await resp.json();
+    document.getElementById('tbodyAulas').innerHTML = aulas.length
+      ? aulas.map(a => {
+          const d = new Date(a.data_aula).toLocaleString('pt-BR');
+          const c = a.conteudo.length > 60 ? a.conteudo.substring(0, 60) + '…' : a.conteudo;
+          return `<tr>
+            <td><strong>${a.titulo}</strong></td>
+            <td>${d}</td>
+            <td>${a.nome_turma || '—'}</td>
+            <td title="${a.conteudo}">${c}</td>
+            <td>
+              <button class="btn-gl yellow" onclick="editarAula(${a.id_aula})">Editar</button>
+              <button class="btn-gl danger"  onclick="deletarAula(${a.id_aula},'${a.titulo.replace(/'/g,"\\'")}')">Remover</button>
+            </td>
+          </tr>`;
+        }).join('')
+      : '<tr><td colspan="5" style="text-align:center;padding:1.5rem;">Nenhuma aula.</td></tr>';
+  } catch { toast('Erro ao carregar aulas.'); }
+}
+
+async function popularSelectsTurma() {
+  try {
+    const resp  = await fetch('/api/turmas', { credentials: 'include' });
+    const turmas = await resp.json();
+    const opts  = '<option value="">Selecione...</option>' + turmas.map(t => `<option value="${t.id_turma}">${t.nome_turma}</option>`).join('');
+    document.getElementById('aTurma').innerHTML  = opts;
+    document.getElementById('atTurma').innerHTML = opts;
+  } catch { /* silencioso */ }
+}
+
+document.getElementById('btnNovaAula').addEventListener('click', () => {
+  document.getElementById('modalAulaTitle').textContent = 'Nova Aula';
+  document.getElementById('aId').value = '';
+  ['aTitulo','aData','aConteudo'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('aTurma').selectedIndex = 0;
+  abrirModal('modalAula');
+});
+
+async function editarAula(id) {
+  try {
+    const resp = await fetch(`/api/aulas/${id}`, { credentials: 'include' });
+    const a    = await resp.json();
+    document.getElementById('modalAulaTitle').textContent = 'Editar Aula';
+    document.getElementById('aId').value       = a.id_aula;
+    document.getElementById('aTitulo').value   = a.titulo;
+    document.getElementById('aData').value     = a.data_aula?.slice(0,16) || '';
+    document.getElementById('aConteudo').value = a.conteudo;
+    document.getElementById('aTurma').value    = a.id_turma;
+    abrirModal('modalAula');
+  } catch { toast('Erro ao carregar aula.'); }
+}
+
+document.getElementById('btnSalvarAula').addEventListener('click', async () => {
+  const id = document.getElementById('aId').value;
+  const body = {
+    titulo:   document.getElementById('aTitulo').value.trim(),
+    data_aula:document.getElementById('aData').value,
+    conteudo: document.getElementById('aConteudo').value.trim(),
+    id_turma: document.getElementById('aTurma').value
+  };
+  const url    = id ? `/api/aulas/${id}` : '/api/aulas';
+  const method = id ? 'PUT' : 'POST';
+  try {
+    const resp = await fetch(url, { method, credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    fecharModal('modalAula'); carregarAulas(); carregarEstatisticas();
+  } catch { toast('Erro ao salvar aula.'); }
+});
+
+async function deletarAula(id, titulo) {
+  if (!confirm(`Remover aula "${titulo}"?`)) return;
+  try {
+    const resp = await fetch(`/api/aulas/${id}`, { method: 'DELETE', credentials: 'include' });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    carregarAulas(); carregarEstatisticas();
+  } catch { toast('Erro.'); }
+}
+
+// ── ATIVIDADES ────────────────────────────────────────────────
+async function carregarAtividades() {
+  try {
+    const resp       = await fetch('/api/atividades', { credentials: 'include' });
+    const atividades = await resp.json();
+    document.getElementById('tbodyAtividades').innerHTML = atividades.length
+      ? atividades.map(at => {
+          const prazo   = new Date(at.prazo).toLocaleDateString('pt-BR');
+          const vencida = new Date(at.prazo) < new Date();
+          return `<tr>
+            <td><strong>${at.titulo}</strong></td>
+            <td>${at.nome_materia || '—'}</td>
+            <td>${at.nome_turma   || '—'}</td>
+            <td style="color:${vencida ? '#e53935' : 'inherit'}">${prazo}</td>
+            <td>
+              <button class="btn-gl yellow" onclick="editarAtividade(${at.id_atividade})">Editar</button>
+              <button class="btn-gl danger"  onclick="deletarAtividade(${at.id_atividade},'${at.titulo.replace(/'/g,"\\'")}')">Remover</button>
+            </td>
+          </tr>`;
+        }).join('')
+      : '<tr><td colspan="5" style="text-align:center;padding:1.5rem;">Nenhuma atividade.</td></tr>';
+  } catch { toast('Erro ao carregar atividades.'); }
+}
+
+async function popularSelectsMateria() {
+  try {
+    const resp    = await fetch('/api/materias', { credentials: 'include' });
+    const mats    = await resp.json();
+    const opts    = '<option value="">Selecione...</option>' + mats.map(m => `<option value="${m.id_materia}">${m.nome_materia}</option>`).join('');
+    document.getElementById('atMateria').innerHTML = opts;
+  } catch { /* silencioso */ }
+}
+
+document.getElementById('btnNovaAtividade').addEventListener('click', () => {
+  document.getElementById('modalAtivTitle').textContent = 'Nova Atividade';
+  document.getElementById('atId').value = '';
+  ['atTitulo','atDesc','atPrazo'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('atMateria').selectedIndex = 0;
+  document.getElementById('atTurma').selectedIndex   = 0;
+  abrirModal('modalAtividade');
+});
+
+async function editarAtividade(id) {
+  try {
+    const resp = await fetch(`/api/atividades/${id}`, { credentials: 'include' });
+    const at   = await resp.json();
+    document.getElementById('modalAtivTitle').textContent = 'Editar Atividade';
+    document.getElementById('atId').value      = at.id_atividade;
+    document.getElementById('atTitulo').value  = at.titulo;
+    document.getElementById('atDesc').value    = at.descricao || '';
+    document.getElementById('atMateria').value = at.id_materia;
+    document.getElementById('atTurma').value   = at.id_turma;
+    document.getElementById('atPrazo').value   = at.prazo?.slice(0,16) || '';
+    abrirModal('modalAtividade');
+  } catch { toast('Erro ao carregar atividade.'); }
+}
+
+document.getElementById('btnSalvarAtiv').addEventListener('click', async () => {
+  const id = document.getElementById('atId').value;
+  const body = {
+    titulo:     document.getElementById('atTitulo').value.trim(),
+    descricao:  document.getElementById('atDesc').value.trim(),
+    id_materia: document.getElementById('atMateria').value,
+    id_turma:   document.getElementById('atTurma').value,
+    prazo:      document.getElementById('atPrazo').value
+  };
+  const url    = id ? `/api/atividades/${id}` : '/api/atividades';
+  const method = id ? 'PUT' : 'POST';
+  try {
+    const resp = await fetch(url, { method, credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    fecharModal('modalAtividade'); carregarAtividades(); carregarEstatisticas();
+  } catch { toast('Erro ao salvar atividade.'); }
+});
+
+async function deletarAtividade(id, titulo) {
+  if (!confirm(`Remover atividade "${titulo}"?`)) return;
+  try {
+    const resp = await fetch(`/api/atividades/${id}`, { method: 'DELETE', credentials: 'include' });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    carregarAtividades(); carregarEstatisticas();
+  } catch { toast('Erro.'); }
+}
+
+// ── Inicializar ───────────────────────────────────────────────
+carregarEstatisticas();
+carregarUsuarios();
+carregarTurmas();
+carregarAulas();
+carregarAtividades();
+popularSelectsTurma();
+popularSelectsMateria();
+</script>
 </body>
 </html>

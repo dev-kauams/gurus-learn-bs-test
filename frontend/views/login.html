@@ -1,65 +1,203 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/components.css"/>
-    <link rel="stylesheet" href="../assets/css/responsive.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guru's Learn — Login</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3976/3976625.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <style>
+    /* Alertas inline */
+    .alert-gl {
+      width: 100%; padding: 10px 14px; border-radius: 10px;
+      font-size: 0.85rem; text-align: center; margin-bottom: 12px;
+      display: none;
+    }
+    .alert-gl.erro  { background: #fde8e8; color: #b71c1c; border: 1px solid #f5c6c6; }
+    .alert-gl.ok    { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+    .spin { animation: giro 1s linear infinite; display:inline-block; }
+    @keyframes giro { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body class="flex justify-center items-center body-login">
-    <div class="card-login">
-        <form action="/login" method="POST" class="form-login">
-            <h2>Login</h2>
-            <div class="field">
-                <input type="email" id="email" name="email" placeholder=" " required>
-                <label for="email">Email da conta</label>
-            </div>
-            <div class="field">
-                <input type="password" id="password" name="password" placeholder=" " required>
-                <label for="password">Senha</label>
-            </div>
-            <button type="submit" id="login_button">Login</button>
-        </form>
 
-        <form action="/register" method="POST" class="form-register">
-            <h2>Register</h2>
-            <div class="field">
-                <input type="text" id="username" name="username" placeholder=" " required>
-                <label for="username">Nome Completo</label>
-            </div>
-            <div class="field-gruop">
-                <div class="field">
-                    <input type="date" name="dataNasc" id="dataNasc" placeholder="" required>
-                </div>
-                <div class="field">
-                    <input type="tel" name="phone" id="phone" placeholder="" required maxlength="11" pattern="[0-9]*">
-                    <label for="phone">Telefone</label>
-                </div>
-            </div>
-            <div class="field-gruop">
-                <div class="field">
-                    <input type="password" id="password" name="password" placeholder=" " minlength="8" required>
-                    <label for="password">Senha</label>
-                </div>
-                <div class="field">
-                    <input type="password" id="passwordConfirm" name="passwordConfirm" placeholder=" " minlength="8" required>
-                    <label for="password">Confirmar Senha</label>
-            </div>
-            </div>
-            <div class="field">
-            <input type="email" name="email" id="email" placeholder=" " required>
-            <label for="email">Email</label>
-            </div>
-            <button type="submit" id="register_button">Register</button>
-        </form>
-        
-        <img src="../assets/img/login-image.gif" alt="Login Image" class="">
-    </div>
-    <p id="register_link">Não possui conta? Registre-se agora!</p>
-    <script src="../../backend/login.js"></script>
-    <script src="../assets/js/script.js"></script>
+  <div class="card-login" id="cardLogin">
+
+    <!-- FORMULÁRIO DE LOGIN -->
+    <form class="form-login" id="formLogin">
+      <h2>Login</h2>
+
+      <div id="alertaLogin" class="alert-gl erro"></div>
+
+      <div class="field">
+        <input type="email" id="loginEmail" placeholder=" " required autocomplete="email">
+        <label for="loginEmail">Email da conta</label>
+      </div>
+      <div class="field">
+        <input type="password" id="loginSenha" placeholder=" " required autocomplete="current-password">
+        <label for="loginSenha">Senha</label>
+      </div>
+      <button type="submit" id="btnLogin">Entrar</button>
+    </form>
+
+    <!-- FORMULÁRIO DE CADASTRO -->
+    <form class="form-register" id="formRegister">
+      <h2>Cadastro</h2>
+
+      <div id="alertaRegister" class="alert-gl erro"></div>
+
+      <div class="field">
+        <input type="text" id="regNome" placeholder=" " required>
+        <label for="regNome">Nome Completo</label>
+      </div>
+      <div class="field">
+        <input type="email" id="regEmail" placeholder=" " required>
+        <label for="regEmail">Email</label>
+      </div>
+      <div class="field-gruop">
+        <div class="field">
+          <input type="text" id="regCpf" placeholder=" " required maxlength="11" pattern="[0-9]*">
+          <label for="regCpf">CPF (só números)</label>
+        </div>
+        <div class="field">
+          <input type="tel" id="regTel" placeholder=" " required maxlength="11" pattern="[0-9]*">
+          <label for="regTel">Telefone</label>
+        </div>
+      </div>
+      <div class="field-gruop">
+        <div class="field">
+          <input type="date" id="regData" required>
+        </div>
+        <div class="field">
+          <input type="password" id="regSenha" placeholder=" " minlength="8" required>
+          <label for="regSenha">Senha</label>
+        </div>
+      </div>
+      <div class="field">
+        <input type="password" id="regConfirm" placeholder=" " minlength="8" required>
+        <label for="regConfirm">Confirmar Senha</label>
+      </div>
+      <button type="submit" id="btnRegister">Cadastrar</button>
+    </form>
+
+    <img src="/assets/img/login-image.gif" alt="Login Image">
+  </div>
+
+  <!-- Toggle login ↔ cadastro -->
+  <p id="register_link">Não possui conta? <strong>Registre-se agora!</strong></p>
+
+<script>
+// ── Toggle formulários (lógica original preservada) ──────────
+const cardLogin     = document.getElementById('cardLogin');
+const registerLink  = document.getElementById('register_link');
+let   showingRegister = false;
+
+registerLink.addEventListener('click', () => {
+  showingRegister = !showingRegister;
+  cardLogin.classList.toggle('show-register', showingRegister);
+  registerLink.innerHTML = showingRegister
+    ? 'Já tem conta? <strong>Fazer login!</strong>'
+    : 'Não possui conta? <strong>Registre-se agora!</strong>';
+});
+
+// ── Helpers ──────────────────────────────────────────────────
+function mostrarAlerta(id, msg, tipo = 'erro') {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className   = `alert-gl ${tipo}`;
+  el.style.display = 'block';
+}
+function ocultarAlerta(id) {
+  document.getElementById(id).style.display = 'none';
+}
+function setBtn(btnId, carregando, textoNormal) {
+  const b = document.getElementById(btnId);
+  b.disabled   = carregando;
+  b.innerHTML  = carregando ? '<span class="spin">↻</span> Aguarde...' : textoNormal;
+}
+
+// ── LOGIN ────────────────────────────────────────────────────
+document.getElementById('formLogin').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  ocultarAlerta('alertaLogin');
+  setBtn('btnLogin', true, 'Entrar');
+
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginSenha').value;
+
+  try {
+    const resp = await fetch('/api/login', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      window.location.href = data.redirectTo;
+    } else {
+      mostrarAlerta('alertaLogin', data.message || 'Credenciais inválidas.');
+      setBtn('btnLogin', false, 'Entrar');
+    }
+  } catch {
+    mostrarAlerta('alertaLogin', 'Erro de conexão com o servidor.');
+    setBtn('btnLogin', false, 'Entrar');
+  }
+});
+
+// ── CADASTRO ─────────────────────────────────────────────────
+document.getElementById('formRegister').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  ocultarAlerta('alertaRegister');
+
+  const senha   = document.getElementById('regSenha').value;
+  const confirm = document.getElementById('regConfirm').value;
+  if (senha !== confirm) {
+    mostrarAlerta('alertaRegister', 'As senhas não coincidem.');
+    return;
+  }
+
+  setBtn('btnRegister', true, 'Cadastrar');
+
+  const body = {
+    nome:           document.getElementById('regNome').value.trim(),
+    email:          document.getElementById('regEmail').value.trim(),
+    cpf:            document.getElementById('regCpf').value.replace(/\D/g,''),
+    telefone:       document.getElementById('regTel').value.replace(/\D/g,''),
+    dataNasc:       document.getElementById('regData').value,
+    password:       senha,
+    passwordConfirm:confirm,
+    id_nivel:       1   // padrão Aluno; gestão pode alterar depois
+  };
+
+  try {
+    const resp = await fetch('/api/register', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    if (data.success) {
+      mostrarAlerta('alertaRegister', '✅ Cadastro realizado! Faça login.', 'ok');
+      setTimeout(() => {
+        cardLogin.classList.remove('show-register');
+        showingRegister = false;
+        registerLink.innerHTML = 'Não possui conta? <strong>Registre-se agora!</strong>';
+        ocultarAlerta('alertaRegister');
+        document.getElementById('formRegister').reset();
+      }, 1800);
+    } else {
+      mostrarAlerta('alertaRegister', data.message || 'Erro ao cadastrar.');
+    }
+  } catch {
+    mostrarAlerta('alertaRegister', 'Erro de conexão com o servidor.');
+  } finally {
+    setBtn('btnRegister', false, 'Cadastrar');
+  }
+});
+</script>
 </body>
 </html>

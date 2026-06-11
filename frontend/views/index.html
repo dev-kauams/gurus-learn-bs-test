@@ -1,260 +1,508 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guru's Learn</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="../assets/css/style.css" />
-    <link rel="stylesheet" href="../assets/css/components.css" />
-    <link rel="stylesheet" href="../assets/css/responsive.css">
-
-    <style type="text/tailwindcss">
-      /* @theme {
-        --bg-base-w: #F4EFFA;
-        --bg-base-d: #2F184B;
-
-        --text-base-w: #F4EFFA;
-        --text-base-d: #2F184B;
-      } */
-    </style>
-  </head>
-  <body class="body-index">
-    <header class="flex">
-      <img src="../assets/img/logo.png" alt="Logo" class="logo" />
-
-      <div class="search-bar">
-        <i></i>
-        <p>Pesquisar (Ctrl + D)</p>
-      </div>
-      <div class="user-info">
-        <img src="../assets/img/account.svg" alt="Profile" />
-        <p id="username-info">User</p>
-      </div>
-    </header>
-
-    <nav class="flex flex-col align-items-center">
-    <div class="icon-gruop">
-      <a href="#notifications" class="icon">
-        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-      </a>
-      <a href="#chat" class="icon">
-        <svg viewBox="0 0 24 24" width="24" height="24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-      </a>
-      <a href="#class" class="icon">
-        <svg height="24px" viewBox="0 -960 960 960" width="24px"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47Zm466 0q-47 47-113 47-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113q0 66-47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q440-607 440-640t-23.5-56.5Q393-720 360-720t-56.5 23.5Q280-673 280-640t23.5 56.5Q327-560 360-560t56.5-23.5ZM360-240Zm0-400Z"/></svg>
-      </a>
-      <a href="#calendar" class="icon">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-188.5-11.5Q280-423 280-440t11.5-28.5Q303-480 320-480t28.5 11.5Q360-457 360-440t-11.5 28.5Q337-400 320-400t-28.5-11.5ZM640-400q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-188.5-11.5Q280-263 280-280t11.5-28.5Q303-320 320-320t28.5 11.5Q360-297 360-280t-11.5 28.5Q337-240 320-240t-28.5-11.5ZM640-240q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z"/></svg>
-      </a>  
-
-      <a href="#community" class="icon">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M240-320q-33 0-56.5-23.5T160-400q0-33 23.5-56.5T240-480q33 0 56.5 23.5T320-400q0 33-23.5 56.5T240-320Zm480 0q-33 0-56.5-23.5T640-400q0-33 23.5-56.5T720-480q33 0 56.5 23.5T800-400q0 33-23.5 56.5T720-320Zm-240-40q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM284-120q14-69 68.5-114.5T480-280q73 0 127.5 45.5T676-120H284Zm-204 0q0-66 47-113t113-47q17 0 32 3t29 9q-30 29-50 66.5T224-120H80Zm656 0q-7-44-27-81.5T659-268q14-6 29-9t32-3q66 0 113 47t47 113H736ZM88-480l-48-64 440-336 160 122v-82h120v174l160 122-48 64-392-299L88-480Z"/></svg>
-      </a>
-    </div>
-
-    <div class="setting-gruop">
-      <a href="#settings" class="icon">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-      </a>
-    </div>
-  </nav>
-
-    <main class="flex flex-col">
-      <section id="class" class="content-section">
-
-        <h1>Turmas</h1>
-        <button class="enter-room-button">Ingressar em uma turma ou organização</button>
-        <div class="card-gruop">
-          <div class="card">
-            <div class="info-classroom">
-              <img src="../assets/img/restart.svg" alt="Icon Turma" />
-              <h2>A arte da sexologia.</h2>
-            </div>
-            <div class="more-info-classroom">
-              <p>Professor Roberto</p>
-              <p>Matéria: Sexologia</p>
-  
-              <img src="../assets/img/profile-pic-card.jpg" alt="">
-  
-              <button class="card-class-button">Ver Calendário</button>
-            </div>
-  
-            <div class="more-info-input">
-              <label>
-                <input type="checkbox" />
-                <img src="../assets/img/arrow-card.svg" />
-              </label>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="calendar" class="content-section disable-section">
-        <aside>
-          <h2>Tarefas do Mês</h2>
-          <ul>
-            <li>Programação Orientada à Objetos - Exercício 1 | 10/05</li>
-            <li>Landing Page com React.js e TypeScript | 13/05</li>
-            <li>Lógica II - Exercício 1 ao 10 | 13/05</li>
-            <li>Programação Orientada à Objetos - Exercício 2 | 17/05</li>
-          </ul>
-        </aside>
-        <div class="calendar-header">
-          <h1>Calendário</h1>
-          <div class="month-selector">
-            <button class="prev-month"><</button>
-      <h2>Maio 2026</h2>
-      <button class="next-month">></button>
-          </div>
-  </div>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Dom</th>
-        <th>Seg</th>
-        <th>Ter</th>
-        <th>Qua</th>
-        <th>Qui</th>
-        <th>Sex</th>
-        <th>Sáb</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="prev-month">26</td>
-        <td class="prev-month">27</td>
-        <td class="prev-month">28</td>
-        <td class="prev-month">29</td>
-        <td class="prev-month">30</td>
-        <td>1</td>
-        <td>2</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td class="today">7</td>
-        <td>8</td>
-        <td>9</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
-        <td>15</td>
-        <td>16</td>
-      </tr>
-      <tr>
-        <td>17</td>
-        <td>18</td>
-        <td>19</td>
-        <td>20</td>
-        <td>21</td>
-        <td>22</td>
-        <td>23</td>
-      </tr>
-      <tr>
-        <td>24</td>
-        <td>25</td>
-        <td>26</td>
-        <td>27</td>
-        <td>28</td>
-        <td>29</td>
-        <td>30</td>
-      </tr>
-    </tbody>
-  </table>
-      </section>
-
-      <section id="chat" class="content-section disable-section">
-  <header class="chat-header">
-    <div class="header-left">
-      <button class="back-btn">&lt;</button>
-      <div class="group-icon">Gurupos</div>
-      <button class="filter-btn">Geral</button>
-    </div>
-    <div class="header-right">
-      <span class="dots">...</span>
-    </div>
-  </header>
-
-  <div class="chat-content">
-    <div class="message incoming">
-      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-      <div class="bubble-group">
-        <span class="username">Antônio Manso Pacífico de Oliveira Sossegado</span>
-        <div class="bubble">Ai vei muito Bangers isso aí, não ligo O-D</div>
-      </div>
-    </div>
-
-    <div class="message outgoing">
-      <div class="bubble-group">
-        <div class="bubble">Pessoal precisamos terminar as atividades antes da data de entrega se não, estamos ferrados.</div>
-      </div>
-      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-    </div>
-
-    <div class="message incoming">
-      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-      <div class="bubble-group">
-        <span class="username">Lança Perfume Rodometálico de Andrade</span>
-        <div class="bubble">Só sei que eu sou o Mior</div>
-      </div>
-    </div>
-
-    <div class="message incoming">
-      <img src="../assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-      <div class="bubble-group">
-        <span class="username">Excelza Teresinha do Menino Jesus da Costa e Silva</span>
-        <div class="bubble audio">
-          <button class="play-btn">></button>
-          <div class="wave">|||||||||||||||||||||||||</div>
-          <span class="time">07:24</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-      <!-- Parte de teste de classes de container. Os cards ficaram aqui. Pode mudar o quanto quiser
-      só tenha certeza de utilizar o esquema de ID's certos que está no index.js no backend. -->
-
-      <!-- <div id="classesContainer"></div> -->
-    </main>
-
-    <footer class="flex">
-      <a href="">Política de Privacidade</a>
-      <a href="">Termos de Uso</a>
-    <script src="../../backend/index.js"></script>
-    <script>
-
-      document.addEventListener('DOMContentLoaded', () => {
-const links = document.querySelectorAll('nav a.icon');
-const sections = document.querySelectorAll('main section.content-section');
-
-links.forEach(link => {
-    link.addEventListener('click', (e) => {
-    e.preventDefault(); 
-    const targetId = link.getAttribute('href').replace('#', '');
-    const targetSection = document.getElementById(targetId);
-
-    if (targetSection) {
-        sections.forEach(sec => sec.classList.add('disable-section'));
-        targetSection.classList.remove('disable-section');
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guru's Learn — Portal</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3976/3976625.png">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <style>
+    /* Estilos adicionais para conteúdo dinâmico */
+    .toast-gl {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: #532B88; color: #F4EFFA;
+      padding: 12px 22px; border-radius: 12px;
+      font-size: 0.9rem; box-shadow: 0 8px 24px #0003;
+      animation: slideIn .3s ease; display: none;
     }
+    @keyframes slideIn { from { transform: translateX(100px); opacity:0; } to { transform: translateX(0); opacity:1; } }
+
+    .badge-nivel {
+      display: inline-block; font-size: 0.7rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px;
+      background: var(--bg-block); color: var(--text-base-w);
+    }
+
+    /* Cards de turma dinâmicos */
+    .turma-card-dyn {
+      background: var(--bg-component-w); border-radius: var(--br-base);
+      padding: 1.2rem; cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column; gap: .5rem;
+    }
+    .turma-card-dyn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px #0002; }
+    .turma-card-dyn h3 { color: var(--bg-block); font-size: 1.1rem; }
+    .turma-card-dyn p  { font-size: .82rem; color: var(--bg-base-d); opacity: .8; }
+
+    /* Lista de atividades na sidebar */
+    .atividade-item {
+      background: rgba(255,255,255,.1); border-radius: 12px;
+      padding: .8rem; border-left: 4px solid var(--bg-block);
+      transition: transform .2s;
+    }
+    .atividade-item:hover { transform: translateX(5px); }
+    .atividade-item .titulo { font-size: .88rem; font-weight: 600; }
+    .atividade-item .prazo  { font-size: .72rem; opacity: .7; margin-top: 3px; }
+    .atividade-item .turma  { font-size: .7rem; opacity: .6; }
+
+    /* Área de aulas */
+    .aula-card {
+      background: var(--bg-component-w); border-radius: var(--br-base);
+      padding: 1.2rem; width: 100%;
+      display: flex; flex-direction: column; gap: .4rem;
+    }
+    .aula-card h3 { color: var(--bg-block); font-size: 1rem; }
+    .aula-card .meta { font-size: .78rem; color: #888; display: flex; gap: 1rem; }
+    .aula-card .conteudo { font-size: .85rem; color: var(--text-base-d); margin-top: .4rem; }
+
+    /* Modal de ingresso */
+    .modal-gl-overlay {
+      position: fixed; inset: 0; background: #0005; z-index: 100;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-gl-overlay.open { display: flex; }
+    .modal-gl {
+      background: var(--bg-component-w); border-radius: var(--br-base);
+      padding: 2rem; width: 90%; max-width: 420px;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .modal-gl h3 { color: var(--bg-block); font-size: 1.3rem; }
+    .modal-gl select, .modal-gl input {
+      width: 100%; padding: .7rem 1rem;
+      border: 2px solid var(--bg-component-d); border-radius: .8rem;
+      background: var(--bg-base-w); color: var(--text-base-d); font-size: .9rem;
+    }
+    .modal-gl .btn-row { display: flex; gap: .8rem; }
+    .modal-gl button {
+      flex: 1; padding: .7rem; border-radius: var(--br-base);
+      border: 2px solid var(--bg-component-d); cursor: pointer;
+      font-size: .9rem; transition: all .2s;
+    }
+    .modal-gl .btn-primary { background: var(--bg-block); color: var(--text-base-w); }
+    .modal-gl .btn-primary:hover { background: var(--bg-component-d); }
+
+    /* Chat dinâmico */
+    .chat-input-area {
+      width: 100%; padding: .8rem 1.5rem;
+      background: var(--bg-component-w); border-top: 1px solid #0001;
+      display: flex; gap: .8rem; align-items: center;
+    }
+    .chat-input-area input {
+      flex: 1; padding: .6rem 1rem; border-radius: 20px;
+      border: 2px solid var(--bg-component-d);
+      background: var(--bg-base-w); color: var(--text-base-d); outline: none;
+    }
+    .chat-input-area button {
+      padding: .6rem 1.2rem; border-radius: 20px;
+      background: var(--bg-block); color: white; border: none; cursor: pointer;
+    }
+  </style>
+</head>
+<body class="body-index">
+
+<div class="toast-gl" id="toast"></div>
+
+<!-- ══ HEADER ══ -->
+<header class="flex">
+  <img src="/assets/img/logo.png" alt="Logo" class="logo">
+  <div class="search-bar">
+    <p>Portal do Aluno / Professor</p>
+  </div>
+  <div class="user-info">
+    <img src="/assets/img/account.svg" alt="Profile">
+    <p id="username-info">Carregando...</p>
+  </div>
+</header>
+
+<!-- ══ SIDEBAR NAV ══ -->
+<nav class="flex flex-col align-items-center">
+  <div class="icon-gruop">
+    <a href="#class" class="icon" title="Turmas">
+      <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm360-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+    </a>
+    <a href="#aulas" class="icon" title="Aulas">
+      <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z"/></svg>
+    </a>
+    <a href="#atividades" class="icon" title="Atividades">
+      <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg>
+    </a>
+    <a href="#calendar" class="icon" title="Calendário">
+      <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+    </a>
+    <a href="#chat" class="icon" title="Chat">
+      <svg viewBox="0 0 24 24" height="24" width="24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </a>
+  </div>
+  <div class="setting-gruop">
+    <a href="#" class="icon" id="btnLogout" title="Sair">
+      <svg viewBox="0 0 24 24" height="24" width="24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main class="flex flex-col">
+
+  <!-- ── TURMAS ── -->
+  <section id="class" class="content-section">
+    <h1>Turmas</h1>
+    <button class="enter-room-button" id="btnIngresso">Ingressar em uma turma</button>
+    <div class="card-gruop" id="gridTurmas">
+      <p style="color:#888;font-size:.9rem;">Carregando turmas...</p>
+    </div>
+  </section>
+
+  <!-- ── AULAS ── -->
+  <section id="aulas" class="content-section disable-section">
+    <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Aulas</h1>
+    <div id="listaAulas" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
+      <p style="color:#888;">Carregando aulas...</p>
+    </div>
+  </section>
+
+  <!-- ── ATIVIDADES ── -->
+  <section id="atividades" class="content-section disable-section">
+    <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Atividades</h1>
+    <div id="listaAtividades" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
+      <p style="color:#888;">Carregando atividades...</p>
+    </div>
+  </section>
+
+  <!-- ── CALENDÁRIO ── -->
+  <section id="calendar" class="content-section disable-section">
+    <aside>
+      <h2>Tarefas do Mês</h2>
+      <ul id="listaTarefas"><li style="opacity:.6;">Carregando...</li></ul>
+    </aside>
+    <div class="calendar-header">
+      <h1>Calendário</h1>
+      <div class="month-selector">
+        <button class="prev-month" id="btnPrevMes">&#8249;</button>
+        <h2 id="labelMes">—</h2>
+        <button class="next-month" id="btnProxMes">&#8250;</button>
+      </div>
+    </div>
+    <table id="tabelaCalendario">
+      <thead>
+        <tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr>
+      </thead>
+      <tbody id="corpoCalendario"></tbody>
+    </table>
+  </section>
+
+  <!-- ── CHAT ── -->
+  <section id="chat" class="content-section disable-section">
+    <header class="chat-header">
+      <div class="header-left">
+        <div class="group-icon">Chat da Turma</div>
+      </div>
+      <div class="header-right"><span class="dots">...</span></div>
+    </header>
+    <div class="chat-content" id="chatContent">
+      <!-- Mensagens demo -->
+      <div class="message incoming">
+        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+        <div class="bubble-group">
+          <span class="username">Antônio Pacífico</span>
+          <div class="bubble">Pessoal, quando é a entrega da POO?</div>
+        </div>
+      </div>
+      <div class="message outgoing">
+        <div class="bubble-group">
+          <div class="bubble">Dia 17, olha as atividades!</div>
+        </div>
+        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
+      <button id="btnEnviarMsg">Enviar</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="flex">
+  <a href="#">Política de Privacidade</a>
+  <a href="#">Termos de Uso</a>
+</footer>
+
+<!-- ══ MODAL INGRESSO ══ -->
+<div class="modal-gl-overlay" id="modalIngresso">
+  <div class="modal-gl">
+    <h3>Ingressar em uma turma</h3>
+    <select id="selectTurmaIngresso">
+      <option value="">Selecione a turma...</option>
+    </select>
+    <div class="btn-row">
+      <button onclick="fecharModalIngresso()" style="background:transparent;">Cancelar</button>
+      <button class="btn-primary" id="btnConfirmarIngresso">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// portal (index.html) — JavaScript dinâmico
+// ============================================================
+
+// ── Navegação entre seções ────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const links    = document.querySelectorAll('nav a.icon:not(#btnLogout)');
+  const sections = document.querySelectorAll('main section.content-section');
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = link.getAttribute('href').replace('#','');
+      sections.forEach(s => s.classList.add('disable-section'));
+      const target = document.getElementById(id);
+      if (target) target.classList.remove('disable-section');
     });
+  });
 });
-      });
-    </script>
-  </body>
+
+// ── Toast ─────────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent  = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+// ── Verificar sessão ──────────────────────────────────────────
+let usuarioLogado = null;
+
+async function init() {
+  try {
+    const resp = await fetch('/api/sessao', { credentials: 'include' });
+    if (!resp.ok) { window.location.href = '/login'; return; }
+    const data = await resp.json();
+    if (!data.user) { window.location.href = '/login'; return; }
+    // Gestão vai pro dashboard
+    if (data.user.id_nivel === 3) { window.location.href = '/dashboard'; return; }
+    usuarioLogado = data.user;
+    document.getElementById('username-info').textContent = data.user.nome;
+    carregarTurmas();
+    carregarAulas();
+    carregarAtividades();
+    iniciarCalendario();
+    carregarTarefas();
+  } catch { window.location.href = '/login'; }
+}
+
+// ── Logout ────────────────────────────────────────────────────
+document.getElementById('btnLogout').addEventListener('click', async (e) => {
+  e.preventDefault();
+  await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+  window.location.href = '/login';
+});
+
+// ── TURMAS ────────────────────────────────────────────────────
+async function carregarTurmas() {
+  try {
+    const resp   = await fetch('/api/turmas', { credentials: 'include' });
+    const turmas = await resp.json();
+    const grid   = document.getElementById('gridTurmas');
+
+    if (!turmas.length) {
+      grid.innerHTML = '<p style="color:#888;">Você não está matriculado em nenhuma turma.</p>';
+      return;
+    }
+
+    grid.innerHTML = turmas.map(t => `
+      <div class="turma-card-dyn">
+        <h3>${t.nome_turma}</h3>
+        <p>${t.descricao || 'Sem descrição'}</p>
+        <p>👨‍🏫 ${t.nome_professor || 'A definir'}</p>
+      </div>`
+    ).join('');
+  } catch { toast('Erro ao carregar turmas.'); }
+}
+
+// ── Modal ingresso ────────────────────────────────────────────
+document.getElementById('btnIngresso').addEventListener('click', async () => {
+  try {
+    const resp   = await fetch('/api/turmas', { credentials: 'include' });
+    const turmas = await resp.json();
+    const select = document.getElementById('selectTurmaIngresso');
+    select.innerHTML = '<option value="">Selecione...</option>' +
+      turmas.map(t => `<option value="${t.id_turma}">${t.nome_turma}</option>`).join('');
+    document.getElementById('modalIngresso').classList.add('open');
+  } catch { toast('Erro ao carregar turmas.'); }
+});
+
+function fecharModalIngresso() {
+  document.getElementById('modalIngresso').classList.remove('open');
+}
+
+document.getElementById('btnConfirmarIngresso').addEventListener('click', async () => {
+  const id = document.getElementById('selectTurmaIngresso').value;
+  if (!id) { toast('Selecione uma turma.'); return; }
+  try {
+    const resp = await fetch(`/api/turmas/${id}/matricular`, {
+      method: 'POST', credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }, body: '{}'
+    });
+    const data = await resp.json();
+    toast(data.mensagem || data.erro);
+    fecharModalIngresso();
+    carregarTurmas();
+  } catch { toast('Erro ao ingressar.'); }
+});
+
+// ── AULAS ─────────────────────────────────────────────────────
+async function carregarAulas() {
+  try {
+    const resp  = await fetch('/api/aulas', { credentials: 'include' });
+    const aulas = await resp.json();
+    const lista = document.getElementById('listaAulas');
+
+    if (!aulas.length) {
+      lista.innerHTML = '<p style="color:#888;">Nenhuma aula disponível.</p>';
+      return;
+    }
+
+    lista.innerHTML = aulas.map(a => {
+      const data = new Date(a.data_aula).toLocaleString('pt-BR');
+      return `
+        <div class="aula-card">
+          <h3>${a.titulo}</h3>
+          <div class="meta">
+            <span>📅 ${data}</span>
+            <span>📚 ${a.nome_turma || '—'}</span>
+          </div>
+          <p class="conteudo">${a.conteudo}</p>
+        </div>`;
+    }).join('');
+  } catch { toast('Erro ao carregar aulas.'); }
+}
+
+// ── ATIVIDADES ────────────────────────────────────────────────
+async function carregarAtividades() {
+  try {
+    const resp       = await fetch('/api/atividades', { credentials: 'include' });
+    const atividades = await resp.json();
+    const lista      = document.getElementById('listaAtividades');
+
+    if (!atividades.length) {
+      lista.innerHTML = '<p style="color:#888;">Nenhuma atividade disponível.</p>';
+      return;
+    }
+
+    lista.innerHTML = atividades.map(at => {
+      const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
+      const vencida = new Date(at.prazo) < new Date();
+      return `
+        <div class="aula-card" style="border-left: 4px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
+          <h3>${at.titulo}</h3>
+          <div class="meta">
+            <span>⏰ Prazo: ${prazo}</span>
+            <span>📖 ${at.nome_materia || '—'}</span>
+            <span>📚 ${at.nome_turma || '—'}</span>
+          </div>
+          ${at.descricao ? `<p class="conteudo">${at.descricao}</p>` : ''}
+          ${vencida ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}
+        </div>`;
+    }).join('');
+  } catch { toast('Erro ao carregar atividades.'); }
+}
+
+// ── TAREFAS NA SIDEBAR DO CALENDÁRIO ─────────────────────────
+async function carregarTarefas() {
+  try {
+    const resp       = await fetch('/api/atividades', { credentials: 'include' });
+    const atividades = await resp.json();
+    const lista      = document.getElementById('listaTarefas');
+
+    if (!atividades.length) { lista.innerHTML = '<li style="opacity:.6;">Nenhuma tarefa.</li>'; return; }
+
+    lista.innerHTML = atividades.slice(0, 6).map(at => {
+      const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
+      return `<li>${at.titulo} | ${prazo}</li>`;
+    }).join('');
+  } catch { /* silencioso */ }
+}
+
+// ── CALENDÁRIO DINÂMICO ───────────────────────────────────────
+let calMes, calAno;
+
+function iniciarCalendario() {
+  const hoje = new Date();
+  calMes = hoje.getMonth();
+  calAno = hoje.getFullYear();
+  renderizarCalendario();
+}
+
+function renderizarCalendario() {
+  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  document.getElementById('labelMes').textContent = `${meses[calMes]} ${calAno}`;
+
+  const corpo = document.getElementById('corpoCalendario');
+  const hoje  = new Date();
+  const primeiro = new Date(calAno, calMes, 1).getDay();
+  const diasNoMes = new Date(calAno, calMes + 1, 0).getDate();
+
+  let html = '<tr>';
+  let dia  = 1;
+  let semana = 0;
+
+  // Células vazias antes do dia 1
+  for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
+  let col = primeiro;
+
+  while (dia <= diasNoMes) {
+    const isHoje = dia === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
+    html += `<td class="${isHoje ? 'today' : ''}">${dia}</td>`;
+    col++;
+    if (col === 7 && dia < diasNoMes) { html += '</tr><tr>'; col = 0; }
+    dia++;
+  }
+  while (col < 7 && col > 0) { html += '<td class="prev-month"></td>'; col++; }
+  html += '</tr>';
+
+  corpo.innerHTML = html;
+}
+
+document.getElementById('btnPrevMes').addEventListener('click', () => {
+  calMes--; if (calMes < 0) { calMes = 11; calAno--; }
+  renderizarCalendario();
+});
+document.getElementById('btnProxMes').addEventListener('click', () => {
+  calMes++; if (calMes > 11) { calMes = 0; calAno++; }
+  renderizarCalendario();
+});
+
+// ── CHAT ─────────────────────────────────────────────────────
+document.getElementById('btnEnviarMsg').addEventListener('click', enviarMensagem);
+document.getElementById('chatInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') enviarMensagem();
+});
+
+function enviarMensagem() {
+  const input = document.getElementById('chatInput');
+  const texto = input.value.trim();
+  if (!texto) return;
+
+  const content = document.getElementById('chatContent');
+  const div = document.createElement('div');
+  div.className = 'message outgoing';
+  div.innerHTML = `
+    <div class="bubble-group">
+      <div class="bubble">${texto}</div>
+    </div>
+    <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">`;
+  content.appendChild(div);
+  content.scrollTop = content.scrollHeight;
+  input.value = '';
+}
+
+// ── Iniciar ───────────────────────────────────────────────────
+init();
+</script>
+</body>
 </html>
-
-<!-- Componente Card com Imagem -->
-
-<!-- <div class="card flex flex-col items-center">
-      <img src="../assets/img/1920x1080.jpg" alt="">
-    </div> -->
