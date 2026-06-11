@@ -1,10 +1,9 @@
 {
   "name": "gurus-learn-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "seed.js",
+  "description": "API do Guru's Learn — portal educacional",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev":   "nodemon server.js",
     "seed":  "node seed.js"
@@ -16,8 +15,8 @@
     "dotenv":          "^16.6.1",
     "express":         "^5.2.1",
     "express-session": "^1.19.0",
-    "multer": "^2.1.1",
-    "mysql2": "^3.22.4"
+    "multer":          "^2.1.1",
+    "mysql2":          "^3.22.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
