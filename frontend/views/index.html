@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <link rel="stylesheet" href="/assets/css/responsive.css">
-  <style>
+  <!-- <style>
     /* Estilos adicionais para conteúdo dinâmico */
     .toast-gl {
       position: fixed; bottom: 24px; right: 24px; z-index: 9999;
@@ -98,7 +98,7 @@
       padding: .6rem 1.2rem; border-radius: 20px;
       background: var(--bg-block); color: white; border: none; cursor: pointer;
     }
-  </style>
+  </style> -->
 </head>
 <body class="body-index">
 
@@ -119,7 +119,7 @@
 <!-- ══ SIDEBAR NAV ══ -->
 <nav class="flex flex-col align-items-center">
   <div class="icon-gruop">
-    <a href="#class" class="icon" title="Turmas">
+    <a href="#turmas" class="icon" title="Turmas">
       <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm360-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
     </a>
     <a href="#aulas" class="icon" title="Aulas">
@@ -128,7 +128,7 @@
     <a href="#atividades" class="icon" title="Atividades">
       <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg>
     </a>
-    <a href="#calendar" class="icon" title="Calendário">
+    <a href="#calendario" class="icon" title="Calendário">
       <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
     </a>
     <a href="#chat" class="icon" title="Chat">
@@ -146,7 +146,7 @@
 <main class="flex flex-col">
 
   <!-- ── TURMAS ── -->
-  <section id="class" class="content-section">
+  <section id="turmas" class="content-section">
     <h1>Turmas</h1>
     <button class="enter-room-button" id="btnIngresso">Ingressar em uma turma</button>
     <div class="card-gruop" id="gridTurmas">
@@ -156,22 +156,22 @@
 
   <!-- ── AULAS ── -->
   <section id="aulas" class="content-section disable-section">
-    <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Aulas</h1>
-    <div id="listaAulas" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
+    <h1>Aulas</h1>
+    <div class="card-gruop" id="listaAulas">
       <p style="color:#888;">Carregando aulas...</p>
     </div>
   </section>
 
   <!-- ── ATIVIDADES ── -->
   <section id="atividades" class="content-section disable-section">
-    <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Atividades</h1>
-    <div id="listaAtividades" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
+    <h1>Atividades</h1>
+    <div class="card-gruop" id="listaAtividades">
       <p style="color:#888;">Carregando atividades...</p>
     </div>
   </section>
 
   <!-- ── CALENDÁRIO ── -->
-  <section id="calendar" class="content-section disable-section">
+  <section id="calendario" class="content-section disable-section">
     <aside>
       <h2>Tarefas do Mês</h2>
       <ul id="listaTarefas"><li style="opacity:.6;">Carregando...</li></ul>
@@ -238,271 +238,11 @@
       <option value="">Selecione a turma...</option>
     </select>
     <div class="btn-row">
-      <button onclick="fecharModalIngresso()" style="background:transparent;">Cancelar</button>
+      <button onclick="fecharModalIngresso()">Cancelar</button>
       <button class="btn-primary" id="btnConfirmarIngresso">Entrar</button>
     </div>
   </div>
 </div>
-
-<script>
-// ============================================================
-// portal (index.html) — JavaScript dinâmico
-// ============================================================
-
-// ── Navegação entre seções ────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  const links    = document.querySelectorAll('nav a.icon:not(#btnLogout)');
-  const sections = document.querySelectorAll('main section.content-section');
-
-  links.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const id = link.getAttribute('href').replace('#','');
-      sections.forEach(s => s.classList.add('disable-section'));
-      const target = document.getElementById(id);
-      if (target) target.classList.remove('disable-section');
-    });
-  });
-});
-
-// ── Toast ─────────────────────────────────────────────────────
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent  = msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 3000);
-}
-
-// ── Verificar sessão ──────────────────────────────────────────
-let usuarioLogado = null;
-
-async function init() {
-  try {
-    const resp = await fetch('/api/sessao', { credentials: 'include' });
-    if (!resp.ok) { window.location.href = '/login'; return; }
-    const data = await resp.json();
-    if (!data.user) { window.location.href = '/login'; return; }
-    // Gestão vai pro dashboard
-    if (data.user.id_nivel === 3) { window.location.href = '/dashboard'; return; }
-    usuarioLogado = data.user;
-    document.getElementById('username-info').textContent = data.user.nome;
-    carregarTurmas();
-    carregarAulas();
-    carregarAtividades();
-    iniciarCalendario();
-    carregarTarefas();
-  } catch { window.location.href = '/login'; }
-}
-
-// ── Logout ────────────────────────────────────────────────────
-document.getElementById('btnLogout').addEventListener('click', async (e) => {
-  e.preventDefault();
-  await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-  window.location.href = '/login';
-});
-
-// ── TURMAS ────────────────────────────────────────────────────
-async function carregarTurmas() {
-  try {
-    const resp   = await fetch('/api/turmas', { credentials: 'include' });
-    const turmas = await resp.json();
-    const grid   = document.getElementById('gridTurmas');
-
-    if (!turmas.length) {
-      grid.innerHTML = '<p style="color:#888;">Você não está matriculado em nenhuma turma.</p>';
-      return;
-    }
-
-    grid.innerHTML = turmas.map(t => `
-      <div class="turma-card-dyn">
-        <h3>${t.nome_turma}</h3>
-        <p>${t.descricao || 'Sem descrição'}</p>
-        <p>👨‍🏫 ${t.nome_professor || 'A definir'}</p>
-      </div>`
-    ).join('');
-  } catch { toast('Erro ao carregar turmas.'); }
-}
-
-// ── Modal ingresso ────────────────────────────────────────────
-document.getElementById('btnIngresso').addEventListener('click', async () => {
-  try {
-    const resp   = await fetch('/api/turmas', { credentials: 'include' });
-    const turmas = await resp.json();
-    const select = document.getElementById('selectTurmaIngresso');
-    select.innerHTML = '<option value="">Selecione...</option>' +
-      turmas.map(t => `<option value="${t.id_turma}">${t.nome_turma}</option>`).join('');
-    document.getElementById('modalIngresso').classList.add('open');
-  } catch { toast('Erro ao carregar turmas.'); }
-});
-
-function fecharModalIngresso() {
-  document.getElementById('modalIngresso').classList.remove('open');
-}
-
-document.getElementById('btnConfirmarIngresso').addEventListener('click', async () => {
-  const id = document.getElementById('selectTurmaIngresso').value;
-  if (!id) { toast('Selecione uma turma.'); return; }
-  try {
-    const resp = await fetch(`/api/turmas/${id}/matricular`, {
-      method: 'POST', credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }, body: '{}'
-    });
-    const data = await resp.json();
-    toast(data.mensagem || data.erro);
-    fecharModalIngresso();
-    carregarTurmas();
-  } catch { toast('Erro ao ingressar.'); }
-});
-
-// ── AULAS ─────────────────────────────────────────────────────
-async function carregarAulas() {
-  try {
-    const resp  = await fetch('/api/aulas', { credentials: 'include' });
-    const aulas = await resp.json();
-    const lista = document.getElementById('listaAulas');
-
-    if (!aulas.length) {
-      lista.innerHTML = '<p style="color:#888;">Nenhuma aula disponível.</p>';
-      return;
-    }
-
-    lista.innerHTML = aulas.map(a => {
-      const data = new Date(a.data_aula).toLocaleString('pt-BR');
-      return `
-        <div class="aula-card">
-          <h3>${a.titulo}</h3>
-          <div class="meta">
-            <span>📅 ${data}</span>
-            <span>📚 ${a.nome_turma || '—'}</span>
-          </div>
-          <p class="conteudo">${a.conteudo}</p>
-        </div>`;
-    }).join('');
-  } catch { toast('Erro ao carregar aulas.'); }
-}
-
-// ── ATIVIDADES ────────────────────────────────────────────────
-async function carregarAtividades() {
-  try {
-    const resp       = await fetch('/api/atividades', { credentials: 'include' });
-    const atividades = await resp.json();
-    const lista      = document.getElementById('listaAtividades');
-
-    if (!atividades.length) {
-      lista.innerHTML = '<p style="color:#888;">Nenhuma atividade disponível.</p>';
-      return;
-    }
-
-    lista.innerHTML = atividades.map(at => {
-      const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
-      const vencida = new Date(at.prazo) < new Date();
-      return `
-        <div class="aula-card" style="border-left: 4px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
-          <h3>${at.titulo}</h3>
-          <div class="meta">
-            <span>⏰ Prazo: ${prazo}</span>
-            <span>📖 ${at.nome_materia || '—'}</span>
-            <span>📚 ${at.nome_turma || '—'}</span>
-          </div>
-          ${at.descricao ? `<p class="conteudo">${at.descricao}</p>` : ''}
-          ${vencida ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}
-        </div>`;
-    }).join('');
-  } catch { toast('Erro ao carregar atividades.'); }
-}
-
-// ── TAREFAS NA SIDEBAR DO CALENDÁRIO ─────────────────────────
-async function carregarTarefas() {
-  try {
-    const resp       = await fetch('/api/atividades', { credentials: 'include' });
-    const atividades = await resp.json();
-    const lista      = document.getElementById('listaTarefas');
-
-    if (!atividades.length) { lista.innerHTML = '<li style="opacity:.6;">Nenhuma tarefa.</li>'; return; }
-
-    lista.innerHTML = atividades.slice(0, 6).map(at => {
-      const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
-      return `<li>${at.titulo} | ${prazo}</li>`;
-    }).join('');
-  } catch { /* silencioso */ }
-}
-
-// ── CALENDÁRIO DINÂMICO ───────────────────────────────────────
-let calMes, calAno;
-
-function iniciarCalendario() {
-  const hoje = new Date();
-  calMes = hoje.getMonth();
-  calAno = hoje.getFullYear();
-  renderizarCalendario();
-}
-
-function renderizarCalendario() {
-  const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  document.getElementById('labelMes').textContent = `${meses[calMes]} ${calAno}`;
-
-  const corpo = document.getElementById('corpoCalendario');
-  const hoje  = new Date();
-  const primeiro = new Date(calAno, calMes, 1).getDay();
-  const diasNoMes = new Date(calAno, calMes + 1, 0).getDate();
-
-  let html = '<tr>';
-  let dia  = 1;
-  let semana = 0;
-
-  // Células vazias antes do dia 1
-  for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
-  let col = primeiro;
-
-  while (dia <= diasNoMes) {
-    const isHoje = dia === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
-    html += `<td class="${isHoje ? 'today' : ''}">${dia}</td>`;
-    col++;
-    if (col === 7 && dia < diasNoMes) { html += '</tr><tr>'; col = 0; }
-    dia++;
-  }
-  while (col < 7 && col > 0) { html += '<td class="prev-month"></td>'; col++; }
-  html += '</tr>';
-
-  corpo.innerHTML = html;
-}
-
-document.getElementById('btnPrevMes').addEventListener('click', () => {
-  calMes--; if (calMes < 0) { calMes = 11; calAno--; }
-  renderizarCalendario();
-});
-document.getElementById('btnProxMes').addEventListener('click', () => {
-  calMes++; if (calMes > 11) { calMes = 0; calAno++; }
-  renderizarCalendario();
-});
-
-// ── CHAT ─────────────────────────────────────────────────────
-document.getElementById('btnEnviarMsg').addEventListener('click', enviarMensagem);
-document.getElementById('chatInput').addEventListener('keypress', e => {
-  if (e.key === 'Enter') enviarMensagem();
-});
-
-function enviarMensagem() {
-  const input = document.getElementById('chatInput');
-  const texto = input.value.trim();
-  if (!texto) return;
-
-  const content = document.getElementById('chatContent');
-  const div = document.createElement('div');
-  div.className = 'message outgoing';
-  div.innerHTML = `
-    <div class="bubble-group">
-      <div class="bubble">${texto}</div>
-    </div>
-    <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">`;
-  content.appendChild(div);
-  content.scrollTop = content.scrollHeight;
-  input.value = '';
-}
-
-// ── Iniciar ───────────────────────────────────────────────────
-init();
-</script>
+<script src="/assets/js/indexPage.js"></script>
 </body>
 </html>
