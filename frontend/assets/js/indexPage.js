@@ -51,7 +51,7 @@ async function init() {
 document.getElementById('btnLogout').addEventListener('click', async (e) => {
   e.preventDefault();
   await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-  window.location.href = '/frontend/views/login.html';
+  window.location.href = '/login';
 });
 
 // ── TURMAS ────────────────────────────────────────────────────
@@ -272,6 +272,107 @@ function enviarMensagem() {
   content.appendChild(div);
   content.scrollTop = content.scrollHeight;
   input.value = '';
+}
+
+async function carregarMeusGurupos() {
+  try {
+    const resp = await fetch('/api/gurupos');
+    const gurupos = await resp.json();
+    const container = document.getElementById('listaDeGurupos');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!gurupos || gurupos.length === 0) {
+      container.innerHTML = '<p class="text-muted small text-center p-3">Você não faz parte de nenhum Gurupo.</p>';
+      return;
+    }
+
+    gurupos.forEach(g => {
+      container.innerHTML += `
+        <button class="btn btn-sm btn-light text-start p-2 border-bottom d-flex justify-content-between align-items-center" 
+                onclick="selecionarGurupo(${g.id_gurupo}, '${g.nome}', '${g.codigo_acesso}')"
+                style="width: 100%; text-align: left; margin-bottom: 2px; border: 1px solid #eee; border-radius:4px;">
+          <div>
+            <span style="display:block; font-weight:600; font-size:13px;"># ${g.nome}</span>
+            <small style="font-size:10px; color:#999;">Cód: ${g.codigo_acesso}</small>
+          </div>
+          <i class="bi bi-chevron-right small text-muted"></i>
+        </button>
+      `;
+    });
+  } catch (err) {
+    console.error('Erro ao buscar Gurupos:', err);
+  }
+}
+
+function selecionarGurupo(id, nome, codigo) {
+  idGurupoSelecionado = id;
+  document.getElementById('nomeGurupoAtivo').innerText = `# ${nome} (Código: ${codigo})`;
+  
+  const inputChat = document.getElementById('chatInput');
+  const btnEnviar = document.getElementById('btnEnviarMsg');
+  
+  inputChat.disabled = false;
+  inputChat.placeholder = `Conversar em # ${nome}...`;
+  btnEnviar.disabled = false;
+
+  const chatContent = document.getElementById('chatContent');
+  chatContent.innerHTML = `
+    <div class="text-center text-muted small my-3">🔮 Você entrou no canal de conversa histórico de ${nome}</div>
+    <div class="message incoming">
+      <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      <div class="bubble-group">
+        <span class="username">Sistema Gurus</span>
+        <div class="bubble">Bem-vindo ao canal privado! Use o código <strong>${codigo}</strong> para convidar seus amigos da turma.</div>
+      </div>
+    </div>
+  `;
+}
+
+async function criarNovoGurupo() {
+  const nomeInput = document.getElementById('inputNomeGurupo');
+  const nome = nomeInput.value.trim();
+  if (!nome) return alert('Por favor, defina um nome para o Gurupo.');
+
+  try {
+    const resp = await fetch('/api/gurupos/criar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome })
+    });
+    const data = await resp.json();
+    
+    if (resp.status === 201 || data.codigo) {
+      alert(`🎉 Gurupo "${nome}" criado! Compartilhe o token de acesso: ${data.codigo}`);
+      nomeInput.value = '';
+      carregarMeusGurupos();
+    } else {
+      alert(data.erro || 'Não foi possível criar o Gurupo.');
+    }
+  } catch { alert('Erro de conexão ao tentar criar grupo.'); }
+}
+
+async function entrarEmGurupo() {
+  const codigoInput = document.getElementById('inputCodigoGurupo');
+  const codigo = codigoInput.value.trim().toUpperCase();
+  if (!codigo) return alert('Por favor, digite o código de 5 caracteres.');
+
+  try {
+    const resp = await fetch('/api/gurupos/entrar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo })
+    });
+    const data = await resp.json();
+    
+    if (resp.ok) {
+      alert(data.mensagem || 'Você ingressou com sucesso!');
+      codigoInput.value = '';
+      carregarMeusGurupos();
+    } else {
+      alert(data.erro || 'Código de acesso inválido ou expirado.');
+    }
+  } catch { alert('Erro de conexão com o servidor.'); }
 }
 
 // ── Iniciar ───────────────────────────────────────────────────
