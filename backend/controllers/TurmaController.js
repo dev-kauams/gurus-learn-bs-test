@@ -31,7 +31,7 @@ class TurmaController {
             res.status(500).json({ erro: 'Erro ao buscar turmas disponíveis.' });
         }
     }
-    
+
     static async buscarUm(req, res) {
         try {
             const t = await Turma.buscarPorId(req.params.id);
@@ -138,6 +138,39 @@ class TurmaController {
             res.json({ mensagem: `Você entrou no Gurupo: ${grupos[0].nome}!` });
         } catch (e) { res.status(500).json({ erro: 'Erro ao entrar no Gurupo.' }); }
     }
+
+        static async ingressar(req, res) {
+        try {
+            const { id_turma } = req.body;
+            const id_aluno = req.session.usuario.id_usuario;
+
+            if (!id_turma) {
+                return res.status(400).json({ erro: 'O ID da turma é obrigatório.' });
+            }
+
+            // Evita duplicar a matrícula caso ele clique duas vezes
+            const [existe] = await db.execute(
+                'SELECT * FROM matricula WHERE id_aluno = ? AND id_turma = ?',
+                [id_aluno, id_turma]
+            );
+            if (existe.length > 0) {
+                return res.status(400).json({ erro: 'Você já está matriculado nesta turma.' });
+            }
+
+            // Insere o vínculo oficial do aluno com a turma
+            await db.execute(
+                'INSERT INTO matricula (id_aluno, id_turma, data_matricula) VALUES (?, ?, NOW())',
+                [id_aluno, id_turma]
+            );
+
+            res.json({ success: true, message: 'Inscrição realizada com sucesso!' });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ erro: 'Erro interno ao ingressar na turma.' });
+        }
+    }
 }
+
+
 
 module.exports = TurmaController;

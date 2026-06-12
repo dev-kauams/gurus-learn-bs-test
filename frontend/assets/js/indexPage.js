@@ -25,6 +25,7 @@ function toast(msg) {
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
+
 // -- Recursos específicos do professor -- 
 function inicializarRecursosProfessor() {
   if (usuarioLogado.id_nivel === 2) {
@@ -57,6 +58,21 @@ async function init() {
     carregarAtividades();
     iniciarCalendario();
     carregarTarefas();
+    
+    if (usuarioLogado) {
+      const btnCriarAula = document.getElementById('btnCriarAula'); 
+      const btnIngressarTurma = document.getElementById('btnIngresso'); // Ajustado para o ID padrão do seu HTML
+
+      if (usuarioLogado.id_nivel === 1) {
+        // 1. FORÇAR REGRAS DO ALUNO
+        if (btnCriarAula) btnCriarAula.style.display = 'none'; 
+        if (btnIngressarTurma) btnIngressarTurma.style.display = 'block'; // Garante acesso total a alunos novos
+      } else if (usuarioLogado.id_nivel === 2) {
+        // 2. FORÇAR REGRAS DO PROFESSOR
+        if (btnCriarAula) btnCriarAula.style.display = 'block';
+        if (btnIngressarTurma) btnIngressarTurma.style.display = 'none'; 
+      }
+    }
   } catch { window.location.href = '/frontend/views/login.html'; }
 }
 
@@ -83,8 +99,7 @@ async function carregarTurmas() {
       <div class="card card-class">
         <h3>${t.nome_turma}</h3>
         <p>${t.descricao || 'Sem descrição'}</p>
-        <p> ${t.nome_professor || 'A definir'}</p>
-
+        <p>Prof: ${t.nome_professor || 'A definir'}</p>
         <button class="card-class-button">Ver mais informações</button>
       </div>`
     ).join('');
@@ -92,7 +107,7 @@ async function carregarTurmas() {
 
   const allCardClass = document.querySelectorAll('.card-class');
   allCardClass.forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (event) => {
         if (event.target.tagName === 'BUTTON') {
             return; 
         }
@@ -117,19 +132,43 @@ function fecharModalIngresso() {
   document.getElementById('modalIngresso').classList.remove('open');
 }
 
-document.getElementById('btnConfirmarIngresso').addEventListener('click', async () => {
+// --- PASSO 5: BOTÃO DE INGRESSAR EM TURMA E VÍNCULO DE ATIVIDADES ---
+document.getElementById('btnConfirmarIngresso').addEventListener('click', async (e) => {
   const id = document.getElementById('selectTurmaIngresso').value;
   if (!id) { toast('Selecione uma turma.'); return; }
+  
+  const btnConfirmar = e.currentTarget;
+  
+  // Retorno Visual Claro de Carregamento
+  const textoOriginal = btnConfirmar.innerText;
+  btnConfirmar.disabled = true;
+  btnConfirmar.innerText = "⌛ Ingressando...";
+
   try {
-    const resp = await fetch(`/api/turmas/${id}/matricular`, {
-      method: 'POST', credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }, body: '{}'
+    const resp = await fetch('/api/turmas/ingressar', {
+      method: 'POST', 
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify({ id_turma: id })
     });
+    
     const data = await resp.json();
-    toast(data.mensagem || data.erro);
-    fecharModalIngresso();
-    carregarTurmas();
-  } catch { toast('Erro ao ingressar.'); }
+    
+    if (resp.ok) {
+      alert('🎉 CONFIRMAÇÃO: Você ingressou na turma com sucesso! Suas novas matérias e atividades foram liberadas.');
+      fecharModalIngresso();
+      // Recarrega a página para atualizar instantaneamente o escopo do aluno no banco de dados
+      window.location.reload();
+    } else {
+      alert(data.erro || 'Erro ao ingressar.');
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = textoOriginal;
+    }
+  } catch { 
+    toast('Erro de rede ao ingressar.'); 
+    btnConfirmar.disabled = false;
+    btnConfirmar.innerText = textoOriginal;
+  }
 });
 
 // ── AULAS ─────────────────────────────────────────────────────
@@ -189,10 +228,11 @@ async function carregarAtividades() {
         } else if (vencida) {
           acaoHtml = '<span style="color:#E53935; font-weight:700;">❌ Pendente (Encerrado)</span>';
         } else {
-          acaoHtml = `<button onclick="entregarAtividade(${at.id_atividade})">Entregar</button>`;
+          // Ajustado com o parâmetro 'this' para capturar o clique
+          acaoHtml = `<button onclick="entregarAtividade(${at.id_atividade}, this)">Entregar</button>`;
         }
       } else if (usuarioLogado.id_nivel === 2) {
-        // 2. SE FOR PROFESSOR: Ganha o botão roxo de gerenciar
+        // 2. SE FOR PROFESSOR
         acaoHtml = `<button style="background-color:#532B88; color:#fff;" onclick="verRelatorioEntregas(${at.id_atividade}, '${at.titulo}')">Ver Entregas</button>`;
       } else {
         // 3. SE FOR ADMIN/GESTÃO
@@ -215,6 +255,50 @@ async function carregarAtividades() {
         </div>`;
     }).join('');
   } catch { toast('Erro ao carregar atividades.'); }
+}
+
+// --- PASSO 4: LOGICA DE ENTREGA COM RETORNO VISUAL CLARO ---
+async function entregarAtividade(id_atividade, botaoElemento) {
+  const urlArquivo = prompt("Por favor, informe a URL/Link da entrega da sua atividade (Google Drive, GitHub, OneDrive, etc):");
+  
+  if (!urlArquivo || urlArquivo.trim() === "") {
+    alert("❌ Operação cancelada. É obrigatório passar um link para enviar o formulário.");
+    return;
+  }
+
+  // Modificação imediata dos estados do botão (Feedback de Carregamento)
+  const textoOriginal = botaoElemento.innerText;
+  botaoElemento.disabled = true;
+  botaoElemento.innerText = "⌛ Enviando...";
+  botaoElemento.style.backgroundColor = "#777";
+  botaoElemento.style.cursor = "not-allowed";
+
+  try {
+    const resp = await fetch('/api/atividades/entregar', { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id_atividade, arquivo_url: urlArquivo.trim() })
+    });
+    
+    const data = await resp.json();
+    
+    if (resp.ok) {
+      alert("✅ CONFIRMAÇÃO: Atividade postada e entregue com sucesso!");
+      if (typeof carregarAtividades === 'function') carregarAtividades();
+    } else {
+      alert(data.erro || "❌ Falha ao computar entrega.");
+      botaoElemento.disabled = false;
+      botaoElemento.innerText = textoOriginal;
+      botaoElemento.style.backgroundColor = "";
+      botaoElemento.style.cursor = "pointer";
+    }
+  } catch (err) {
+    alert("❌ Falha crítica de conexão com o servidor.");
+    botaoElemento.disabled = false;
+    botaoElemento.innerText = textoOriginal;
+    botaoElemento.style.backgroundColor = "";
+    botaoElemento.style.cursor = "pointer";
+  }
 }
 
 // ── TAREFAS NA SIDEBAR DO CALENDÁRIO ─────────────────────────
@@ -257,7 +341,6 @@ function renderizarCalendario() {
   let dia  = 1;
   let semana = 0;
 
-  // Células vazias antes do dia 1
   for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
   let col = primeiro;
 
@@ -415,7 +498,6 @@ async function entrarEmGurupo() {
 
 async function abrirModalCriarAula() {
   try {
-    // Carrega apenas as turmas que pertencem a ele (devido ao filtro construído na Fase 1)
     const resp = await fetch('/api/turmas', { credentials: 'include' });
     const turmas = await resp.json();
     
@@ -430,6 +512,8 @@ async function abrirModalCriarAula() {
 }
 
 async function salvarNovaAula() {
+  const btnSalvar = document.querySelector("#modalCriarAula button[onclick='salvarNovaAula()']");
+  
   const body = {
     id_turma:  document.getElementById('regAulaTurma').value,
     titulo:    document.getElementById('regAulaTitulo').value.trim(),
@@ -438,9 +522,14 @@ async function salvarNovaAula() {
   };
 
   if (!body.id_turma || !body.titulo || !body.data_aula) {
-    toast('Por favor, preencha todos os campos obrigatórios.');
+    alert('Por favor, preencha todos os campos obrigatórios.');
     return;
   }
+
+  // --- RETORNO VISUAL CLARO ---
+  const textoOriginal = btnSalvar.innerText;
+  btnSalvar.disabled = true;
+  btnSalvar.innerText = "⌛ Publicando aula...";
 
   try {
     const resp = await fetch('/api/aulas', {
@@ -449,15 +538,24 @@ async function salvarNovaAula() {
       body: JSON.stringify(body)
     });
     const data = await resp.json();
+    
     if (resp.ok) {
-      toast('✅ Aula publicada com sucesso!');
+      alert('✅ CONFIRMAÇÃO: Aula publicada e disponibilizada para a turma com sucesso!');
       document.getElementById('modalCriarAula').style.display = 'none';
+      
+      document.getElementById('regAulaTitulo').value = "";
+      document.getElementById('regAulaConteudo').value = "";
+      document.getElementById('regAulaData').value = "";
+      
       if (typeof carregarAulas === 'function') carregarAulas();
     } else {
-      toast(data.erro || 'Erro ao publicar aula.');
+      alert(data.erro || 'Erro ao publicar aula.');
     }
   } catch {
-    toast('Erro de comunicação com o servidor.');
+    alert('Erro de comunicação com o servidor.');
+  } finally {
+    btnSalvar.disabled = false;
+    btnSalvar.innerText = textoOriginal;
   }
 }
 

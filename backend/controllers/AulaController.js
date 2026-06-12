@@ -62,24 +62,40 @@ class AulaController {
             const { titulo, data_aula, conteudo, id_turma } = req.body;
             const { id_usuario, id_nivel } = req.session.usuario;
 
+            if (!titulo || !data_aula || !id_turma) {
+                return res.status(400).json({ erro: 'Título, data e turma são obrigatórios.' });
+            }
+
+            // Validação de Professor (Segurança)
             if (id_nivel === 2) {
-                // Verifica se a turma realmente pertence a esse professor
                 const [turma] = await db.execute(
                     'SELECT id_turma FROM turma WHERE id_turma = ? AND id_professor = ?',
                     [id_turma, id_usuario]
                 );
                 if (turma.length === 0) {
-                    return res.status(403).json({ erro: 'Acesso negado. Você não é o professor designado para esta turma.' });
+                    return res.status(403).json({ erro: 'Acesso negado. Você não gerencia esta turma.' });
                 }
             }
 
+            // --- SOLUÇÃO CONTRA DUPLICIDADE ---
+            const [existente] = await db.execute(
+                'SELECT id_aula FROM aula WHERE LOWER(titulo) = LOWER(?) AND id_turma = ?',
+                [titulo.trim(), id_turma]
+            );
+
+            if (existente.length > 0) {
+                return res.status(400).json({ erro: 'Já existe uma aula cadastrada com este mesmo título nesta turma!' });
+            }
+            // ----------------------------------
+
             await db.execute(
                 'INSERT INTO aula (titulo, data_aula, conteudo, id_turma) VALUES (?, ?, ?, ?)',
-                [titulo, data_aula, conteudo, id_turma]
+                [titulo.trim(), data_aula, conteudo || null, id_turma]
             );
 
             res.status(201).json({ success: true, message: 'Aula criada com sucesso!' });
         } catch (e) {
+            console.error(e);
             res.status(500).json({ erro: 'Erro ao criar aula.' });
         }
     }

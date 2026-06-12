@@ -24,6 +24,7 @@ router.get('/professores',  autenticado, UsuarioController.professores);
 
 // ── TURMAS ────────────────────────────────────────────────────
 router.get   ('/turmas',               autenticado,                    TurmaController.listar);
+router.post('/turmas/ingressar',       autenticado,                    TurmaController.ingressar);
 router.get   ('/turmas/disponiveis',   autenticado,                    TurmaController.listarDisponiveis);
 router.get   ('/turmas/:id',           autenticado,                    TurmaController.buscarUm);
 router.get   ('/turmas/:id/alunos',    autenticado, professorOuGestao, TurmaController.alunos); // Ajuste Manual: Permite ver quem está na sala!
