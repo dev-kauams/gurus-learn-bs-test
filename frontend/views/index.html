@@ -104,7 +104,6 @@
 
 <div class="toast-gl" id="toast"></div>
 
-<!-- ══ HEADER ══ -->
 <header class="flex">
   <img src="/assets/img/logo.png" alt="Logo" class="logo">
   <div class="search-bar">
@@ -116,7 +115,6 @@
   </div>
 </header>
 
-<!-- ══ SIDEBAR NAV ══ -->
 <nav class="flex flex-col align-items-center">
   <div class="icon-gruop">
     <a href="#turmas" class="icon" title="Turmas">
@@ -131,7 +129,7 @@
     <a href="#calendario" class="icon" title="Calendário">
       <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
     </a>
-    <a href="#chat" class="icon" title="Chat">
+    <a href="#chat" class="icon" title="Gurupos" onclick="setTimeout(carregarMeusGurupos, 50)">
       <svg viewBox="0 0 24 24" height="24" width="24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
     </a>
   </div>
@@ -142,11 +140,14 @@
   </div>
 </nav>
 
-<!-- ══ MAIN ══ -->
 <main class="flex flex-col">
 
+<<<<<<< HEAD
+  <section id="class" class="content-section">
+=======
   <!-- ── TURMAS ── -->
   <section id="turmas" class="content-section">
+>>>>>>> c3d4d7b5428c9a9d1c02127e0bfb039ba4622976
     <h1>Turmas</h1>
     <button class="enter-room-button" id="btnIngresso">Ingressar em uma turma</button>
     <div class="card-gruop" id="gridTurmas">
@@ -154,7 +155,6 @@
     </div>
   </section>
 
-  <!-- ── AULAS ── -->
   <section id="aulas" class="content-section disable-section">
     <h1>Aulas</h1>
     <div class="card-gruop" id="listaAulas">
@@ -162,7 +162,6 @@
     </div>
   </section>
 
-  <!-- ── ATIVIDADES ── -->
   <section id="atividades" class="content-section disable-section">
     <h1>Atividades</h1>
     <div class="card-gruop" id="listaAtividades">
@@ -170,8 +169,12 @@
     </div>
   </section>
 
+<<<<<<< HEAD
+  <section id="calendar" class="content-section disable-section">
+=======
   <!-- ── CALENDÁRIO ── -->
   <section id="calendario" class="content-section disable-section">
+>>>>>>> c3d4d7b5428c9a9d1c02127e0bfb039ba4622976
     <aside>
       <h2>Tarefas do Mês</h2>
       <ul id="listaTarefas"><li style="opacity:.6;">Carregando...</li></ul>
@@ -192,39 +195,61 @@
     </table>
   </section>
 
-  <!-- ── CHAT ── -->
   <section id="chat" class="content-section disable-section">
-    <header class="chat-header">
-      <div class="header-left">
-        <div class="group-icon">Chat da Turma</div>
-      </div>
-      <div class="header-right"><span class="dots">...</span></div>
-    </header>
-    <div class="chat-content" id="chatContent">
-      <!-- Mensagens demo -->
-      <div class="message incoming">
-        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-        <div class="bubble-group">
-          <span class="username">Antônio Pacífico</span>
-          <div class="bubble">Pessoal, quando é a entrega da POO?</div>
+    <div class="gurupos-container" style="display: flex; width: 100%; height: 100%;">
+      
+      <aside class="gurupos-sidebar" style="width: 280px; border-right: 1px solid #ddd; padding: 15px; display: flex; flex-direction: column; background-color: #f8f9fa;">
+        <h5 class="fw-bold mb-3">🔮 Gurupos Hub</h5>
+        
+        <div class="mb-3 p-2 border rounded bg-white">
+          <label class="form-label small fw-bold text-muted mb-1">Entrar via Código</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="inputCodigoGurupo" placeholder="Ex: X7K2A" class="form-control form-control-sm text-uppercase" style="text-transform: uppercase;" maxlength="5">
+            <button class="btn btn-sm btn-success" onclick="entrarEmGurupo()">Ir</button>
+          </div>
+        </div>
+
+        <div class="mb-3 p-2 border rounded bg-white">
+          <label class="form-label small fw-bold text-muted mb-1">Criar Gurupo</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="inputNomeGurupo" placeholder="Nome do grupo..." class="form-control form-control-sm">
+            <button class="btn btn-sm btn-primary" onclick="criarNovoGurupo()">+</button>
+          </div>
+        </div>
+
+        <hr class="my-2">
+        <label class="small fw-bold text-muted mb-2">Seus Canais Ativos</label>
+        
+        <div id="listaDeGurupos" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+          <p class="text-muted small text-center p-3">Você ainda não entrou em nenhum Gurupo.</p>
+        </div>
+      </aside>
+
+      <div class="gurupos-chat-window" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+        <header class="chat-header">
+          <div class="header-left">
+            <div class="group-icon" id="nomeGurupoAtivo">Selecione ou crie um Gurupo</div>
+          </div>
+          <div class="header-right"><span class="dots">...</span></div>
+        </header>
+
+        <div class="chat-content" id="chatContent" style="flex: 1; overflow-y: auto;">
+          <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #aaa;">
+            <p><i class="bi bi-chat-left-dots"></i> Escolha um Gurupo ao lado para ler e enviar mensagens.</p>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Selecione um grupo primeiro..." disabled>
+          <button id="btnEnviarMsg" disabled onclick="enviarMensagemGurupo()">Enviar</button>
         </div>
       </div>
-      <div class="message outgoing">
-        <div class="bubble-group">
-          <div class="bubble">Dia 17, olha as atividades!</div>
-        </div>
-        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-      </div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
-      <button id="btnEnviarMsg">Enviar</button>
+
     </div>
   </section>
 
 </main>
 
-<!-- ══ FOOTER ══ -->
 <footer class="flex">
   <a href="#">Política de Privacidade</a>
   <a href="#">Termos de Uso</a>
