@@ -32,11 +32,11 @@ let usuarioLogado = null;
 async function init() {
   try {
     const resp = await fetch('/api/sessao', { credentials: 'include' });
-    if (!resp.ok) { window.location.href = '/login'; return; }
+    if (!resp.ok) { window.location.href = '/frontend/views/login.html'; return; }
     const data = await resp.json();
-    if (!data.user) { window.location.href = '/login'; return; }
+    if (!data.user) { window.location.href = '/frontend/views/login.html'; return; }
     // Gestão vai pro dashboard
-    if (data.user.id_nivel === 3) { window.location.href = '/dashboard'; return; }
+    if (data.user.id_nivel === 3) { window.location.href = '/frontend/views/dashboard.html'; return; }
     usuarioLogado = data.user;
     document.getElementById('username-info').textContent = data.user.nome;
     carregarTurmas();
@@ -44,14 +44,14 @@ async function init() {
     carregarAtividades();
     iniciarCalendario();
     carregarTarefas();
-  } catch { window.location.href = '/login'; }
+  } catch { window.location.href = '/frontend/views/login.html'; }
 }
 
 // ── Logout ────────────────────────────────────────────────────
 document.getElementById('btnLogout').addEventListener('click', async (e) => {
   e.preventDefault();
   await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-  window.location.href = '/login';
+  window.location.href = '/frontend/views/login.html';
 });
 
 // ── TURMAS ────────────────────────────────────────────────────
@@ -167,12 +167,15 @@ async function carregarAtividades() {
       const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
       const vencida = new Date(at.prazo) < new Date();
       return `
-        <div class="aula-card" style="border-left: 4px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
+        <div class="atividade-card" style="border: 1px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
           <h3>${at.titulo}</h3>
           <div class="meta">
-            <span>Prazo: ${prazo}</span>
-            <span>${at.nome_materia || '—'}</span>
-            <span>${at.nome_turma || '—'}</span>
+            <div class="meta-info">
+              <span>Prazo: ${prazo}</span>
+              <span>${at.nome_materia || '—'}</span>
+              <span>${at.nome_turma || '—'}</span>
+            </div>
+            <button>Entregar</button>
           </div>
           ${at.descricao ? `<p class="conteudo">${at.descricao}</p>` : ''}
           ${vencida ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}

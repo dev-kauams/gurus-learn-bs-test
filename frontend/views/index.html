@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guru's Learn — Portal</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3976/3976625.png">
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <link rel="stylesheet" href="/assets/css/components.css">
-  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/responsive.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
   <!-- <style>
     /* Estilos adicionais para conteúdo dinâmico */
     .toast-gl {
@@ -231,18 +231,21 @@
 </footer>
 
 <!-- ══ MODAL INGRESSO ══ -->
-<div class="modal-gl-overlay" id="modalIngresso">
-  <div class="modal-gl">
+<div class="modal-overlay modal-turma-overlay" id="modalIngresso">
+  <div class="modal">
     <h3>Ingressar em uma turma</h3>
     <select id="selectTurmaIngresso">
       <option value="">Selecione a turma...</option>
     </select>
-    <div class="btn-row">
-      <button onclick="fecharModalIngresso()">Cancelar</button>
+    <div class="button-gruop">
+      <button class="button-cancel" onclick="fecharModalIngresso()">
+        <div class="button-hover"></div>
+        <svg viewBox="0 0 24 24" height="20" width="20"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
       <button class="btn-primary" id="btnConfirmarIngresso">Entrar</button>
     </div>
   </div>
 </div>
-<script src="/assets/js/indexPage.js"></script>
+<script src="../assets/js/indexPage.js"></script>
 </body>
 </html>

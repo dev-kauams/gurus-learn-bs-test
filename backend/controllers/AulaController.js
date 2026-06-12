@@ -79,3 +79,5 @@ class AulaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao registrar presença.' }); }
     }
 }
+
+module.exports = AulaController;
