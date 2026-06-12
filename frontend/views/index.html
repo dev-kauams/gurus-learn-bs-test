@@ -104,7 +104,6 @@
 
 <div class="toast-gl" id="toast"></div>
 
-<!-- ══ HEADER ══ -->
 <header class="flex">
   <img src="/assets/img/logo.png" alt="Logo" class="logo">
   <div class="search-bar">
@@ -116,7 +115,6 @@
   </div>
 </header>
 
-<!-- ══ SIDEBAR NAV ══ -->
 <nav class="flex flex-col align-items-center">
   <div class="icon-gruop">
     <a href="#class" class="icon" title="Turmas">
@@ -131,7 +129,7 @@
     <a href="#calendar" class="icon" title="Calendário">
       <svg viewBox="0 -960 960 960" height="24" width="24"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
     </a>
-    <a href="#chat" class="icon" title="Chat">
+    <a href="#chat" class="icon" title="Gurupos" onclick="setTimeout(carregarMeusGurupos, 50)">
       <svg viewBox="0 0 24 24" height="24" width="24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
     </a>
   </div>
@@ -142,10 +140,8 @@
   </div>
 </nav>
 
-<!-- ══ MAIN ══ -->
 <main class="flex flex-col">
 
-  <!-- ── TURMAS ── -->
   <section id="class" class="content-section">
     <h1>Turmas</h1>
     <button class="enter-room-button" id="btnIngresso">Ingressar em uma turma</button>
@@ -154,7 +150,6 @@
     </div>
   </section>
 
-  <!-- ── AULAS ── -->
   <section id="aulas" class="content-section disable-section">
     <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Aulas</h1>
     <div id="listaAulas" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
@@ -162,7 +157,6 @@
     </div>
   </section>
 
-  <!-- ── ATIVIDADES ── -->
   <section id="atividades" class="content-section disable-section">
     <h1 style="color:var(--text-base-d);font-size:clamp(1.5rem,2vw,3rem);margin-bottom:1rem;">Atividades</h1>
     <div id="listaAtividades" style="width:100%;display:flex;flex-direction:column;gap:.8rem;">
@@ -170,7 +164,6 @@
     </div>
   </section>
 
-  <!-- ── CALENDÁRIO ── -->
   <section id="calendar" class="content-section disable-section">
     <aside>
       <h2>Tarefas do Mês</h2>
@@ -192,45 +185,66 @@
     </table>
   </section>
 
-  <!-- ── CHAT ── -->
   <section id="chat" class="content-section disable-section">
-    <header class="chat-header">
-      <div class="header-left">
-        <div class="group-icon">Chat da Turma</div>
-      </div>
-      <div class="header-right"><span class="dots">...</span></div>
-    </header>
-    <div class="chat-content" id="chatContent">
-      <!-- Mensagens demo -->
-      <div class="message incoming">
-        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-        <div class="bubble-group">
-          <span class="username">Antônio Pacífico</span>
-          <div class="bubble">Pessoal, quando é a entrega da POO?</div>
+    <div class="gurupos-container" style="display: flex; width: 100%; height: 100%;">
+      
+      <aside class="gurupos-sidebar" style="width: 280px; border-right: 1px solid #ddd; padding: 15px; display: flex; flex-direction: column; background-color: #f8f9fa;">
+        <h5 class="fw-bold mb-3">🔮 Gurupos Hub</h5>
+        
+        <div class="mb-3 p-2 border rounded bg-white">
+          <label class="form-label small fw-bold text-muted mb-1">Entrar via Código</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="inputCodigoGurupo" placeholder="Ex: X7K2A" class="form-control form-control-sm text-uppercase" style="text-transform: uppercase;" maxlength="5">
+            <button class="btn btn-sm btn-success" onclick="entrarEmGurupo()">Ir</button>
+          </div>
+        </div>
+
+        <div class="mb-3 p-2 border rounded bg-white">
+          <label class="form-label small fw-bold text-muted mb-1">Criar Gurupo</label>
+          <div style="display: flex; gap: 5px;">
+            <input type="text" id="inputNomeGurupo" placeholder="Nome do grupo..." class="form-control form-control-sm">
+            <button class="btn btn-sm btn-primary" onclick="criarNovoGurupo()">+</button>
+          </div>
+        </div>
+
+        <hr class="my-2">
+        <label class="small fw-bold text-muted mb-2">Seus Canais Ativos</label>
+        
+        <div id="listaDeGurupos" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+          <p class="text-muted small text-center p-3">Você ainda não entrou em nenhum Gurupo.</p>
+        </div>
+      </aside>
+
+      <div class="gurupos-chat-window" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+        <header class="chat-header">
+          <div class="header-left">
+            <div class="group-icon" id="nomeGurupoAtivo">Selecione ou crie um Gurupo</div>
+          </div>
+          <div class="header-right"><span class="dots">...</span></div>
+        </header>
+
+        <div class="chat-content" id="chatContent" style="flex: 1; overflow-y: auto;">
+          <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #aaa;">
+            <p><i class="bi bi-chat-left-dots"></i> Escolha um Gurupo ao lado para ler e enviar mensagens.</p>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Selecione um grupo primeiro..." disabled>
+          <button id="btnEnviarMsg" disabled onclick="enviarMensagemGurupo()">Enviar</button>
         </div>
       </div>
-      <div class="message outgoing">
-        <div class="bubble-group">
-          <div class="bubble">Dia 17, olha as atividades!</div>
-        </div>
-        <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
-      </div>
-    </div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
-      <button id="btnEnviarMsg">Enviar</button>
+
     </div>
   </section>
 
 </main>
 
-<!-- ══ FOOTER ══ -->
 <footer class="flex">
   <a href="#">Política de Privacidade</a>
   <a href="#">Termos de Uso</a>
 </footer>
 
-<!-- ══ MODAL INGRESSO ══ -->
 <div class="modal-gl-overlay" id="modalIngresso">
   <div class="modal-gl">
     <h3>Ingressar em uma turma</h3>
@@ -282,7 +296,6 @@ async function init() {
     if (!resp.ok) { window.location.href = '/login'; return; }
     const data = await resp.json();
     if (!data.user) { window.location.href = '/login'; return; }
-    // Gestão vai pro dashboard
     if (data.user.id_nivel === 3) { window.location.href = '/dashboard'; return; }
     usuarioLogado = data.user;
     document.getElementById('username-info').textContent = data.user.nome;
@@ -449,11 +462,9 @@ function renderizarCalendario() {
 
   let html = '<tr>';
   let dia  = 1;
-  let semana = 0;
-
-  // Células vazias antes do dia 1
-  for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
   let col = primeiro;
+
+  for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
 
   while (dia <= diasNoMes) {
     const isHoje = dia === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
@@ -477,28 +488,132 @@ document.getElementById('btnProxMes').addEventListener('click', () => {
   renderizarCalendario();
 });
 
-// ── CHAT ─────────────────────────────────────────────────────
-document.getElementById('btnEnviarMsg').addEventListener('click', enviarMensagem);
+// ── GURUPOS HUB MÚLTIPLOS (Mecanismo de Interação) ─────────────
+let idGurupoSelecionado = null;
+
+// Captura do Enter na caixa de texto do Gurupo
 document.getElementById('chatInput').addEventListener('keypress', e => {
-  if (e.key === 'Enter') enviarMensagem();
+  if (e.key === 'Enter') enviarMensagemGurupo();
 });
 
-function enviarMensagem() {
-  const input = document.getElementById('chatInput');
-  const texto = input.value.trim();
-  if (!texto) return;
+async function carregarMeusGurupos() {
+  try {
+    const resp = await fetch('/api/gurupos');
+    const gurupos = await resp.json();
+    const container = document.getElementById('listaDeGurupos');
+    if (!container) return;
+    container.innerHTML = '';
 
-  const content = document.getElementById('chatContent');
-  const div = document.createElement('div');
-  div.className = 'message outgoing';
-  div.innerHTML = `
-    <div class="bubble-group">
-      <div class="bubble">${texto}</div>
+    if (!gurupos || gurupos.length === 0) {
+      container.innerHTML = '<p class="text-muted small text-center p-3">Você não faz parte de nenhum Gurupo.</p>';
+      return;
+    }
+
+    gurupos.forEach(g => {
+      container.innerHTML += `
+        <button class="btn btn-sm btn-light text-start p-2 border-bottom d-flex justify-content-between align-items-center" 
+                onclick="selecionarGurupo(${g.id_gurupo}, '${g.nome}', '${g.codigo_acesso}')"
+                style="width: 100%; text-align: left; margin-bottom: 2px; border: 1px solid #eee; border-radius:4px;">
+          <div>
+            <span style="display:block; font-weight:600; font-size:13px;"># ${g.nome}</span>
+            <small style="font-size:10px; color:#999;">Cód: ${g.codigo_acesso}</small>
+          </div>
+          <i class="bi bi-chevron-right small text-muted"></i>
+        </button>
+      `;
+    });
+  } catch (err) {
+    console.error('Erro ao buscar Gurupos:', err);
+  }
+}
+
+function selecionarGurupo(id, nome, codigo) {
+  idGurupoSelecionado = id;
+  document.getElementById('nomeGurupoAtivo').innerText = `# ${nome} (Código: ${codigo})`;
+  
+  const inputChat = document.getElementById('chatInput');
+  const btnEnviar = document.getElementById('btnEnviarMsg');
+  
+  inputChat.disabled = false;
+  inputChat.placeholder = `Conversar em # ${nome}...`;
+  btnEnviar.disabled = false;
+
+  const chatContent = document.getElementById('chatContent');
+  chatContent.innerHTML = `
+    <div class="text-center text-muted small my-3">🔮 Você entrou no canal de conversa histórico de ${nome}</div>
+    <div class="message incoming">
+      <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+      <div class="bubble-group">
+        <span class="username">Sistema Gurus</span>
+        <div class="bubble">Bem-vindo ao canal privado! Use o código <strong>${codigo}</strong> para convidar seus amigos da turma.</div>
+      </div>
     </div>
-    <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">`;
-  content.appendChild(div);
-  content.scrollTop = content.scrollHeight;
-  input.value = '';
+  `;
+}
+
+async function criarNovoGurupo() {
+  const nomeInput = document.getElementById('inputNomeGurupo');
+  const nome = nomeInput.value.trim();
+  if (!nome) return alert('Por favor, defina um nome para o Gurupo.');
+
+  try {
+    const resp = await fetch('/api/gurupos/criar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome })
+    });
+    const data = await resp.json();
+    
+    if (resp.status === 201 || data.codigo) {
+      alert(`🎉 Gurupo "${nome}" criado! Compartilhe o token de acesso: ${data.codigo}`);
+      nomeInput.value = '';
+      carregarMeusGurupos();
+    } else {
+      alert(data.erro || 'Não foi possível criar o Gurupo.');
+    }
+  } catch { alert('Erro de conexão ao tentar criar grupo.'); }
+}
+
+async function entrarEmGurupo() {
+  const codigoInput = document.getElementById('inputCodigoGurupo');
+  const codigo = codigoInput.value.trim().toUpperCase();
+  if (!codigo) return alert('Por favor, digite o código de 5 caracteres.');
+
+  try {
+    const resp = await fetch('/api/gurupos/entrar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo })
+    });
+    const data = await resp.json();
+    
+    if (resp.ok) {
+      alert(data.mensagem || 'Você ingressou com sucesso!');
+      codigoInput.value = '';
+      carregarMeusGurupos();
+    } else {
+      alert(data.erro || 'Código de acesso inválido ou expirado.');
+    }
+  } catch { alert('Erro de conexão com o servidor.'); }
+}
+
+function enviarMensagemGurupo() {
+  const inputChat = document.getElementById('chatInput');
+  const texto = inputChat.value.trim();
+  if (!texto || !idGurupoSelecionado) return;
+
+  const chatContent = document.getElementById('chatContent');
+  chatContent.innerHTML += `
+    <div class="message outgoing">
+      <div class="bubble-group">
+        <div class="bubble">${texto}</div>
+      </div>
+      <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
+    </div>
+  `;
+  
+  inputChat.value = '';
+  chatContent.scrollTop = chatContent.scrollHeight;
 }
 
 // ── Iniciar ───────────────────────────────────────────────────
