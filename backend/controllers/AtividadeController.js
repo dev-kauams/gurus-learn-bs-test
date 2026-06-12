@@ -7,10 +7,10 @@ class AtividadeController {
     static async listar(req, res) {
         try {
             const { id_usuario, id_nivel } = req.session.usuario;
-            
-            // Query customizada para trazer o status de entrega (Sim/Não) junto com a listagem
             let atividades;
+            
             if (id_nivel === 1) {
+                // ALUNO: Vê apenas atividades das turmas nas quais está matriculado
                 const [rows] = await db.execute(`
                     SELECT at.*, t.nome_turma, m.nome_materia, COALESCE(ea.entregue, 0) AS entregue
                     FROM atividade at
@@ -22,11 +22,32 @@ class AtividadeController {
                     ORDER BY at.prazo ASC
                 `, [id_usuario, id_usuario]);
                 atividades = rows;
+            } else if (id_nivel === 2) {
+                // PROFESSOR: Vê apenas as atividades das turmas em que ELE é o professor designado
+                const [rows] = await db.execute(`
+                    SELECT at.*, t.nome_turma, m.nome_materia
+                    FROM atividade at
+                    JOIN turma t ON at.id_turma = t.id_turma
+                    LEFT JOIN materia m ON at.id_materia = m.id_materia
+                    WHERE t.id_professor = ?
+                    ORDER BY at.prazo ASC
+                `, [id_usuario]);
+                atividades = rows;
             } else {
-                atividades = await Atividade.listarTodas();
+                // GESTÃO / ADMIN: Vê tudo do sistema
+                const [rows] = await db.execute(`
+                    SELECT at.*, t.nome_turma, m.nome_materia
+                    FROM atividade at
+                    JOIN turma t ON at.id_turma = t.id_turma
+                    LEFT JOIN materia m ON at.id_materia = m.id_materia
+                    ORDER BY at.prazo ASC
+                `);
+                atividades = rows;
             }
             res.json(atividades);
-        } catch (e) { res.status(500).json({ erro: 'Erro ao listar atividades.' }); }
+        } catch (e) { 
+            res.status(500).json({ erro: 'Erro ao listar atividades.' }); 
+        }
     }
 
     static async buscarUm(req, res) {
@@ -80,6 +101,30 @@ class AtividadeController {
             `, [req.params.id, req.session.usuario.id_usuario, entregue]);
             res.json({ mensagem: 'Status da entrega salvo!' });
         } catch (e) { res.status(500).json({ erro: 'Erro ao processar confirmação de entrega.' }); }
+    }
+
+    static async listarEntregas(req, res) {
+        try {
+            const id_atividade = req.params.id;
+            // Junta todos os alunos daquela turma e cruza com as entregas efetuadas
+            const [rows] = await db.execute(`
+                SELECT 
+                    u.nome AS nome_aluno,
+                    u.email AS email_aluno,
+                    COALESCE(ea.entregue, 0) AS entregue,
+                    ea.arquivo_url,
+                    ea.entregue_em
+                FROM atividade at
+                INNER JOIN matricula m ON m.id_turma = at.id_turma
+                INNER JOIN usuario u ON m.id_aluno = u.id_usuario
+                LEFT JOIN entrega_atividade ea ON ea.id_atividade = at.id_atividade AND ea.id_aluno = u.id_usuario
+                WHERE at.id_atividade = ?
+                ORDER BY u.nome ASC
+            `, [id_atividade]);
+            res.json(rows);
+        } catch (e) {
+            res.status(500).json({ erro: 'Erro ao processar relatório de entregas.' });
+        }
     }
 }
 

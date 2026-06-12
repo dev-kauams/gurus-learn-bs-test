@@ -14,6 +14,24 @@ class TurmaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao listar turmas.' }); }
     }
 
+    static async listarDisponiveis(req, res) {
+        try {
+            const id_aluno = req.session.usuario.id_usuario;
+            // Seleciona apenas as turmas onde o aluno NÃO possui matrícula ativa
+            const [rows] = await db.execute(`
+                SELECT t.*, u.nome AS nome_professor 
+                FROM turma t
+                LEFT JOIN usuario u ON t.id_professor = u.id_usuario
+                WHERE t.id_turma NOT IN (
+                    SELECT id_turma FROM matricula WHERE id_aluno = ?
+                )
+            `, [id_aluno]);
+            res.json(rows);
+        } catch (e) {
+            res.status(500).json({ erro: 'Erro ao buscar turmas disponíveis.' });
+        }
+    }
+    
     static async buscarUm(req, res) {
         try {
             const t = await Turma.buscarPorId(req.params.id);

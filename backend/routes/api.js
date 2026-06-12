@@ -23,8 +23,9 @@ router.get('/materias',     autenticado, UsuarioController.materias);
 router.get('/professores',  autenticado, UsuarioController.professores);
 
 // ── TURMAS ────────────────────────────────────────────────────
-router.get   ('/turmas',               autenticado,                   TurmaController.listar);
-router.get   ('/turmas/:id',           autenticado,                   TurmaController.buscarUm);
+router.get   ('/turmas',               autenticado,                    TurmaController.listar);
+router.get   ('/turmas/disponiveis',   autenticado,                    TurmaController.listarDisponiveis);
+router.get   ('/turmas/:id',           autenticado,                    TurmaController.buscarUm);
 router.get   ('/turmas/:id/alunos',    autenticado, professorOuGestao, TurmaController.alunos); // Ajuste Manual: Permite ver quem está na sala!
 router.post  ('/turmas',               autenticado, apenasGestao,      TurmaController.criar);
 router.put   ('/turmas/:id',           autenticado, apenasGestao,      TurmaController.editar);
@@ -51,9 +52,10 @@ router.post('/gurupos/criar',  autenticado, TurmaController.criarGurupo);
 router.post('/gurupos/entrar', autenticado, TurmaController.entrarGurupo);
 
 // ── ATIVIDADES ────────────────────────────────────────────────
-router.get   ('/atividades',           autenticado,                   AtividadeController.listar);
-router.get   ('/atividades/proximas',  autenticado,                   AtividadeController.proximasPorAluno);
-router.get   ('/atividades/:id',       autenticado,                   AtividadeController.buscarUm);
+router.get   ('/atividades',           autenticado,                    AtividadeController.listar);
+router.get   ('/atividades/:id/entregas', autenticado,                 AtividadeController.listarEntregas);
+router.get   ('/atividades/proximas',  autenticado,                    AtividadeController.proximasPorAluno);
+router.get   ('/atividades/:id',       autenticado,                    AtividadeController.buscarUm);
 router.post  ('/atividades',           autenticado, professorOuGestao, AtividadeController.criar);
 router.put   ('/atividades/:id',       autenticado, professorOuGestao, AtividadeController.editar);
 router.delete('/atividades/:id',       autenticado, professorOuGestao, AtividadeController.deletar);

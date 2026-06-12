@@ -25,6 +25,18 @@ function toast(msg) {
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
+// -- Recursos específicos do professor -- 
+function inicializarRecursosProfessor() {
+  if (usuarioLogado.id_nivel === 2) {
+    const containerAulas = document.querySelector('#aulas');
+    if (containerAulas) {
+      const btn = `<button style="margin-bottom:20px; padding:10px 18px; background:#532B88; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAula()">➕ Publicar Nova Aula</button>`;
+      containerAulas.insertBefore(document.createRange().createContextualFragment(btn), containerAulas.firstChild);
+    }
+    const btnInscricao = document.getElementById('btnIngresso');
+    if (btnInscricao) btnInscricao.style.display = 'none'; // Professor não se inscreve em turmas
+  }
+}
 
 // ── Verificar sessão ──────────────────────────────────────────
 let usuarioLogado = null;
@@ -39,6 +51,7 @@ async function init() {
     if (data.user.id_nivel === 3) { window.location.href = '/frontend/views/dashboard.html'; return; }
     usuarioLogado = data.user;
     document.getElementById('username-info').textContent = data.user.nome;
+    inicializarRecursosProfessor();
     carregarTurmas();
     carregarAulas();
     carregarAtividades();
@@ -91,7 +104,7 @@ async function carregarTurmas() {
 // ── Modal ingresso ────────────────────────────────────────────
 document.getElementById('btnIngresso').addEventListener('click', async () => {
   try {
-    const resp   = await fetch('/api/turmas', { credentials: 'include' });
+    const resp   = await fetch('/api/turmas/disponiveis', { credentials: 'include' });
     const turmas = await resp.json();
     const select = document.getElementById('selectTurmaIngresso');
     select.innerHTML = '<option value="">Selecione...</option>' +
@@ -166,6 +179,26 @@ async function carregarAtividades() {
     lista.innerHTML = atividades.map(at => {
       const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
       const vencida = new Date(at.prazo) < new Date();
+      
+      let acaoHtml = '';
+
+      if (usuarioLogado.id_nivel === 1) { 
+        // 1. SE FOR ALUNO
+        if (at.entregue === 1) {
+          acaoHtml = '<span style="color:#2E7D32; font-weight:700;">✅ Entregue</span>';
+        } else if (vencida) {
+          acaoHtml = '<span style="color:#E53935; font-weight:700;">❌ Pendente (Encerrado)</span>';
+        } else {
+          acaoHtml = `<button onclick="entregarAtividade(${at.id_atividade})">Entregar</button>`;
+        }
+      } else if (usuarioLogado.id_nivel === 2) {
+        // 2. SE FOR PROFESSOR: Ganha o botão roxo de gerenciar
+        acaoHtml = `<button style="background-color:#532B88; color:#fff;" onclick="verRelatorioEntregas(${at.id_atividade}, '${at.titulo}')">Ver Entregas</button>`;
+      } else {
+        // 3. SE FOR ADMIN/GESTÃO
+        acaoHtml = '<span style="color:#666; font-size:0.85rem;">Modo Visualização</span>';
+      }
+
       return `
         <div class="atividade-card" style="border: 1px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
           <h3>${at.titulo}</h3>
@@ -175,10 +208,10 @@ async function carregarAtividades() {
               <span>${at.nome_materia || '—'}</span>
               <span>${at.nome_turma || '—'}</span>
             </div>
-            <button>Entregar</button>
+            ${acaoHtml}
           </div>
           ${at.descricao ? `<p class="conteudo">${at.descricao}</p>` : ''}
-          ${vencida ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}
+          ${(vencida && usuarioLogado.id_nivel === 1 && at.entregue !== 1) ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}
         </div>`;
     }).join('');
   } catch { toast('Erro ao carregar atividades.'); }
@@ -373,6 +406,86 @@ async function entrarEmGurupo() {
       alert(data.erro || 'Código de acesso inválido ou expirado.');
     }
   } catch { alert('Erro de conexão com o servidor.'); }
+}
+
+async function abrirModalCriarAula() {
+  try {
+    // Carrega apenas as turmas que pertencem a ele (devido ao filtro construído na Fase 1)
+    const resp = await fetch('/api/turmas', { credentials: 'include' });
+    const turmas = await resp.json();
+    
+    const select = document.getElementById('regAulaTurma');
+    select.innerHTML = '<option value="">Selecione uma de suas turmas...</option>' + 
+      turmas.map(t => `<option value="${t.id_turma}">${t.nome_turma}</option>`).join('');
+    
+    document.getElementById('modalCriarAula').style.display = 'block';
+  } catch {
+    toast('Erro ao preparar formulário de criação.');
+  }
+}
+
+async function salvarNovaAula() {
+  const body = {
+    id_turma:  document.getElementById('regAulaTurma').value,
+    titulo:    document.getElementById('regAulaTitulo').value.trim(),
+    conteudo:  document.getElementById('regAulaConteudo').value.trim(),
+    data_aula: document.getElementById('regAulaData').value
+  };
+
+  if (!body.id_turma || !body.titulo || !body.data_aula) {
+    toast('Por favor, preencha todos os campos obrigatórios.');
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/aulas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      toast('✅ Aula publicada com sucesso!');
+      document.getElementById('modalCriarAula').style.display = 'none';
+      if (typeof carregarAulas === 'function') carregarAulas();
+    } else {
+      toast(data.erro || 'Erro ao publicar aula.');
+    }
+  } catch {
+    toast('Erro de comunicação com o servidor.');
+  }
+}
+
+async function verRelatorioEntregas(idAtividade, tituloAtividade) {
+  try {
+    const resp = await fetch(`/api/atividades/${idAtividade}/entregas`, { credentials: 'include' });
+    const entregas = await resp.json();
+
+    document.getElementById('tituloModalRelatorio').innerText = `Entregas de: ${tituloAtividade}`;
+    const tabela = document.getElementById('corpoTabelaRelatorio');
+
+    if (!entregas.length) {
+      tabela.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:#999;">Nenhum aluno vinculado a esta turma.</td></tr>';
+    } else {
+      tabela.innerHTML = entregas.map(e => {
+        const badgeStatus = e.entregue === 1 
+          ? `<span style="color:#2E7D32; font-weight:bold;">🟢 Entregue</span>` 
+          : `<span style="color:#E53935; font-weight:bold;">🔴 Pendente</span>`;
+        const dataStatus = e.entregue_em ? new Date(e.entregue_em).toLocaleString('pt-BR') : '—';
+        
+        return `
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px;"><strong>${e.nome_aluno}</strong><br><small style="color:#777;">${e.email_aluno}</small></td>
+            <td style="padding: 10px;">${badgeStatus}</td>
+            <td style="padding: 10px;">${dataStatus}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    document.getElementById('modalRelatorioEntregas').style.display = 'block';
+  } catch {
+    toast('Erro ao buscar o relatório consolidado.');
+  }
 }
 
 // ── Iniciar ───────────────────────────────────────────────────

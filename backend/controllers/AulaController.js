@@ -7,9 +7,39 @@ class AulaController {
     static async listar(req, res) {
         try {
             const { id_usuario, id_nivel } = req.session.usuario;
-            const aulas = id_nivel === 1 ? await Aula.listarDoAluno(id_usuario) : await Aula.listarTodas();
-            res.json(aulas);
-        } catch (e) { res.status(500).json({ erro: 'Erro ao listar aulas.' }); }
+            let query = '';
+            let params = [];
+
+            if (id_nivel === 1) { 
+                // ALUNO: Só vê aulas das turmas em que está MATRICULADO
+                query = `SELECT a.*, t.nome_turma 
+                        FROM aula a
+                        INNER JOIN turma t ON a.id_turma = t.id_turma
+                        INNER JOIN matricula m ON m.id_turma = t.id_turma
+                        WHERE m.id_aluno = ?
+                        ORDER BY a.data_aula DESC`;
+                params = [id_usuario];
+            } else if (id_nivel === 2) { 
+                // PROFESSOR: Só vê aulas das turmas que ELE está assignado
+                query = `SELECT a.*, t.nome_turma 
+                        FROM aula a
+                        INNER JOIN turma t ON a.id_turma = t.id_turma
+                        WHERE t.id_professor = ?
+                        ORDER BY a.data_aula DESC`;
+                params = [id_usuario];
+            } else { 
+                // GESTÃO / ADMIN: Vê tudo
+                query = `SELECT a.*, t.nome_turma 
+                        FROM aula a 
+                        INNER JOIN turma t ON a.id_turma = t.id_turma 
+                        ORDER BY a.data_aula DESC`;
+            }
+
+            const [rows] = await db.execute(query, params);
+            res.json(rows);
+        } catch (e) {
+            res.status(500).json({ erro: 'Erro ao listar aulas.' });
+        }
     }
 
     static async listarPorTurma(req, res) {
@@ -28,12 +58,30 @@ class AulaController {
     }
 
     static async criar(req, res) {
-        const { titulo, data_aula, conteudo, id_turma } = req.body;
-        if (!titulo || !data_aula || !conteudo || !id_turma) return res.status(400).json({ erro: 'Preencha todos os campos.' });
         try {
-            const id = await Aula.criar(titulo, data_aula, conteudo, id_turma);
-            res.status(201).json({ mensagem: 'Aula criada!', id });
-        } catch (e) { res.status(500).json({ erro: 'Erro ao criar aula.' }); }
+            const { titulo, data_aula, conteudo, id_turma } = req.body;
+            const { id_usuario, id_nivel } = req.session.usuario;
+
+            if (id_nivel === 2) {
+                // Verifica se a turma realmente pertence a esse professor
+                const [turma] = await db.execute(
+                    'SELECT id_turma FROM turma WHERE id_turma = ? AND id_professor = ?',
+                    [id_turma, id_usuario]
+                );
+                if (turma.length === 0) {
+                    return res.status(403).json({ erro: 'Acesso negado. Você não é o professor designado para esta turma.' });
+                }
+            }
+
+            await db.execute(
+                'INSERT INTO aula (titulo, data_aula, conteudo, id_turma) VALUES (?, ?, ?, ?)',
+                [titulo, data_aula, conteudo, id_turma]
+            );
+
+            res.status(201).json({ success: true, message: 'Aula criada com sucesso!' });
+        } catch (e) {
+            res.status(500).json({ erro: 'Erro ao criar aula.' });
+        }
     }
 
     static async editar(req, res) {
