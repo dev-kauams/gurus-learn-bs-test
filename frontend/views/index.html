@@ -102,8 +102,6 @@
 </head>
 <body class="body-index">
 
-<div class="toast-gl" id="toast"></div>
-
 <header class="flex">
   <img src="/assets/img/logo.png" alt="Logo" class="logo">
   <div class="search-bar">
@@ -142,12 +140,8 @@
 
 <main class="flex flex-col">
 
-<<<<<<< HEAD
-  <section id="class" class="content-section">
-=======
   <!-- ── TURMAS ── -->
   <section id="turmas" class="content-section">
->>>>>>> c3d4d7b5428c9a9d1c02127e0bfb039ba4622976
     <h1>Turmas</h1>
     <button class="enter-room-button" id="btnIngresso">Ingressar em uma turma</button>
     <div class="card-gruop" id="gridTurmas">
@@ -169,12 +163,8 @@
     </div>
   </section>
 
-<<<<<<< HEAD
-  <section id="calendar" class="content-section disable-section">
-=======
   <!-- ── CALENDÁRIO ── -->
   <section id="calendario" class="content-section disable-section">
->>>>>>> c3d4d7b5428c9a9d1c02127e0bfb039ba4622976
     <aside>
       <h2>Tarefas do Mês</h2>
       <ul id="listaTarefas"><li style="opacity:.6;">Carregando...</li></ul>
@@ -198,34 +188,37 @@
   <section id="chat" class="content-section disable-section">
     <div class="gurupos-container" style="display: flex; width: 100%; height: 100%;">
       
-      <aside class="gurupos-sidebar" style="width: 280px; border-right: 1px solid #ddd; padding: 15px; display: flex; flex-direction: column; background-color: #f8f9fa;">
-        <h5 class="fw-bold mb-3">🔮 Gurupos Hub</h5>
-        
-        <div class="mb-3 p-2 border rounded bg-white">
-          <label class="form-label small fw-bold text-muted mb-1">Entrar via Código</label>
-          <div style="display: flex; gap: 5px;">
-            <input type="text" id="inputCodigoGurupo" placeholder="Ex: X7K2A" class="form-control form-control-sm text-uppercase" style="text-transform: uppercase;" maxlength="5">
-            <button class="btn btn-sm btn-success" onclick="entrarEmGurupo()">Ir</button>
+      <aside class="gurupos-sidebar">
+        <svg id="buttonSidebar" viewBox="0 0 24 24" height="20" width="20"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2z"/></svg>
+        <div class="open-sidebar">
+          <h3>Gurupos</h3>
+          
+          <div class="gurupos-entrar">
+            <label class="">Entrar via Código</label>
+            <div>
+              <input type="text" id="inputCodigoGurupo" placeholder="Ex: X7K2A" class="" maxlength="5">
+              <button class="" onclick="entrarEmGurupo()">Ir</button>
+            </div>
           </div>
-        </div>
-
-        <div class="mb-3 p-2 border rounded bg-white">
-          <label class="form-label small fw-bold text-muted mb-1">Criar Gurupo</label>
-          <div style="display: flex; gap: 5px;">
-            <input type="text" id="inputNomeGurupo" placeholder="Nome do grupo..." class="form-control form-control-sm">
-            <button class="btn btn-sm btn-primary" onclick="criarNovoGurupo()">+</button>
+  
+          <div class="gurupos-entrar">
+            <label class="">Criar Gurupo</label>
+            <div>
+              <input type="text" id="inputNomeGurupo" placeholder="Nome do grupo..." class="">
+              <button class="" onclick="criarNovoGurupo()">+</button>
+            </div>
           </div>
-        </div>
-
-        <hr class="my-2">
-        <label class="small fw-bold text-muted mb-2">Seus Canais Ativos</label>
-        
-        <div id="listaDeGurupos" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
-          <p class="text-muted small text-center p-3">Você ainda não entrou em nenhum Gurupo.</p>
+  
+          <hr>
+          <label class="gurupos-channels">Seus Canais Ativos</label>
+          
+          <div class="gurupos-list" id="listaDeGurupos">
+            <p class="text-muted">Você ainda não entrou em nenhum Gurupo.</p>
+          </div>
         </div>
       </aside>
 
-      <div class="gurupos-chat-window" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+      <div class="gurupos-chat-window">
         <header class="chat-header">
           <div class="header-left">
             <div class="group-icon" id="nomeGurupoAtivo">Selecione ou crie um Gurupo</div>
@@ -233,8 +226,8 @@
           <div class="header-right"><span class="dots">...</span></div>
         </header>
 
-        <div class="chat-content" id="chatContent" style="flex: 1; overflow-y: auto;">
-          <div style="display: flex; justify-content: center; align-items: center; height: 100%; color: #aaa;">
+        <div class="chat-content" id="chatContent"
+          <div>
             <p><i class="bi bi-chat-left-dots"></i> Escolha um Gurupo ao lado para ler e enviar mensagens.</p>
           </div>
         </div>

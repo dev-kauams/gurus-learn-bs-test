@@ -445,6 +445,77 @@ body {
         border-radius: var(--br-base);
         overflow: hidden;
 
+        .gurupos-sidebar{
+          background-color: var(--bg-component-w);
+          overflow: hidden;
+          width: 5dvw;
+          border-radius: var(--br-base);
+
+          & svg{
+            fill: var(--text-base-d);
+            transition: all 0.3s ease;
+            width: 100%;
+            height: 5%;
+
+            &:hover{
+              fill: var(--bg-block);
+            }
+          }
+
+          .open-sidebar{
+            display: none;
+            width: 100%;
+            & h3{
+              padding: 1.5rem;
+              font-size: clamp(1.5rem, 2vw, 3rem);
+              color: var(--text-base-d);
+              text-align: center;
+            }
+  
+            .gurupos-entrar{
+              padding: 0.5rem 1.5rem; 
+            }
+  
+            & label{
+              display: flex;
+              margin-bottom: 0.3rem;
+              color: var(--text-base-d);
+  
+            }
+  
+            & hr{
+              margin: 0.5rem 0;
+              border: none;
+              border-top: 2px solid var(--bg-block);
+            }
+  
+            .gurupos-channels{
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              margin-bottom: 0.5rem;
+              color: var(--text-base-d);
+            }
+  
+            .gurupos-list{
+              padding: 0 1.5rem;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              color: var(--text-base-d);
+  
+              .text-muted{
+                color: #414040;
+                text-align: center;
+                font-size: 0.7rem;
+            }
+          }
+  
+  
+  
+          }
+        }
+
         .chat-header {
           width: 100%;
           height: 60px;
@@ -800,7 +871,9 @@ body {
     & footer {
       grid-area: footer;
       display: flex;
-      justify-content: space-around;
+      width: 100%;
+      height: 5dvh;
+      justify-content: center;
       align-items: center;
       background-color: transparent;
       color: var(--text-base-d);
