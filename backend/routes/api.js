@@ -1,4 +1,4 @@
-// routes/api.js
+// backend/routes/api.js
 const express = require('express');
 const router  = express.Router();
 
@@ -10,7 +10,7 @@ const UsuarioController   = require('../controllers/UsuarioController');
 
 const { autenticado, apenasGestao, professorOuGestao } = require('../middleware/auth');
 
-// ── AUTENTICAÇÃO (público) ────────────────────────────────────
+// ── AUTENTICAÇÃO ──────────────────────────────────────────────
 router.post('/login',    AuthController.login);
 router.post('/register', AuthController.register);
 router.post('/logout',   autenticado, AuthController.logout);
@@ -24,7 +24,7 @@ router.get('/professores',  autenticado, UsuarioController.professores);
 // ── TURMAS ────────────────────────────────────────────────────
 router.get   ('/turmas',               autenticado,                   TurmaController.listar);
 router.get   ('/turmas/:id',           autenticado,                   TurmaController.buscarUm);
-router.get   ('/turmas/:id/alunos',    autenticado, professorOuGestao, TurmaController.alunos);
+router.get   ('/turmas/:id/alunos',    autenticado, professorOuGestao, TurmaController.alunos); // Ajuste Manual: Permite ver quem está na sala!
 router.post  ('/turmas',               autenticado, apenasGestao,      TurmaController.criar);
 router.put   ('/turmas/:id',           autenticado, apenasGestao,      TurmaController.editar);
 router.delete('/turmas/:id',           autenticado, apenasGestao,      TurmaController.deletar);
@@ -40,6 +40,15 @@ router.post  ('/aulas',                autenticado, professorOuGestao, AulaContr
 router.put   ('/aulas/:id',            autenticado, professorOuGestao, AulaController.editar);
 router.delete('/aulas/:id',            autenticado, professorOuGestao, AulaController.deletar);
 
+// ── SISTEMA DE PRESENÇA / CHAMADA ─────────────────────────────
+router.get ('/aulas/:id/presencas', autenticado, professorOuGestao, AulaController.listarPresencas);
+router.post('/aulas/:id/presenca',  autenticado, professorOuGestao, AulaController.registrarPresenca);
+
+// ── GURUPOS HUB ───────────────────────────────────────────────
+router.get ('/gurupos',        autenticado, TurmaController.listarGurupos);
+router.post('/gurupos/criar',  autenticado, TurmaController.criarGurupo);
+router.post('/gurupos/entrar', autenticado, TurmaController.entrarGurupo);
+
 // ── ATIVIDADES ────────────────────────────────────────────────
 router.get   ('/atividades',           autenticado,                   AtividadeController.listar);
 router.get   ('/atividades/proximas',  autenticado,                   AtividadeController.proximasPorAluno);
@@ -48,7 +57,10 @@ router.post  ('/atividades',           autenticado, professorOuGestao, Atividade
 router.put   ('/atividades/:id',       autenticado, professorOuGestao, AtividadeController.editar);
 router.delete('/atividades/:id',       autenticado, professorOuGestao, AtividadeController.deletar);
 
-// ── USUÁRIOS (gestão) ─────────────────────────────────────────
+// ── CONFIRMAÇÃO DE ENTREGA (Sim/Não) ──────────────────────────
+router.post('/atividades/:id/entregar', autenticado, AtividadeController.confirmarEntrega);
+
+// ── USUÁRIOS ──────────────────────────────────────────────────
 router.get   ('/usuarios',     autenticado, apenasGestao, UsuarioController.listar);
 router.get   ('/usuarios/:id', autenticado,               UsuarioController.buscarUm);
 router.put   ('/usuarios/:id', autenticado, apenasGestao, UsuarioController.atualizar);
