@@ -256,6 +256,11 @@ document.getElementById('chatInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') enviarMensagem();
 });
 
+document.getElementById('buttonSidebar').addEventListener('click', () => {
+  const sidebar = document.querySelector('.gurupos-sidebar');
+  sidebar.classList.toggle('open-sidebar');
+});
+
 function enviarMensagem() {
   const input = document.getElementById('chatInput');
   const texto = input.value.trim();

@@ -189,8 +189,10 @@
     <div class="gurupos-container" style="display: flex; width: 100%; height: 100%;">
       
       <aside class="gurupos-sidebar">
-        <svg id="buttonSidebar" viewBox="0 0 24 24" height="20" width="20"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2z"/></svg>
-        <div class="open-sidebar">
+        <div id="buttonSidebar">
+          <svg viewBox="0 0 24 24" height="20" width="20"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2z"/></svg>
+        </div>
+        <div class="sidebar">
           <h3>Gurupos</h3>
           
           <div class="gurupos-entrar">
@@ -230,12 +232,13 @@
           <div>
             <p><i class="bi bi-chat-left-dots"></i> Escolha um Gurupo ao lado para ler e enviar mensagens.</p>
           </div>
+          
+          <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Selecione um grupo primeiro..." disabled>
+            <button id="btnEnviarMsg" disabled onclick="enviarMensagemGurupo()">Enviar</button>
+          </div>
         </div>
 
-        <div class="chat-input-area">
-          <input type="text" id="chatInput" placeholder="Selecione um grupo primeiro..." disabled>
-          <button id="btnEnviarMsg" disabled onclick="enviarMensagemGurupo()">Enviar</button>
-        </div>
       </div>
 
     </div>
