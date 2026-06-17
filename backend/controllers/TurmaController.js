@@ -1,5 +1,5 @@
 const Turma = require('../models/Turma');
-const db = require('../config/db'); // Ajuste Manual: Importação direta para as novas querys
+const db = require('../config/db'); 
 
 class TurmaController {
 
@@ -40,7 +40,6 @@ class TurmaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao buscar turma.' }); }
     }
 
-    // 👁️ ATUALIZADO: Traz a lista real de alunos matriculados na sala
     static async alunos(req, res) {
         try {
             const [rows] = await db.execute(`
@@ -97,7 +96,6 @@ class TurmaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao desmatricular.' }); }
     }
 
-    // Novo método específico: Lógica dos Gurupos (estilo Discord)
     static async listarGurupos(req, res) {
         try {
             const [rows] = await db.execute(`
@@ -114,14 +112,12 @@ class TurmaController {
         const { nome } = req.body;
         if (!nome) return res.status(400).json({ erro: 'Nome do Gurupo é obrigatório.' });
         
-        // Gera um código único aleatório de 5 caracteres maiúsculos
         const codigo = Math.random().toString(36).substring(2, 7).toUpperCase();
         try {
             const [r] = await db.execute(
                 'INSERT INTO gurupo (nome, codigo_acesso, id_criador) VALUES (?, ?, ?)',
                 [nome, codigo, req.session.usuario.id_usuario]
             );
-            // Coloca o criador automaticamente como membro do grupo
             await db.execute('INSERT INTO gurupo_membro (id_gurupo, id_usuario) VALUES (?, ?)', [r.insertId, req.session.usuario.id_usuario]);
             res.status(201).json({ mensagem: 'Gurupo criado!', codigo });
         } catch (e) { res.status(500).json({ erro: 'Erro ao criar Gurupo.' }); }
@@ -139,13 +135,14 @@ class TurmaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao entrar no Gurupo.' }); }
     }
 
-        static async ingressar(req, res) {
+    // CORRIGIDO: Alinhamento de chaves consertado e propriedades JSON padronizadas para o front
+    static async ingressar(req, res) {
         try {
             const { id_turma } = req.body;
             const id_aluno = req.session.usuario.id_usuario;
 
             if (!id_turma) {
-                return res.status(400).json({ erro: 'O ID da turma é obrigatório.' });
+                return res.status(400).json({ success: false, erro: 'O ID da turma é obrigatório.' });
             }
 
             // Evita duplicar a matrícula caso ele clique duas vezes
@@ -153,24 +150,23 @@ class TurmaController {
                 'SELECT * FROM matricula WHERE id_aluno = ? AND id_turma = ?',
                 [id_aluno, id_turma]
             );
+            
             if (existe.length > 0) {
-                return res.status(400).json({ erro: 'Você já está matriculado nesta turma.' });
+                return res.status(400).json({ success: false, erro: 'Você já está matriculado nesta turma.' });
             }
 
             // Insere o vínculo oficial do aluno com a turma
             await db.execute(
-                'INSERT INTO matricula (id_aluno, id_turma, data_matricula) VALUES (?, ?, NOW())',
+                'INSERT INTO matricula (id_aluno, id_turma, criado_em) VALUES (?, ?, NOW())',
                 [id_aluno, id_turma]
             );
 
-            res.json({ success: true, message: 'Inscrição realizada com sucesso!' });
+            return res.json({ success: true, message: 'Inscrição realizada com sucesso!' });
         } catch (e) {
             console.error(e);
-            res.status(500).json({ erro: 'Erro interno ao ingressar na turma.' });
+            return res.status(500).json({ success: false, erro: 'Erro interno ao ingressar na turma.' });
         }
     }
 }
-
-
 
 module.exports = TurmaController;
