@@ -77,7 +77,7 @@ class AulaController {
                 }
             }
 
-            // --- SOLUÇÃO CONTRA DUPLICIDADE ---
+            // Evita a criação de aulas duplas
             const [existente] = await db.execute(
                 'SELECT id_aula FROM aula WHERE LOWER(titulo) = LOWER(?) AND id_turma = ?',
                 [titulo.trim(), id_turma]
@@ -123,7 +123,7 @@ class AulaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao buscar próximas aulas.' }); }
     }
 
-    // Novo méotodo exclusivo: Controle de presença 
+    // Novo método exclusivo: Controle de presença 
     static async listarPresencas(req, res) {
         try {
             const [rows] = await db.execute('SELECT id_aluno, status FROM presenca WHERE id_aula = ?', [req.params.id]);

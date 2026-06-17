@@ -135,7 +135,7 @@ class TurmaController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao entrar no Gurupo.' }); }
     }
 
-    // CORRIGIDO: Alinhamento de chaves consertado e propriedades JSON padronizadas para o front
+    // Alinhamento de chaves consertado e propriedades JSON padronizadas para o front
     static async ingressar(req, res) {
         try {
             const { id_turma } = req.body;

@@ -76,7 +76,7 @@ async function init() {
     // Regras estritas de exibição baseadas no nível
     const btnIngresso = document.getElementById('btnIngresso');
     if (usuarioLogado.id_nivel === 1) {
-      if (btnIngresso) btnIngresso.style.display = 'block'; // Alunos novos sempre veem o botão
+      if (btnIngresso) btnIngresso.style.display = 'block'; 
     }
   } catch { window.location.href = '/frontend/views/login.html'; }
 }
@@ -119,7 +119,7 @@ async function carregarTurmas() {
   });
 }
 
-// ── Modal ingresso (CORRIGIDO PARA SE ADEQUAR AO BACKEND) ──────
+// ── Modal ingresso  ──────
 document.getElementById('btnIngresso').addEventListener('click', async () => {
   try {
     const resp   = await fetch('/api/turmas/disponiveis', { credentials: 'include' });
@@ -149,14 +149,14 @@ document.getElementById('btnConfirmarIngresso').addEventListener('click', async 
       method: 'POST', 
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' }, 
-      body: JSON.stringify({ id_turma: id }) // Correção do Payload esperado pelo backend
+      body: JSON.stringify({ id_turma: id }) 
     });
     
     const data = await resp.json();
     if (resp.ok) {
       alert(data.message || '🎉 Confirmado! Inscrição realizada com sucesso.');
       fecharModalIngresso();
-      window.location.reload(); // Atualização forçada para remapear escopos de aulas/atividades
+      window.location.reload(); // Recarrega para mostrar novas lições e aulas da classe ingressada
     } else {
       alert(data.erro || 'Erro ao ingressar.');
     }
@@ -223,7 +223,7 @@ async function carregarAtividades() {
         } else if (vencida) {
           acaoHtml = '<span style="color:#E53935; font-weight:700;">❌ Pendente (Encerrado)</span>';
         } else {
-          // Botão Simples e Direto passando o elemento 'this' para o feedback visual imediato
+          
           acaoHtml = `<button style="background-color: #2b5788; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;" onclick="marcarComoConcluida(${at.id_atividade}, this)">Marcar como Concluída</button>`;
         }
       } else if (usuarioLogado.id_nivel === 2) {
@@ -250,7 +250,7 @@ async function carregarAtividades() {
   } catch { toast('Erro ao carregar atividades.'); }
 }
 
-// ── SIMPLIFICAÇÃO COM RETORNO VISUAL AJUSTADO PARA A ROTA CORRETA ──
+
 async function marcarComoConcluida(id_atividade, botaoElemento) {
   if (!confirm("Deseja marcar esta atividade como concluída?")) return;
 
@@ -494,7 +494,7 @@ async function salvarNovaAula() {
   }
 }
 
-// ── NOVO: OPERAÇÕES DE ATIVIDADE DO PROFESSOR ─────────────────
+// ── OPERAÇÕES DE ATIVIDADE DO PROFESSOR ─────────────────
 async function abrirModalCriarAtividade() {
   try {
     const resp = await fetch('/api/turmas', { credentials: 'include' });
@@ -517,7 +517,7 @@ async function salvarNovaAtividade() {
     titulo:     document.getElementById('regAtivTitulo').value.trim(),
     descricao:  document.getElementById('regAtivDesc').value.trim(),
     prazo:      document.getElementById('regAtivPrazo').value,
-    id_materia: 1 // Id padrão genérico vinculado ao banco
+    id_materia: 1 
   };
 
   if (!body.id_turma || !body.titulo || !body.prazo) {
