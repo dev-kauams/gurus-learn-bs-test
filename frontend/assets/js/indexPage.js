@@ -1,5 +1,5 @@
 // ============================================================
-// portal (index.html) — JavaScript dinâmico
+// portal (index.html) — JavaScript dinâmico COESIVO
 // ============================================================
 
 // ── Navegação entre seções ────────────────────────────────────
@@ -21,19 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Toast ─────────────────────────────────────────────────────
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent  = msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 3000);
+  if (el) {
+    el.textContent  = msg;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 3000);
+  } else {
+    alert(msg);
+  }
 }
 
 // -- Recursos específicos do professor -- 
 function inicializarRecursosProfessor() {
   if (usuarioLogado.id_nivel === 2) {
+    // Botão de Criar Aula
     const containerAulas = document.querySelector('#aulas');
-    if (containerAulas) {
-      const btn = `<button style="margin-bottom:20px; padding:10px 18px; background:#532B88; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAula()">➕ Publicar Nova Aula</button>`;
-      containerAulas.insertBefore(document.createRange().createContextualFragment(btn), containerAulas.firstChild);
+    if (containerAulas && !document.getElementById('btnCriarAulaTrigger')) {
+      const btnAula = `<button id="btnCriarAulaTrigger" style="margin-bottom:20px; margin-right:10px; padding:10px 18px; background:#532B88; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAula()">➕ Publicar Nova Aula</button>`;
+      containerAulas.insertBefore(document.createRange().createContextualFragment(btnAula), containerAulas.firstChild);
     }
+
+    // Botão de Criar Atividade
+    const containerAtividades = document.querySelector('#atividades');
+    if (containerAtividades && !document.getElementById('btnCriarAtividadeTrigger')) {
+      const btnAtiv = `<button id="btnCriarAtividadeTrigger" style="margin-bottom:20px; padding:10px 18px; background:#2E7D32; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAtividade()">📝 Criar Nova Atividade</button>`;
+      containerAtividades.insertBefore(document.createRange().createContextualFragment(btnAtiv), containerAtividades.firstChild);
+    }
+
     const btnInscricao = document.getElementById('btnIngresso');
     if (btnInscricao) btnInscricao.style.display = 'none'; // Professor não se inscreve em turmas
   }
@@ -48,10 +61,11 @@ async function init() {
     if (!resp.ok) { window.location.href = '/frontend/views/login.html'; return; }
     const data = await resp.json();
     if (!data.user) { window.location.href = '/frontend/views/login.html'; return; }
-    // Gestão vai pro dashboard
+    
     if (data.user.id_nivel === 3) { window.location.href = '/frontend/views/dashboard.html'; return; }
     usuarioLogado = data.user;
     document.getElementById('username-info').textContent = data.user.nome;
+    
     inicializarRecursosProfessor();
     carregarTurmas();
     carregarAulas();
@@ -59,19 +73,10 @@ async function init() {
     iniciarCalendario();
     carregarTarefas();
     
-    if (usuarioLogado) {
-      const btnCriarAula = document.getElementById('btnCriarAula'); 
-      const btnIngressarTurma = document.getElementById('btnIngresso'); // Ajustado para o ID padrão do seu HTML
-
-      if (usuarioLogado.id_nivel === 1) {
-        // 1. FORÇAR REGRAS DO ALUNO
-        if (btnCriarAula) btnCriarAula.style.display = 'none'; 
-        if (btnIngressarTurma) btnIngressarTurma.style.display = 'block'; // Garante acesso total a alunos novos
-      } else if (usuarioLogado.id_nivel === 2) {
-        // 2. FORÇAR REGRAS DO PROFESSOR
-        if (btnCriarAula) btnCriarAula.style.display = 'block';
-        if (btnIngressarTurma) btnIngressarTurma.style.display = 'none'; 
-      }
+    // Regras estritas de exibição baseadas no nível
+    const btnIngresso = document.getElementById('btnIngresso');
+    if (usuarioLogado.id_nivel === 1) {
+      if (btnIngresso) btnIngresso.style.display = 'block'; // Alunos novos sempre veem o botão
     }
   } catch { window.location.href = '/frontend/views/login.html'; }
 }
@@ -108,15 +113,13 @@ async function carregarTurmas() {
   const allCardClass = document.querySelectorAll('.card-class');
   allCardClass.forEach(card => {
     card.addEventListener('click', (event) => {
-        if (event.target.tagName === 'BUTTON') {
-            return; 
-        }
-      card.classList.toggle('expanded');
+        if (event.target.tagName === 'BUTTON') { return; }
+        card.classList.toggle('expanded');
     });
   });
 }
 
-// ── Modal ingresso ────────────────────────────────────────────
+// ── Modal ingresso (CORRIGIDO PARA SE ADEQUAR AO BACKEND) ──────
 document.getElementById('btnIngresso').addEventListener('click', async () => {
   try {
     const resp   = await fetch('/api/turmas/disponiveis', { credentials: 'include' });
@@ -132,42 +135,36 @@ function fecharModalIngresso() {
   document.getElementById('modalIngresso').classList.remove('open');
 }
 
-// --- PASSO 5: BOTÃO DE INGRESSAR EM TURMA E VÍNCULO DE ATIVIDADES ---
-document.getElementById('btnConfirmarIngresso').addEventListener('click', async (e) => {
+document.getElementById('btnConfirmarIngresso').addEventListener('click', async () => {
   const id = document.getElementById('selectTurmaIngresso').value;
   if (!id) { toast('Selecione uma turma.'); return; }
   
-  const btnConfirmar = e.currentTarget;
-  
-  // Retorno Visual Claro de Carregamento
-  const textoOriginal = btnConfirmar.innerText;
-  btnConfirmar.disabled = true;
-  btnConfirmar.innerText = "⌛ Ingressando...";
+  const btn = document.getElementById('btnConfirmarIngresso');
+  const txtOriginal = btn.innerText;
+  btn.disabled = true;
+  btn.innerText = "⌛ Processando...";
 
   try {
     const resp = await fetch('/api/turmas/ingressar', {
       method: 'POST', 
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' }, 
-      body: JSON.stringify({ id_turma: id })
+      body: JSON.stringify({ id_turma: id }) // Correção do Payload esperado pelo backend
     });
     
     const data = await resp.json();
-    
     if (resp.ok) {
-      alert('🎉 CONFIRMAÇÃO: Você ingressou na turma com sucesso! Suas novas matérias e atividades foram liberadas.');
+      alert(data.message || '🎉 Confirmado! Inscrição realizada com sucesso.');
       fecharModalIngresso();
-      // Recarrega a página para atualizar instantaneamente o escopo do aluno no banco de dados
-      window.location.reload();
+      window.location.reload(); // Atualização forçada para remapear escopos de aulas/atividades
     } else {
       alert(data.erro || 'Erro ao ingressar.');
-      btnConfirmar.disabled = false;
-      btnConfirmar.innerText = textoOriginal;
     }
   } catch { 
-    toast('Erro de rede ao ingressar.'); 
-    btnConfirmar.disabled = false;
-    btnConfirmar.innerText = textoOriginal;
+    alert('Erro de comunicação.'); 
+  } finally {
+    btn.disabled = false;
+    btn.innerText = txtOriginal;
   }
 });
 
@@ -197,8 +194,7 @@ async function carregarAulas() {
               <button>Ingressar</button>
               <button>Adicionar ao calendário</button>
           </div>    
-        </div>
-        `;
+        </div>`;
     }).join('');
   } catch { toast('Erro ao carregar aulas.'); }
 }
@@ -222,20 +218,17 @@ async function carregarAtividades() {
       let acaoHtml = '';
 
       if (usuarioLogado.id_nivel === 1) { 
-        // 1. SE FOR ALUNO
         if (at.entregue === 1) {
-          acaoHtml = '<span style="color:#2E7D32; font-weight:700;">✅ Entregue</span>';
+          acaoHtml = '<span style="color:#2E7D32; font-weight:700;">✅ Concluída</span>';
         } else if (vencida) {
           acaoHtml = '<span style="color:#E53935; font-weight:700;">❌ Pendente (Encerrado)</span>';
         } else {
-          // Ajustado com o parâmetro 'this' para capturar o clique
-          acaoHtml = `<button onclick="entregarAtividade(${at.id_atividade}, this)">Entregar</button>`;
+          // Botão Simples e Direto passando o elemento 'this' para o feedback visual imediato
+          acaoHtml = `<button style="background-color: #2b5788; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;" onclick="marcarComoConcluida(${at.id_atividade}, this)">Marcar como Concluída</button>`;
         }
       } else if (usuarioLogado.id_nivel === 2) {
-        // 2. SE FOR PROFESSOR
         acaoHtml = `<button style="background-color:#532B88; color:#fff;" onclick="verRelatorioEntregas(${at.id_atividade}, '${at.titulo}')">Ver Entregas</button>`;
       } else {
-        // 3. SE FOR ADMIN/GESTÃO
         acaoHtml = '<span style="color:#666; font-size:0.85rem;">Modo Visualização</span>';
       }
 
@@ -245,8 +238,8 @@ async function carregarAtividades() {
           <div class="meta">
             <div class="meta-info">
               <span>Prazo: ${prazo}</span>
-              <span>${at.nome_materia || '—'}</span>
-              <span>${at.nome_turma || '—'}</span>
+              <span>Matéria: ${at.nome_materia || '—'}</span>
+              <span>Turma: ${at.nome_turma || '—'}</span>
             </div>
             ${acaoHtml}
           </div>
@@ -257,47 +250,41 @@ async function carregarAtividades() {
   } catch { toast('Erro ao carregar atividades.'); }
 }
 
-// --- PASSO 4: LOGICA DE ENTREGA COM RETORNO VISUAL CLARO ---
-async function entregarAtividade(id_atividade, botaoElemento) {
-  const urlArquivo = prompt("Por favor, informe a URL/Link da entrega da sua atividade (Google Drive, GitHub, OneDrive, etc):");
-  
-  if (!urlArquivo || urlArquivo.trim() === "") {
-    alert("❌ Operação cancelada. É obrigatório passar um link para enviar o formulário.");
-    return;
-  }
+// ── SIMPLIFICAÇÃO COM RETORNO VISUAL AJUSTADO PARA A ROTA CORRETA ──
+async function marcarComoConcluida(id_atividade, botaoElemento) {
+  if (!confirm("Deseja marcar esta atividade como concluída?")) return;
 
-  // Modificação imediata dos estados do botão (Feedback de Carregamento)
+
   const textoOriginal = botaoElemento.innerText;
   botaoElemento.disabled = true;
-  botaoElemento.innerText = "⌛ Enviando...";
+  botaoElemento.innerText = "⌛ Salvando...";
   botaoElemento.style.backgroundColor = "#777";
-  botaoElemento.style.cursor = "not-allowed";
 
   try {
-    const resp = await fetch('/api/atividades/entregar', { 
+    const resp = await fetch(`/api/atividades/${id_atividade}/entregar`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id_atividade, arquivo_url: urlArquivo.trim() })
+      credentials: 'include' 
     });
-    
-    const data = await resp.json();
-    
-    if (resp.ok) {
-      alert("✅ CONFIRMAÇÃO: Atividade postada e entregue com sucesso!");
-      if (typeof carregarAtividades === 'function') carregarAtividades();
+
+    const d = await resp.json();
+
+    if (resp.ok || d.success) {
+      alert("✅ CONFIRMAÇÃO: Atividade marcada como concluída com sucesso!");
+      carregarAtividades(); // Atualiza a tela na hora
     } else {
-      alert(data.erro || "❌ Falha ao computar entrega.");
+      alert(d.erro || "Erro ao computar conclusão.");
       botaoElemento.disabled = false;
       botaoElemento.innerText = textoOriginal;
-      botaoElemento.style.backgroundColor = "";
-      botaoElemento.style.cursor = "pointer";
+      botaoElemento.style.backgroundColor = "#2b5788";
     }
   } catch (err) {
-    alert("❌ Falha crítica de conexão com o servidor.");
+    console.error(err);
+    alert("Erro de conexão ao salvar.");
+    // Destrava o botão em caso de erro de rede/servidor fora do ar
     botaoElemento.disabled = false;
     botaoElemento.innerText = textoOriginal;
-    botaoElemento.style.backgroundColor = "";
-    botaoElemento.style.cursor = "pointer";
+    botaoElemento.style.backgroundColor = "#2b5788";
   }
 }
 
@@ -339,10 +326,9 @@ function renderizarCalendario() {
 
   let html = '<tr>';
   let dia  = 1;
-  let semana = 0;
+  let col = primeiro;
 
   for (let i = 0; i < primeiro; i++) html += '<td class="prev-month"></td>';
-  let col = primeiro;
 
   while (dia <= diasNoMes) {
     const isHoje = dia === hoje.getDate() && calMes === hoje.getMonth() && calAno === hoje.getFullYear();
@@ -418,8 +404,7 @@ async function carregarMeusGurupos() {
             <small style="font-size:10px; color:#999;">Cód: ${g.codigo_acesso}</small>
           </div>
           <i class="bi bi-chevron-right small text-muted"></i>
-        </button>
-      `;
+        </button>`;
     });
   } catch (err) {
     console.error('Erro ao buscar Gurupos:', err);
@@ -446,56 +431,10 @@ function selecionarGurupo(id, nome, codigo) {
         <span class="username">Sistema Gurus</span>
         <div class="bubble">Bem-vindo ao canal privado! Use o código <strong>${codigo}</strong> para convidar seus amigos da turma.</div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-async function criarNovoGurupo() {
-  const nomeInput = document.getElementById('inputNomeGurupo');
-  const nome = nomeInput.value.trim();
-  if (!nome) return alert('Por favor, defina um nome para o Gurupo.');
-
-  try {
-    const resp = await fetch('/api/gurupos/criar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome })
-    });
-    const data = await resp.json();
-    
-    if (resp.status === 201 || data.codigo) {
-      alert(`🎉 Gurupo "${nome}" criado! Compartilhe o token de acesso: ${data.codigo}`);
-      nomeInput.value = '';
-      carregarMeusGurupos();
-    } else {
-      alert(data.erro || 'Não foi possível criar o Gurupo.');
-    }
-  } catch { alert('Erro de conexão ao tentar criar grupo.'); }
-}
-
-async function entrarEmGurupo() {
-  const codigoInput = document.getElementById('inputCodigoGurupo');
-  const codigo = codigoInput.value.trim().toUpperCase();
-  if (!codigo) return alert('Por favor, digite o código de 5 caracteres.');
-
-  try {
-    const resp = await fetch('/api/gurupos/entrar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ codigo })
-    });
-    const data = await resp.json();
-    
-    if (resp.ok) {
-      alert(data.mensagem || 'Você ingressou com sucesso!');
-      codigoInput.value = '';
-      carregarMeusGurupos();
-    } else {
-      alert(data.erro || 'Código de acesso inválido ou expirado.');
-    }
-  } catch { alert('Erro de conexão com o servidor.'); }
-}
-
+// ── OPERAÇÕES DE AULA DO PROFESSOR ───────────────────────────
 async function abrirModalCriarAula() {
   try {
     const resp = await fetch('/api/turmas', { credentials: 'include' });
@@ -513,7 +452,6 @@ async function abrirModalCriarAula() {
 
 async function salvarNovaAula() {
   const btnSalvar = document.querySelector("#modalCriarAula button[onclick='salvarNovaAula()']");
-  
   const body = {
     id_turma:  document.getElementById('regAulaTurma').value,
     titulo:    document.getElementById('regAulaTitulo').value.trim(),
@@ -526,7 +464,6 @@ async function salvarNovaAula() {
     return;
   }
 
-  // --- RETORNO VISUAL CLARO ---
   const textoOriginal = btnSalvar.innerText;
   btnSalvar.disabled = true;
   btnSalvar.innerText = "⌛ Publicando aula...";
@@ -540,19 +477,78 @@ async function salvarNovaAula() {
     const data = await resp.json();
     
     if (resp.ok) {
-      alert('✅ CONFIRMAÇÃO: Aula publicada e disponibilizada para a turma com sucesso!');
+      alert('✅ CONFIRMAÇÃO: Aula publicada com sucesso!');
       document.getElementById('modalCriarAula').style.display = 'none';
-      
       document.getElementById('regAulaTitulo').value = "";
       document.getElementById('regAulaConteudo').value = "";
       document.getElementById('regAulaData').value = "";
-      
-      if (typeof carregarAulas === 'function') carregarAulas();
+      carregarAulas();
     } else {
       alert(data.erro || 'Erro ao publicar aula.');
     }
   } catch {
-    alert('Erro de comunicação com o servidor.');
+    alert('Erro de comunicação.');
+  } finally {
+    btnSalvar.disabled = false;
+    btnSalvar.innerText = textoOriginal;
+  }
+}
+
+// ── NOVO: OPERAÇÕES DE ATIVIDADE DO PROFESSOR ─────────────────
+async function abrirModalCriarAtividade() {
+  try {
+    const resp = await fetch('/api/turmas', { credentials: 'include' });
+    const turmas = await resp.json();
+    
+    const select = document.getElementById('regAtivTurma');
+    select.innerHTML = '<option value="">Selecione uma turma...</option>' + 
+      turmas.map(t => `<option value="${t.id_turma}">${t.nome_turma}</option>`).join('');
+    
+    document.getElementById('modalCriarAtividade').style.display = 'block';
+  } catch {
+    toast('Erro ao preparar formulário.');
+  }
+}
+
+async function salvarNovaAtividade() {
+  const btnSalvar = document.querySelector("#modalCriarAtividade button[onclick='salvarNovaAtividade()']");
+  const body = {
+    id_turma:   document.getElementById('regAtivTurma').value,
+    titulo:     document.getElementById('regAtivTitulo').value.trim(),
+    descricao:  document.getElementById('regAtivDesc').value.trim(),
+    prazo:      document.getElementById('regAtivPrazo').value,
+    id_materia: 1 // Id padrão genérico vinculado ao banco
+  };
+
+  if (!body.id_turma || !body.titulo || !body.prazo) {
+    alert('Por favor, preencha todos os campos obrigatórios.');
+    return;
+  }
+
+  const textoOriginal = btnSalvar.innerText;
+  btnSalvar.disabled = true;
+  btnSalvar.innerText = "⌛ Criando Atividade...";
+
+  try {
+    const resp = await fetch('/api/atividades', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json();
+    
+    if (resp.ok) {
+      alert('✅ CONFIRMAÇÃO: Atividade criada e anexada à turma!');
+      document.getElementById('modalCriarAtividade').style.display = 'none';
+      document.getElementById('regAtivTitulo').value = "";
+      document.getElementById('regAtivDesc').value = "";
+      document.getElementById('regAtivPrazo').value = "";
+      carregarAtividades();
+    } else {
+      alert(data.erro || 'Erro ao criar atividade.');
+    }
+  } catch {
+    alert('Erro ao se conectar com o servidor.');
   } finally {
     btnSalvar.disabled = false;
     btnSalvar.innerText = textoOriginal;
@@ -568,11 +564,11 @@ async function verRelatorioEntregas(idAtividade, tituloAtividade) {
     const tabela = document.getElementById('corpoTabelaRelatorio');
 
     if (!entregas.length) {
-      tabela.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:#999;">Nenhum aluno vinculado a esta turma.</td></tr>';
+      tabela.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:#999;">Nenhum aluno vinculado ou com entregas.</td></tr>';
     } else {
       tabela.innerHTML = entregas.map(e => {
         const badgeStatus = e.entregue === 1 
-          ? `<span style="color:#2E7D32; font-weight:bold;">🟢 Entregue</span>` 
+          ? `<span style="color:#2E7D32; font-weight:bold;">🟢 Concluído</span>` 
           : `<span style="color:#E53935; font-weight:bold;">🔴 Pendente</span>`;
         const dataStatus = e.entregue_em ? new Date(e.entregue_em).toLocaleString('pt-BR') : '—';
         

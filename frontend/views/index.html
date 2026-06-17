@@ -314,6 +314,47 @@
     </div>
   </div>
 </div>
+<!-- Modal de Criar Atividade Professor -->
+<div id="modalCriarAtividade" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:#fff; width:90%; max-width:500px; margin:10% auto; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.3); position:relative;">
+    <span style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#888;" onclick="document.getElementById('modalCriarAtividade').style.display='none'">&times;</span>
+    <h2 style="margin-bottom:20px; color:#532B88;">📝 Criar Nova Atividade</h2>
+    
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Turma Alvo *</label>
+    <select id="regAtivTurma" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px;"></select>
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Título da Atividade *</label>
+    <input type="text" id="regAtivTitulo" placeholder="Ex: Lista de Exercícios 1" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px;">
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Descrição / Enunciado</label>
+    <textarea id="regAtivDesc" placeholder="Descreva os critérios da atividade..." rows="3" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; font-family:inherit;"></textarea>
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Data de Prazo Final *</label>
+    <input type="datetime-local" id="regAtivPrazo" style="width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:6px;">
+
+    <button onclick="salvarNovaAtividade()" style="width:100%; padding:12px; background:#2E7D32; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">💾 Criar e Vincular Atividade</button>
+  </div>
+</div>
+
+<!-- Modal de relatório de entregas professor -->
+<div id="modalRelatorioEntregas" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:#fff; width:90%; max-width:650px; margin:8% auto; padding:25px; border-radius:12px; position:relative; max-height:80vh; overflow-y:auto;">
+    <span style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#888;" onclick="document.getElementById('modalRelatorioEntregas').style.display='none'">&times;</span>
+    <h3 id="tituloModalRelatorio" style="color:#532B88; margin-bottom:15px;">Entregas da Atividade</h3>
+    
+    <table style="width:100%; border-collapse:collapse; text-align:left;">
+      <thead>
+        <tr style="background:#f5f5f5; border-bottom:2px solid #ccc;">
+          <th style="padding:10px;">Aluno</th>
+          <th style="padding:10px;">Status</th>
+          <th style="padding:10px;">Data de Conclusão</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabelaRelatorio">
+        </tbody>
+    </table>
+  </div>
+</div>
 <script src="../assets/js/indexPage.js"></script>
 </body>
 </html>

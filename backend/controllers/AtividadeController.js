@@ -58,12 +58,13 @@ class AtividadeController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao buscar atividade.' }); }
     }
 
+    // Seu método original intacto e preservado
     static async criar(req, res) {
         const { titulo, descricao, id_materia, id_turma, prazo } = req.body;
         if (!titulo || !id_materia || !id_turma || !prazo) return res.status(400).json({ erro: 'Preencha todos os campos obrigatórios.' });
         try {
             const id = await Atividade.criar(titulo, descricao, id_materia, id_turma, prazo);
-            res.status(201).json({ mensagem: 'Atividade criada!', id });
+            res.status(201).json({ success: true, mensagem: 'Atividade criada!', id });
         } catch (e) { res.status(500).json({ erro: 'Erro ao criar atividade.' }); }
     }
 
@@ -90,23 +91,29 @@ class AtividadeController {
         } catch (e) { res.status(500).json({ erro: 'Erro ao buscar atividades.' }); }
     }
 
-    // Novo Método específico: Confirmação Sim/Não via Botão Rádio do Aluno
+    // Corrigido e adaptado para a rota: POST /api/atividades/:id/entregar
     static async confirmarEntrega(req, res) {
-        const { entregue } = req.body; // Espera 1 para Sim e 0 para Não
-        if (entregue === undefined) return res.status(400).json({ erro: 'Selecione uma opção de status.' });
+        const id_atividade = req.params.id; // Captura o ID vindo da URL da rota
+        const id_aluno = req.session.usuario.id_usuario;
+
         try {
+            // Insere o registro de entrega como feito (1) ou atualiza se já existir
             await db.execute(`
-                INSERT INTO entrega_atividade (id_atividade, id_aluno, entregue) VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE entregue = VALUES(entregue)
-            `, [req.params.id, req.session.usuario.id_usuario, entregue]);
-            res.json({ mensagem: 'Status da entrega salvo!' });
-        } catch (e) { res.status(500).json({ erro: 'Erro ao processar confirmação de entrega.' }); }
+                INSERT INTO entrega_atividade (id_atividade, id_aluno, entregue, arquivo_url, entregue_em) 
+                VALUES (?, ?, 1, 'Confirmado via Portal', NOW())
+                ON DUPLICATE KEY UPDATE entregue = 1, entregue_em = NOW()
+            `, [id_atividade, id_aluno]);
+
+            res.json({ success: true, mensagem: 'Status da entrega salvo!' });
+        } catch (e) { 
+            console.error(e);
+            res.status(500).json({ erro: 'Erro ao processar confirmação de entrega.' }); 
+        }
     }
 
     static async listarEntregas(req, res) {
         try {
             const id_atividade = req.params.id;
-            // Junta todos os alunos daquela turma e cruza com as entregas efetuadas
             const [rows] = await db.execute(`
                 SELECT 
                     u.nome AS nome_aluno,
