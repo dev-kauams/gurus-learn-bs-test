@@ -53,16 +53,16 @@ function inicializarRecursosProfessor() {
 }
 
 // ── Verificar sessão ──────────────────────────────────────────
-let usuarioLogado = null;
+// let usuarioLogado = null;
 
-async function init() {
+// async function init() {
   try {
     const resp = await fetch('/api/sessao', { credentials: 'include' });
-    if (!resp.ok) { window.location.href = '/frontend/views/login.html'; return; }
+    if (!resp.ok) { window.location.href = '/login'; return; }
     const data = await resp.json();
-    if (!data.user) { window.location.href = '/frontend/views/login.html'; return; }
+    if (!data.user) { window.location.href = '/login'; return; }
     
-    if (data.user.id_nivel === 3) { window.location.href = '/frontend/views/dashboard.html'; return; }
+    if (data.user.id_nivel === 3) { window.location.href = '/dashboard'; return; }
     usuarioLogado = data.user;
     document.getElementById('username-info').textContent = data.user.nome;
     
@@ -79,7 +79,7 @@ async function init() {
       if (btnIngresso) btnIngresso.style.display = 'block'; 
     }
   } catch { window.location.href = '/frontend/views/login.html'; }
-}
+// }
 
 // ── Logout ────────────────────────────────────────────────────
 document.getElementById('btnLogout').addEventListener('click', async (e) => {
