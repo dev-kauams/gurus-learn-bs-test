@@ -122,6 +122,10 @@
 
         & nav {
             grid-area: sidebar;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             flex-direction: row;
             justify-content: space-around;
@@ -131,6 +135,7 @@
             background-color: transparent;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             width: 100%;
+            z-index: 100;
 
             .icon-gruop {
                 display: flex;
@@ -195,6 +200,10 @@
             gap: 1.5rem;
 
             .content-section {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
                 & h1 {
                     font-size: 1.3rem;
                     margin-bottom: 0.8rem;
@@ -477,11 +486,18 @@
 
         & nav {
             grid-area: sidebar;
+            position: fixed !important;
+            left: 0;
+            top: 0;
+            height: 100dvh;
+            width: 5rem;
+            bottom: auto;
+            right: auto;
             flex-direction: column;
             justify-content: space-between;
             padding: 1rem 0;
             align-items: center;
-            height: 100%;
+            z-index: 100;
 
             .icon-gruop {
                 flex-direction: column;
@@ -584,9 +600,17 @@
 
         & nav {
             grid-area: sidebar;
+            position: fixed !important;
+            left: 0;
+            top: 0;
+            height: 100dvh;
+            width: 5rem;
+            bottom: auto;
+            right: auto;
             flex-direction: column;
             justify-content: space-between;
             padding: 1rem 0;
+            z-index: 100;
 
             .icon-gruop {
                 flex-direction: column;
@@ -661,6 +685,18 @@
         }
 
         & nav {
+            position: fixed !important;
+            left: 0;
+            top: 0;
+            height: 100dvh;
+            width: 4rem;
+            bottom: auto;
+            right: auto;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1rem 0;
+            z-index: 100;
+
             .icon-gruop {
                 flex-direction: column;
                 gap: 1.5rem;

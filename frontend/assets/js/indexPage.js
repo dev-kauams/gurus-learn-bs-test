@@ -36,14 +36,14 @@ function inicializarRecursosProfessor() {
     // Botão de Criar Aula
     const containerAulas = document.querySelector('#aulas');
     if (containerAulas && !document.getElementById('btnCriarAulaTrigger')) {
-      const btnAula = `<button id="btnCriarAulaTrigger" style="margin-bottom:20px; margin-right:10px; padding:10px 18px; background:#532B88; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAula()">➕ Publicar Nova Aula</button>`;
+      const btnAula = `<button id="btnCriarAulaTrigger" style="margin-bottom:20px; margin-right:10px; padding:10px 18px; background:#532B88; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAula()">Publicar Nova Aula</button>`;
       containerAulas.insertBefore(document.createRange().createContextualFragment(btnAula), containerAulas.firstChild);
     }
 
     // Botão de Criar Atividade
     const containerAtividades = document.querySelector('#atividades');
     if (containerAtividades && !document.getElementById('btnCriarAtividadeTrigger')) {
-      const btnAtiv = `<button id="btnCriarAtividadeTrigger" style="margin-bottom:20px; padding:10px 18px; background:#2E7D32; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAtividade()">📝 Criar Nova Atividade</button>`;
+      const btnAtiv = `<button id="btnCriarAtividadeTrigger" style="margin-bottom:20px; padding:10px 18px; background: var(--bg-component-d); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;" onclick="abrirModalCriarAtividade()">Criar Nova Atividade</button>`;
       containerAtividades.insertBefore(document.createRange().createContextualFragment(btnAtiv), containerAtividades.firstChild);
     }
 
@@ -53,9 +53,9 @@ function inicializarRecursosProfessor() {
 }
 
 // ── Verificar sessão ──────────────────────────────────────────
-// let usuarioLogado = null;
+let usuarioLogado = null;
 
-// async function init() {
+async function init() {
   try {
     const resp = await fetch('/api/sessao', { credentials: 'include' });
     if (!resp.ok) { window.location.href = '/login'; return; }
@@ -79,7 +79,7 @@ function inicializarRecursosProfessor() {
       if (btnIngresso) btnIngresso.style.display = 'block'; 
     }
   } catch { window.location.href = '/frontend/views/login.html'; }
-// }
+}
 
 // ── Logout ────────────────────────────────────────────────────
 document.getElementById('btnLogout').addEventListener('click', async (e) => {
@@ -214,17 +214,20 @@ async function carregarAtividades() {
     lista.innerHTML = atividades.map(at => {
       const prazo = new Date(at.prazo).toLocaleDateString('pt-BR');
       const vencida = new Date(at.prazo) < new Date();
-      
+      const atividadeCard = document.querySelector('atividade-card')
+
       let acaoHtml = '';
 
       if (usuarioLogado.id_nivel === 1) { 
         if (at.entregue === 1) {
-          acaoHtml = '<span style="color:#2E7D32; font-weight:700;">✅ Concluída</span>';
+          acaoHtml = '<span class="text-concluido" style="color:#2E7D32; font-weight:700;">Concluída</span>';
         } else if (vencida) {
-          acaoHtml = '<span style="color:#E53935; font-weight:700;">❌ Pendente (Encerrado)</span>';
+          acaoHtml = ''
         } else {
           
-          acaoHtml = `<button style="background-color: #2b5788; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;" onclick="marcarComoConcluida(${at.id_atividade}, this)">Marcar como Concluída</button>`;
+          acaoHtml = `<button style="background-color: var(--bg-component-d); color: white; padding: 10px 14px; border: none; border-radius: var(--br-base); cursor: pointer;" onclick="marcarComoConcluida(${at.id_atividade}, this)">Marcar como Concluída</button>`;
+          
+          
         }
       } else if (usuarioLogado.id_nivel === 2) {
         acaoHtml = `<button style="background-color:#532B88; color:#fff;" onclick="verRelatorioEntregas(${at.id_atividade}, '${at.titulo}')">Ver Entregas</button>`;
@@ -233,7 +236,7 @@ async function carregarAtividades() {
       }
 
       return `
-        <div class="atividade-card" style="border: 1px solid ${vencida ? '#E53935' : 'var(--bg-block)'}">
+        <div class="atividade-card" style="border: 1px solid ${vencida ? '#E53935' : '#2E7D32 '}">
           <h3>${at.titulo}</h3>
           <div class="meta">
             <div class="meta-info">
@@ -246,6 +249,8 @@ async function carregarAtividades() {
           ${at.descricao ? `<p class="conteudo">${at.descricao}</p>` : ''}
           ${(vencida && usuarioLogado.id_nivel === 1 && at.entregue !== 1) ? '<span style="font-size:.75rem;color:#E53935;font-weight:700;">PRAZO ENCERRADO</span>' : ''}
         </div>`;
+
+        
     }).join('');
   } catch { toast('Erro ao carregar atividades.'); }
 }
@@ -257,7 +262,7 @@ async function marcarComoConcluida(id_atividade, botaoElemento) {
 
   const textoOriginal = botaoElemento.innerText;
   botaoElemento.disabled = true;
-  botaoElemento.innerText = "⌛ Salvando...";
+  botaoElemento.innerText = "Salvando...";
   botaoElemento.style.backgroundColor = "#777";
 
   try {
@@ -414,17 +419,17 @@ async function carregarMeusGurupos() {
 function selecionarGurupo(id, nome, codigo) {
   idGurupoSelecionado = id;
   document.getElementById('nomeGurupoAtivo').innerText = `# ${nome} (Código: ${codigo})`;
-  
+
   const inputChat = document.getElementById('chatInput');
   const btnEnviar = document.getElementById('btnEnviarMsg');
-  
+
   inputChat.disabled = false;
   inputChat.placeholder = `Conversar em # ${nome}...`;
   btnEnviar.disabled = false;
 
   const chatContent = document.getElementById('chatContent');
   chatContent.innerHTML = `
-    <div class="text-center text-muted small my-3">🔮 Você entrou no canal de conversa histórico de ${nome}</div>
+    <div class="text-center text-muted small my-3">Você entrou no canal de conversa histórico de ${nome}</div>
     <div class="message incoming">
       <img src="/assets/img/profile-pic-card.jpg" alt="Avatar" class="avatar">
       <div class="bubble-group">
@@ -432,6 +437,62 @@ function selecionarGurupo(id, nome, codigo) {
         <div class="bubble">Bem-vindo ao canal privado! Use o código <strong>${codigo}</strong> para convidar seus amigos da turma.</div>
       </div>
     </div>`;
+}
+
+async function entrarEmGurupo() {
+  const codigo = document.getElementById('inputCodigoGurupo').value.trim();
+  if (!codigo) {
+    toast('Digite um código para entrar no Gurupo.');
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/gurupos/entrar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ codigo_acesso: codigo })
+    });
+
+    const data = await resp.json();
+    if (resp.ok) {
+      toast('Você entrou no Gurupo!');
+      document.getElementById('inputCodigoGurupo').value = '';
+      carregarMeusGurupos();
+    } else {
+      toast(data.erro || 'Código inválido ou expirado.');
+    }
+  } catch {
+    toast('Erro ao conectar ao servidor.');
+  }
+}
+
+async function criarNovoGurupo() {
+  const nome = document.getElementById('inputNomeGurupo').value.trim();
+  if (!nome) {
+    toast('Digite um nome para o Gurupo.');
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/gurupos/criar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ nome })
+    });
+
+    const data = await resp.json();
+    if (resp.ok) {
+      toast('Gurupo criado com sucesso!');
+      document.getElementById('inputNomeGurupo').value = '';
+      carregarMeusGurupos();
+    } else {
+      toast(data.erro || 'Erro ao criar Gurupo.');
+    }
+  } catch {
+    toast('Erro de comunicação com o servidor.');
+  }
 }
 
 // ── OPERAÇÕES DE AULA DO PROFESSOR ───────────────────────────

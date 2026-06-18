@@ -126,6 +126,148 @@ body {
     }
   }
 
+  .modal-enviar-atividade {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+
+    .modal-content {
+      background-color: var(--bg-component-w);
+      width: 90%;
+      max-width: 500px;
+      margin: 10% auto;
+      padding: 25px;
+      border-radius: var(--br-base);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+
+      .modal-close {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--bg-block);
+
+        &:hover {
+          color: #555;
+        }
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #532b88;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 2px solid var(--bg-component-d);
+        border-radius: var(--br-base);
+        box-sizing: border-box;
+        background-color: transparent;
+      }
+
+      textarea {
+        font-family: inherit;
+        resize: vertical;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: var(--bg-component-d);
+        color: var(--bg-base-w);
+        border: none;
+        border-radius: var(--br-base);
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  .modal-relatorio {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+
+    .modal-content {
+      background: var(--bg-component-w);
+      width: 90%;
+      max-width: 650px;
+      margin: 8% auto;
+      padding: 25px;
+      border-radius: var(--br-base);
+      position: relative;
+      max-height: 80vh;
+      overflow-y: auto;
+
+      .modal-close {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-base-d);
+
+        &:hover {
+          color: var(--bg-block);
+        }
+      }
+
+      h3 {
+        color: #532b88;
+        margin-bottom: 15px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+
+        thead {
+          tr {
+            background: var(--bg-base-d);
+            color: var(--bg-base-w);
+            border-radius: var(--br-base);
+          }
+        }
+
+        th,
+        td {
+          padding: 10px;
+        }
+
+        tbody {
+          tr {
+            border-bottom: 1px solid #eee;
+
+            &:hover {
+              background: #fafafa;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .modal-turma-overlay {
     display: none;
     width: 100vw;
@@ -523,6 +665,29 @@ body {
               padding: 0.5rem 1.5rem;
             }
 
+            .gurupos-input{
+                & input{
+                  background-color: transparent;
+                  width: 100%;
+                  padding: 1rem 1.2rem;
+                  border: 2px solid var(--bg-component-d);
+                  border-radius: var(--br-base);
+                  &::placeholder{
+                    color: #2d1b4e;
+                  }
+                }
+
+                & button{
+                  width: 100%;
+                  padding: 1rem;
+                  background-color: var(--bg-component-d);
+                  border-radius: var(--br-base);
+                  margin-top: 0.2rem;
+                  color: var(--bg-base-w);
+                  border: none;
+                }
+            }
+
             & label {
               display: flex;
               margin-bottom: 0.3rem;
@@ -739,6 +904,11 @@ body {
       }
     }
     #atividades {
+      h1 {
+        margin-bottom: 10px;
+        font-size: clamp(1rem, 5vw, 5rem);
+      }
+
       .card-gruop {
         width: 100%;
         display: flex;
@@ -968,8 +1138,8 @@ body {
     }
 
     & footer {
+      display: none !important;
       grid-area: footer;
-      display: flex;
       width: 100%;
       height: 5dvh;
       justify-content: center;

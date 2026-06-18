@@ -6,99 +6,8 @@
   <title>Guru's Learn — Portal</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3976/3976625.png">
   <link rel="stylesheet" href="../assets/css/components.css">
-  <link rel="stylesheet" href="../assets/css/responsive.css">
   <link rel="stylesheet" href="../assets/css/style.css">
-  <!-- <style>
-    /* Estilos adicionais para conteúdo dinâmico */
-    .toast-gl {
-      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-      background: #532B88; color: #F4EFFA;
-      padding: 12px 22px; border-radius: 12px;
-      font-size: 0.9rem; box-shadow: 0 8px 24px #0003;
-      animation: slideIn .3s ease; display: none;
-    }
-    @keyframes slideIn { from { transform: translateX(100px); opacity:0; } to { transform: translateX(0); opacity:1; } }
-
-    .badge-nivel {
-      display: inline-block; font-size: 0.7rem; font-weight: 700;
-      padding: 2px 10px; border-radius: 20px;
-      background: var(--bg-block); color: var(--text-base-w);
-    }
-
-    /* Cards de turma dinâmicos */
-    .turma-card-dyn {
-      background: var(--bg-component-w); border-radius: var(--br-base);
-      padding: 1.2rem; cursor: pointer;
-      transition: transform .2s, box-shadow .2s;
-      display: flex; flex-direction: column; gap: .5rem;
-    }
-    .turma-card-dyn:hover { transform: translateY(-4px); box-shadow: 0 8px 20px #0002; }
-    .turma-card-dyn h3 { color: var(--bg-block); font-size: 1.1rem; }
-    .turma-card-dyn p  { font-size: .82rem; color: var(--bg-base-d); opacity: .8; }
-
-    /* Lista de atividades na sidebar */
-    .atividade-item {
-      background: rgba(255,255,255,.1); border-radius: 12px;
-      padding: .8rem; border-left: 4px solid var(--bg-block);
-      transition: transform .2s;
-    }
-    .atividade-item:hover { transform: translateX(5px); }
-    .atividade-item .titulo { font-size: .88rem; font-weight: 600; }
-    .atividade-item .prazo  { font-size: .72rem; opacity: .7; margin-top: 3px; }
-    .atividade-item .turma  { font-size: .7rem; opacity: .6; }
-
-    /* Área de aulas */
-    .aula-card {
-      background: var(--bg-component-w); border-radius: var(--br-base);
-      padding: 1.2rem; width: 100%;
-      display: flex; flex-direction: column; gap: .4rem;
-    }
-    .aula-card h3 { color: var(--bg-block); font-size: 1rem; }
-    .aula-card .meta { font-size: .78rem; color: #888; display: flex; gap: 1rem; }
-    .aula-card .conteudo { font-size: .85rem; color: var(--text-base-d); margin-top: .4rem; }
-
-    /* Modal de ingresso */
-    .modal-gl-overlay {
-      position: fixed; inset: 0; background: #0005; z-index: 100;
-      display: none; align-items: center; justify-content: center;
-    }
-    .modal-gl-overlay.open { display: flex; }
-    .modal-gl {
-      background: var(--bg-component-w); border-radius: var(--br-base);
-      padding: 2rem; width: 90%; max-width: 420px;
-      display: flex; flex-direction: column; gap: 1rem;
-    }
-    .modal-gl h3 { color: var(--bg-block); font-size: 1.3rem; }
-    .modal-gl select, .modal-gl input {
-      width: 100%; padding: .7rem 1rem;
-      border: 2px solid var(--bg-component-d); border-radius: .8rem;
-      background: var(--bg-base-w); color: var(--text-base-d); font-size: .9rem;
-    }
-    .modal-gl .btn-row { display: flex; gap: .8rem; }
-    .modal-gl button {
-      flex: 1; padding: .7rem; border-radius: var(--br-base);
-      border: 2px solid var(--bg-component-d); cursor: pointer;
-      font-size: .9rem; transition: all .2s;
-    }
-    .modal-gl .btn-primary { background: var(--bg-block); color: var(--text-base-w); }
-    .modal-gl .btn-primary:hover { background: var(--bg-component-d); }
-
-    /* Chat dinâmico */
-    .chat-input-area {
-      width: 100%; padding: .8rem 1.5rem;
-      background: var(--bg-component-w); border-top: 1px solid #0001;
-      display: flex; gap: .8rem; align-items: center;
-    }
-    .chat-input-area input {
-      flex: 1; padding: .6rem 1rem; border-radius: 20px;
-      border: 2px solid var(--bg-component-d);
-      background: var(--bg-base-w); color: var(--text-base-d); outline: none;
-    }
-    .chat-input-area button {
-      padding: .6rem 1.2rem; border-radius: 20px;
-      background: var(--bg-block); color: white; border: none; cursor: pointer;
-    }
-  </style> -->
+  <link rel="stylesheet" href="../assets/css/responsive.css">
 </head>
 <body class="body-index">
 
@@ -197,7 +106,7 @@
           
           <div class="gurupos-entrar">
             <label class="">Entrar via Código</label>
-            <div>
+            <div class="gurupos-input">
               <input type="text" id="inputCodigoGurupo" placeholder="Ex: X7K2A" class="" maxlength="5">
               <button class="" onclick="entrarEmGurupo()">Ir</button>
             </div>
@@ -205,7 +114,7 @@
   
           <div class="gurupos-entrar">
             <label class="">Criar Gurupo</label>
-            <div>
+            <div class="gurupos-input">
               <input type="text" id="inputNomeGurupo" placeholder="Nome do grupo..." class="">
               <button class="" onclick="criarNovoGurupo()">+</button>
             </div>
@@ -246,10 +155,10 @@
 
 </main>
 
-<footer class="flex">
+<!-- <footer class="flex">
   <a href="#">Política de Privacidade</a>
   <a href="#">Termos de Uso</a>
-</footer>
+</footer> -->
 
 <!-- ══ MODAL INGRESSO ══ -->
 <div class="modal-overlay modal-turma-overlay" id="modalIngresso">
@@ -294,60 +203,40 @@
   </div>
 </div>
 
-<div class="modal-gl-overlay" id="modalRelatorioEntregas" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;">
-  <div class="modal-gl" style="max-width: 600px; padding: 20px; background: #fff; border-radius: 12px; margin: 10% auto;">
-    <h3 id="tituloModalRelatorio">Relatório de Entregas</h3>
-    <div style="max-height: 300px; overflow-y: auto; margin: 15px 0;">
-      <table style="width: 100%; border-collapse: collapse; text-align: left;">
-        <thead>
-          <tr style="border-bottom: 2px solid #ccc; background:#f4f4f4;">
-            <th style="padding: 10px;">Aluno</th>
-            <th style="padding: 10px;">Situação</th>
-            <th style="padding: 10px;">Data de Envio</th>
-          </tr>
-        </thead>
-        <tbody id="corpoTabelaRelatorio"></tbody>
-      </table>
-    </div>
-    <div style="display: flex; justify-content: flex-end;">
-      <button onclick="document.getElementById('modalRelatorioEntregas').style.display='none'" style="padding:8px 16px; border-radius:6px; background:#666; color:#fff; border:none; cursor:pointer;">Fechar Painel</button>
-    </div>
-  </div>
-</div>
 <!-- Modal de Criar Atividade Professor -->
-<div id="modalCriarAtividade" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-  <div style="background:#fff; width:90%; max-width:500px; margin:10% auto; padding:25px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.3); position:relative;">
-    <span style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#888;" onclick="document.getElementById('modalCriarAtividade').style.display='none'">&times;</span>
-    <h2 style="margin-bottom:20px; color:#532B88;">📝 Criar Nova Atividade</h2>
+<div class="modal-enviar-atividade" id="modalCriarAtividade">
+  <div class="modal-content">
+    <span class="modal-close" onclick="document.getElementById('modalCriarAtividade').style.display='none'">&times;</span>
+    <h2>Criar Nova Atividade</h2>
     
-    <label style="display:block; margin-bottom:5px; font-weight:bold;">Turma Alvo *</label>
-    <select id="regAtivTurma" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px;"></select>
+    <label>Turma Alvo *</label>
+    <select id="regAtivTurma"></select>
 
-    <label style="display:block; margin-bottom:5px; font-weight:bold;">Título da Atividade *</label>
-    <input type="text" id="regAtivTitulo" placeholder="Ex: Lista de Exercícios 1" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px;">
+    <label>Título da Atividade *</label>
+    <input type="text" id="regAtivTitulo" placeholder="Ex: Lista de Exercícios 1">
 
-    <label style="display:block; margin-bottom:5px; font-weight:bold;">Descrição / Enunciado</label>
-    <textarea id="regAtivDesc" placeholder="Descreva os critérios da atividade..." rows="3" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; font-family:inherit;"></textarea>
+    <label>Descrição / Enunciado</label>
+    <textarea id="regAtivDesc" placeholder="Descreva os critérios da atividade..." rows="3"></textarea>
 
-    <label style="display:block; margin-bottom:5px; font-weight:bold;">Data de Prazo Final *</label>
-    <input type="datetime-local" id="regAtivPrazo" style="width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:6px;">
+    <label>Data de Prazo Final *</label>
+    <input type="datetime-local" id="regAtivPrazo">
 
-    <button onclick="salvarNovaAtividade()" style="width:100%; padding:12px; background:#2E7D32; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">💾 Criar e Vincular Atividade</button>
+    <button onclick="salvarNovaAtividade()">Criar e Vincular Atividade</button>
   </div>
 </div>
 
 <!-- Modal de relatório de entregas professor -->
-<div id="modalRelatorioEntregas" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-  <div style="background:#fff; width:90%; max-width:650px; margin:8% auto; padding:25px; border-radius:12px; position:relative; max-height:80vh; overflow-y:auto;">
-    <span style="position:absolute; right:15px; top:10px; font-size:24px; cursor:pointer; color:#888;" onclick="document.getElementById('modalRelatorioEntregas').style.display='none'">&times;</span>
-    <h3 id="tituloModalRelatorio" style="color:#532B88; margin-bottom:15px;">Entregas da Atividade</h3>
+<div class="modal-relatorio" id="modalRelatorioEntregas">
+  <div class="modal-content">
+    <span class="modal-close" onclick="document.getElementById('modalRelatorioEntregas').style.display='none'">&times;</span>
+    <h3 id="tituloModalRelatorio">Entregas da Atividade</h3>
     
-    <table style="width:100%; border-collapse:collapse; text-align:left;">
+    <table>
       <thead>
-        <tr style="background:#f5f5f5; border-bottom:2px solid #ccc;">
-          <th style="padding:10px;">Aluno</th>
-          <th style="padding:10px;">Status</th>
-          <th style="padding:10px;">Data de Conclusão</th>
+        <tr>
+          <th >Aluno</th>
+          <th>Status</th>
+          <th>Data de Conclusão</th>
         </tr>
       </thead>
       <tbody id="corpoTabelaRelatorio">
