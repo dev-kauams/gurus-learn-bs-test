@@ -103,7 +103,7 @@ CREATE TABLE presenca (
 CREATE TABLE gurupo (
     id_gurupo     INT AUTO_INCREMENT PRIMARY KEY,
     nome          VARCHAR(100) NOT NULL,
-    codigo_acesso VARCHAR(10)  NOT NULL UNIQUE, -- Código gerado automaticamente.
+    codigo_acesso VARCHAR(10)  NOT NULL UNIQUE COLLATE utf8mb4_general_ci, -- Código gerado automaticamente.
     id_criador    INT NOT NULL,
     criado_em     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_criador) REFERENCES usuario(id_usuario) ON DELETE CASCADE

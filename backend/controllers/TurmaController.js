@@ -112,6 +112,7 @@ class TurmaController {
         const { nome } = req.body;
         if (!nome) return res.status(400).json({ erro: 'Nome do Gurupo é obrigatório.' });
         
+        // Gera código sempre em MAIÚSCULA
         const codigo = Math.random().toString(36).substring(2, 7).toUpperCase();
         try {
             const [r] = await db.execute(
@@ -127,7 +128,9 @@ class TurmaController {
         const { codigo } = req.body;
         if (!codigo) return res.status(400).json({ erro: 'Código necessário.' });
         try {
-            const [grupos] = await db.execute('SELECT * FROM gurupo WHERE codigo_acesso = ?', [codigo.toUpperCase().trim()]);
+            // Normaliza o código para MAIÚSCULA antes de buscar
+            const codigoNormalizado = codigo.toString().toUpperCase().trim();
+            const [grupos] = await db.execute('SELECT * FROM gurupo WHERE UPPER(codigo_acesso) = ?', [codigoNormalizado]);
             if (grupos.length === 0) return res.status(404).json({ erro: 'Código de Gurupo não encontrado.' });
             
             await db.execute('INSERT IGNORE INTO gurupo_membro (id_gurupo, id_usuario) VALUES (?, ?)', [grupos[0].id_gurupo, req.session.usuario.id_usuario]);
